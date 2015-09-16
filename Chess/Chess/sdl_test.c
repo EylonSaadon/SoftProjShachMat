@@ -1,27 +1,20 @@
-#include "Chess.h"
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_video.h>
 
 #define WIN_W 640
 #define WIN_H 640
-#define MAINMENU_W 353
-#define MAINMENU_H 478
-#define BUTTON_W 333
-#define BUTTON_H 114
-#define BOARD_W 512
-#define BOARD_H 512
-#define PIECE_W 63
-#define PIECE_H 63
+#define IMG_W 550
+#define IMG_H 550
 
 int main(void) {
 	SDL_Event e;
-	SDL_Rect rect = { 10, 10, 50, 50 };
-	SDL_Rect imgrect = { 0, 0, MAINMENU_W, MAINMENU_W };
-	SDL_Surface *mainMenu = SDL_LoadBMP("MainMenu.bmp");
-	SDL_Surface *w = SDL_SetVideoMode(MAINMENU_W, MAINMENU_W, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
+	SDL_Rect rect = {10, 10, 50, 50};
+	SDL_Rect imgrect = {0, 0, IMG_W, IMG_H};
+	SDL_Surface *img = SDL_LoadBMP("Chessboard_wood.bmp");
+	SDL_Surface *w  = SDL_SetVideoMode(WIN_W, WIN_H, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	int quit = 0;
-
+	
 	/* Initialize SDL and make sure it quits*/
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("ERROR: unable to init SDL: %s\n", SDL_GetError());
@@ -37,10 +30,10 @@ int main(void) {
 	}
 
 	/* Define the rects we need*/
-
+	
 
 	/* Load test spritesheet image*/
-
+	
 	if (img == NULL) {
 		printf("ERROR: failed to load image: %s\n", SDL_GetError());
 		return 1;
@@ -56,7 +49,7 @@ int main(void) {
 
 	while (!quit) {
 		/* Clear window to BLACK*/
-		if (SDL_FillRect(w, 0, 0) != 0) {
+		if (SDL_FillRect(w,0,0) != 0) {
 			printf("ERROR: failed to draw rect: %s\n", SDL_GetError());
 			break;
 		}
@@ -92,18 +85,18 @@ int main(void) {
 
 		while (SDL_PollEvent(&e) != 0) {
 			switch (e.type) {
-			case (SDL_QUIT) :
-				quit = 1;
-				break;
-			case (SDL_KEYUP) :
-				if (e.key.keysym.sym == SDLK_ESCAPE) quit = 1;
-				break;
-			case (SDL_MOUSEBUTTONUP) :
-				if ((e.button.x > rect.x) && (e.button.x < rect.x + rect.w) && (e.button.y > rect.y) && (e.button.y < rect.y + rect.h))
+				case (SDL_QUIT):
 					quit = 1;
-				break;
-			default:
-				break;
+					break;
+				case (SDL_KEYUP):
+					if (e.key.keysym.sym == SDLK_ESCAPE) quit = 1;
+					break;
+				case (SDL_MOUSEBUTTONUP):
+					if ((e.button.x > rect.x) && (e.button.x < rect.x + rect.w) && (e.button.y > rect.y) && (e.button.y < rect.y+rect.h))
+						quit = 1;
+					break;
+				default:
+					break;
 			}
 		}
 

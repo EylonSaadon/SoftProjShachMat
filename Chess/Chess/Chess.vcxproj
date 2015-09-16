@@ -41,6 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>C:\Users\t-eylosa\Source\Git\Repos\SDL-devel-1.2.15-VC\SDL-1.2.15\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\t-eylosa\Source\Git\Repos\SDL-devel-1.2.15-VC\SDL-1.2.15\lib\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -53,10 +55,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>SDL.lib;SDLmain.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,6 +83,34 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Main.c" />
+    <ClCompile Include="sdl_test.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Chess.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="background.bmp" />
+    <Image Include="Button_LoadGame.bmp" />
+    <Image Include="Button_MainMenu.bmp" />
+    <Image Include="Button_NewGame.bmp" />
+    <Image Include="Button_Quit.bmp" />
+    <Image Include="Button_SaveGame.bmp" />
+    <Image Include="Chessboard_wood.bmp" />
+    <Image Include="chess_piece_black_bishop.bmp" />
+    <Image Include="chess_piece_black_king.bmp" />
+    <Image Include="chess_piece_black_knight.bmp" />
+    <Image Include="chess_piece_black_pawn.bmp" />
+    <Image Include="chess_piece_black_queen.bmp" />
+    <Image Include="chess_piece_black_rook.bmp" />
+    <Image Include="chess_piece_white_bishop.bmp" />
+    <Image Include="chess_piece_white_king.bmp" />
+    <Image Include="chess_piece_white_knight.bmp" />
+    <Image Include="chess_piece_white_pawn.bmp" />
+    <Image Include="chess_piece_white_queen.bmp" />
+    <Image Include="chess_piece_white_rook.bmp" />
+    <Image Include="hello.bmp" />
+    <Image Include="MainMenu.bmp" />
+    <Image Include="test.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
