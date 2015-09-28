@@ -1,0 +1,13 @@
+minimax_depth 3
+user_color white
+clear
+set <e,7> black m
+set <g,7> black m 
+set <g,9> black m
+set <e,9> black m
+set <c,7> black m
+set <d,8> white m
+print
+start
+get_moves
+quit

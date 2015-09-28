@@ -1,0 +1,10 @@
+בעמוד 10 כתוב 
+You should handle the case when the board is initialized such that the first
+player will not move (tie or lose). You can handle it either within the start
+command or before the first player make his move. It's up to you. Make sure
+you print the right message (see the end of game messages in "game state").
+
+אבל בפורום כתוב:
+http://moodle.tau.ac.il/mod/forum/discuss.php?d=74261
+http://moodle.tau.ac.il/mod/forum/discuss.php?d=74946
+

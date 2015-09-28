@@ -1,0 +1,12 @@
+minimax_depth 6
+print
+user_color white
+clear
+print
+set <h,8> white m
+set <g,9> black m
+set <c,7> black m
+print
+start
+get_moves
+move <h,8> to <f,10>

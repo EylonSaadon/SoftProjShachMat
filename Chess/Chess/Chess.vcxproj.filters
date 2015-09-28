@@ -15,15 +15,51 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.c">
+    <ClCompile Include="GUI.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sdl_test.c">
+    <ClCompile Include="Data_Structures.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Logic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Minimax.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventHandler.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Chess.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFramework.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Data_Structures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Defs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Logic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Minimax.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GUI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIFrameWork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

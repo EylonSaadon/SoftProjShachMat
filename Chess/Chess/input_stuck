@@ -1,0 +1,9 @@
+clear
+minimax_depth 2
+user_color black
+set <b,4> white m
+set <c,7> black m
+set <a,7> black m
+print
+start
+get_moves
