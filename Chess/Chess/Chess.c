@@ -1,20 +1,30 @@
 #include "Chess.h"
 
 #include "Minimax.h"
+#include "GUI.h"
 
-int main2()
+int main(int argc, char* argv[])
 {
 	char board[BOARD_SIZE][BOARD_SIZE];
 
 	init_board(board);
 
+	if (1 == argc || !strcmp(argv[1], "console")) {
+		console_main(board);
+	}
+	else {
+		start_gui();
+	}
+
+	return 0;
+}
+
+void console_main(char board[BOARD_SIZE][BOARD_SIZE]) {
 	print_board(board);
 
 	struct game_settings settings = set_settings(board);
 
 	play(board, &settings);
-
-	return 0;
 }
 
 struct game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
@@ -188,10 +198,29 @@ void play(char board[BOARD_SIZE][BOARD_SIZE], struct game_settings* settings)
 	bool should_continue = true;
 
 	while (should_continue) {
+
 		// Get the possible moves of the current player
 		struct move_list* moves = NULL;
 		if (-1 == get_moves_for_color(board, current_color, &moves)) {
 			exit(0);
+		}
+
+		// Get the score of the board
+		int score = get_board_score_for_color(board, get_opposite_color(current_color));
+
+		// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
+		if (WIN_SCORE == score) {
+			print_win_message(get_opposite_color(current_color));
+			break;
+		}
+		else if (TIE_SCORE == score && NULL == moves) {
+			print_message(TIE);
+			break;
+		}
+		else {
+			if (is_check_on_color(board, current_color)) {
+				print_message(CHECK);
+			}
 		}
 
 		// Computer turn
@@ -208,33 +237,9 @@ void play(char board[BOARD_SIZE][BOARD_SIZE], struct game_settings* settings)
 
 		if (should_continue) {
 			print_board(board);
-
-			// Get the score of the board
-			int score = get_board_score_for_color(board, current_color);
-
-			// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
-			if (WIN_SCORE == score) {
-				print_win_message(current_color);
-				should_continue = false;
-			}
-			// TODO: check if needed (if it's my turn, i can't lose...)
-			//else if (LOSE_SCORE == score) {
-			//	print_win_message(get_opposite_color(current_color));
-			//	should_continue = false;
-			//}
-			else if (TIE_SCORE == score) {
-				print_message(TIE);
-				should_continue = false;
-			}
-			else {
-				current_color = get_opposite_color(current_color);
-
-				// TODO: check if "is_check_on_color" should be call also after loading a game....
-				if (is_check_on_color(board, current_color)) {
-					print_message(CHECK);
-				}
-			}
 		}
+
+		current_color = get_opposite_color(current_color);
 	}
 }
 
@@ -363,6 +368,8 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 			do {
 				print_move(&best_move_list->mov);
 			} while (NULL != (current_move_node = current_move_node->next));
+
+			free_move_list(best_move_list);
 		}
 		// Get Score
 		else if (strstr(input, "get_score ") == input) {

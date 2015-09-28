@@ -24,6 +24,8 @@
 #define PIECE_H 63
 
 
+void start_gui();
+
 SDL_Surface* LoadBMP(char* fileName);
 
 void StartNewGame_ButtonClick(control input);

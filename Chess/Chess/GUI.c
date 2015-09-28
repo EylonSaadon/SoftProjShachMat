@@ -88,12 +88,12 @@ int MainMenu()
 	}
 }
 
-int main()
+void start_gui()
 {
 	/* Initialize SDL and make sure it quits*/
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		printf("ERROR: unable to init SDL: %s\n", SDL_GetError());
-		return 1;
+		exit(EXIT_FAILURE);
 	}
 	atexit(SDL_Quit);
 
@@ -103,8 +103,6 @@ int main()
 	while (!quit) {
 		HandleEvents();
 	}
-
-	return 1;
 }
 
 

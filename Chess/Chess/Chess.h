@@ -10,6 +10,9 @@
 #include "Data_Structures.h"
 #include "Logic.h"
 
+// TODO - comments:
+void console_main(char board[BOARD_SIZE][BOARD_SIZE]);
+
 // Set the settings of the game
 struct game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE]);
 
