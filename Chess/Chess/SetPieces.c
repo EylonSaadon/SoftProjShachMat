@@ -88,15 +88,15 @@ void DrawPiecesOnSidePanel(UINode* panel_node)
 {
 	char* whitePieces = "prnbqk";
 	char* blackPieces = "PRNBQK";
-	for int
-	control* chessPiece_control = Create_panel_from_bmp(
-		fileName,
-		name,
-		MARGIN + i*SQUARE_W,
-		MARGIN + j*SQUARE_W,
-		(Uint16)SQUARE_W,
-		(Uint16)SQUARE_H);
-	UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, boardNode);
+	//for int
+	//control* chessPiece_control = Create_panel_from_bmp(
+	//	fileName,
+	//	name,
+	//	MARGIN + i*SQUARE_W,
+	//	MARGIN + j*SQUARE_W,
+	//	(Uint16)SQUARE_W,
+	//	(Uint16)SQUARE_H);
+	//UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, boardNode);
 }
 
 void SetPiecesWindow()
