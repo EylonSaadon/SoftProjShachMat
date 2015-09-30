@@ -40,13 +40,13 @@ void ChooseMode_ButtonClick(control* input)
 void SetPiece_ButtonClick(control* input)
 {
 	SwitchButtonHighlight(input);
-	if (setPieces = 0)
+	if (setPieces == 0)
 	{
 		setPieces = 1;
 	}
 	else
 	{
-		setPieces = 0;
+		setPieces == 0;
 	}
 	DrawTree(tree);
 	/* We finished drawing*/
@@ -99,12 +99,15 @@ void GameSettingsNext_ButtonClick(control* input)
 {
 	if (curSettings->game_mode == PLAYER_VS_AI_GAME_MODE){
 		AISetting();
+		return;
 	}
-	else if(setPieces == 1){
+	if(setPieces == 1){
 		SetPiecesWindow();
+		return;
 	}
 	else{
 		StartGame();
+		return;
 	}
 }
 
