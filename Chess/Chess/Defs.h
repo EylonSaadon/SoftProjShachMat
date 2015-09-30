@@ -69,6 +69,6 @@ struct game_settings {
 	int game_mode;
 	int minimax_depth;
 	COLOR user_color;
-};
+}; typedef struct game_settings game_settings;
 
 #endif

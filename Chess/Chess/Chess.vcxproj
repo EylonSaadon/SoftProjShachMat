@@ -84,15 +84,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AISettings.c" />
     <ClCompile Include="Chess.c" />
     <ClCompile Include="Data_Structures.c" />
     <ClCompile Include="EventHandler.c" />
     <ClCompile Include="GUI.c" />
     <ClCompile Include="Logic.c" />
     <ClCompile Include="Minimax.c" />
+    <ClCompile Include="SetPieces.c" />
+    <ClCompile Include="SettingMenu.c" />
     <ClCompile Include="UIFramework.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AISettings.h" />
     <ClInclude Include="Chess.h" />
     <ClInclude Include="Data_Structures.h" />
     <ClInclude Include="Defs.h" />
@@ -100,6 +104,8 @@
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Logic.h" />
     <ClInclude Include="Minimax.h" />
+    <ClInclude Include="SetPieces.h" />
+    <ClInclude Include="SettingMenu.h" />
     <ClInclude Include="UIFrameWork.h" />
   </ItemGroup>
   <ItemGroup>

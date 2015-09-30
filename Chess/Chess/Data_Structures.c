@@ -147,30 +147,32 @@ UINode* CreateTree(control* window)
 	UINode* root = (UINode*)malloc(sizeof(UINode));
 	root->control = window;
 	root->childrenCount = 0;
-	root->children = NULL;
+	root->childrenSize = INITIALCHILDRENSIZE;
+	root->children = (UINode**)malloc(sizeof(UINode*) * root->childrenSize);
 	root->father = NULL;
+	root->root = root;
 	return root;
 }
 
 void addNodeAsChild(UINode* node, UINode* father)
 {
-	father->childrenCount = father->childrenCount + 1;
-	if (father->children != NULL){
-		father->children = realloc(father->children, sizeof(UINode*) * father->childrenCount);
-	}
-	else
+	if (father->childrenCount == father->childrenSize)
 	{
-		father->children = malloc(sizeof(UINode*) * father->childrenCount);
+		father->childrenSize *= 2;
+		father->children = realloc(father->children, sizeof(UINode*) * father->childrenSize);
 	}
+	father->childrenCount ++;
 	father->children[father->childrenCount - 1] = node;
 
 	node->father = father;
+	node->root = father->root;
 }
 UINode* CreateAndAddNodeToTree(control* control, UINode* father){
 	UINode* node = (UINode*)malloc(sizeof(UINode));
 	node->control = control;
 	node->childrenCount = 0;
-	node->children = NULL;
+	node->childrenSize = INITIALCHILDRENSIZE;
+	node->children = (UINode**)malloc(sizeof(UINode*) * node->childrenSize);
 	node->father = NULL;
 
 	addNodeAsChild(node, father);

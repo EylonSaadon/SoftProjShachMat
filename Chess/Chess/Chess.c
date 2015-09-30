@@ -10,14 +10,14 @@ int main2()
 
 	print_board(board);
 
-	struct game_settings settings = set_settings(board);
+	game_settings settings = set_settings(board);
 
 	play(board, &settings);
 
 	return 0;
 }
 
-struct game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
+game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 {
 	struct game_settings settings = { .next_turn = WHITE, .game_mode = 1, .minimax_depth = 1, .user_color = WHITE };
 

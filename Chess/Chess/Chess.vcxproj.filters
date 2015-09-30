@@ -36,6 +36,15 @@
     <ClCompile Include="UIFramework.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SettingMenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetPieces.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AISettings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -60,6 +69,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UIFrameWork.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SetPieces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AISettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

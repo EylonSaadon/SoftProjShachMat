@@ -71,6 +71,7 @@ bool is_move_in_move_list(struct move* mov, struct move_list* move_list);
 bool is_equal_pos(struct position pos1, struct position pos2);
 
 
+#define INITIALCHILDRENSIZE 100
 
 struct control
 {
@@ -78,6 +79,8 @@ struct control
 	SDL_Surface* highlighted_surface;
 	SDL_Rect* location_rect;
 	char* type;
+	char* name;
+	int ishighlighted;
 	void (*Action)(struct control*);
 }; typedef struct control control;
 
@@ -87,8 +90,10 @@ struct UINode
 {
 	control* control;
 	int childrenCount;
+	int childrenSize;
 	struct UINode** children;
 	struct UINode* father;
+	struct UINode* root;
 };  typedef struct UINode UINode;
 
 
