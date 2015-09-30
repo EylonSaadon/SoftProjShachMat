@@ -112,42 +112,6 @@
     <Image Include="Button_SaveGame.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="chess_piece_black_bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_king.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_rook.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_king.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_rook.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Chessboard_wood.bmp">
       <Filter>Resource Files</Filter>
     </Image>

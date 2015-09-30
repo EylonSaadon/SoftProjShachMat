@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <SDL/sdl.h>
+#include <SDL/SDL.h>
 
 #define perror_message(func_name) perror("Error: standard function " #func_name " has failed")
 
@@ -84,7 +84,7 @@ struct control
 	void (*Action)(struct control*);
 }; typedef struct control control;
 
-typedef (*ButtonAction)(struct control*);
+typedef void(*ButtonAction)(struct control*);
 
 struct UINode
 {
