@@ -1,15 +1,21 @@
 #ifndef SETPIECES_
 #define SETPIECES_
 
-#ifndef GUI_
-#include "GUI.h"
+#ifndef COMMONGAMEBOARD_
+#include "CommonGameboard.h"
 #endif
 
 #ifndef SETTINGMENU
 #include "SettingMenu.h"
 #endif
-void DrawSquareButtons();
-void DrawBoardGui();
+
+extern control* selectedSquare_Control;
+extern control* selectedPiece_Control;
+
+extern UINode* board_node;
+
+void PlacePiece();
+
 void SetPiecesWindow();
 
 #endif

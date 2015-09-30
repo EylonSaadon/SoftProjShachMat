@@ -86,6 +86,7 @@
   <ItemGroup>
     <ClCompile Include="AISettings.c" />
     <ClCompile Include="Chess.c" />
+    <ClCompile Include="CommonGameboard.c" />
     <ClCompile Include="Data_Structures.c" />
     <ClCompile Include="EventHandler.c" />
     <ClCompile Include="GameBoard.c" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="AISettings.h" />
     <ClInclude Include="Chess.h" />
+    <ClInclude Include="CommonGameboard.h" />
     <ClInclude Include="Data_Structures.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="EventHandler.h" />

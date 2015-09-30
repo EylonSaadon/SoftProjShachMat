@@ -1,8 +1,12 @@
 #ifndef GAMEBOARD_
 #define GAMEBOARD_
 
-#ifndef GUI_
-#include "GUI.h"
+#ifndef COMMONGAMEBOARD_
+#include "CommonGameboard.h"
+#endif
+
+#ifndef SETPIECES_
+#include "SetPieces.h"
 #endif
 
 extern UINode* tree;
