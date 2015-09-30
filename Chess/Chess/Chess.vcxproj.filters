@@ -124,41 +124,5 @@
     <Image Include="test.bmp">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Chess_Piece_Black_Bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_Black_King.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_Black_Knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_Black_Pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_Black_Queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_Black_Rook.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_Bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_King.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_Knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_Pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_Queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Chess_Piece_White_Rook.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
