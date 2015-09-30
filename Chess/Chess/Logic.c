@@ -396,7 +396,7 @@ struct position find_king_pos(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 bool is_check_on_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 	struct position pos = find_king_pos(board, color);
 
-	// Check chess from queen, bishop or rook
+	// Check chess from queen, bishop, rook or king
 	for (int i = 0; i <= 7; i++) {
 		// Choose direction
 		int diff_col = 0;
@@ -441,6 +441,7 @@ bool is_check_on_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 		new_pos.col += diff_col;
 		new_pos.row += diff_row;
 
+		bool first_iter = true;
 		while (is_valid_position(new_pos)) {
 			char piece = get_piece(board, new_pos);
 
@@ -452,13 +453,16 @@ bool is_check_on_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 				if (!is_piece_of_color(piece, color)) {
 					if ((WHITE_Q == piece || BLACK_Q == piece) ||
 						(i <= 3 && (WHITE_B == piece || BLACK_B == piece)) ||
-						(i >= 4 && (WHITE_R == piece || BLACK_R == piece))) {
+						(i >= 4 && (WHITE_R == piece || BLACK_R == piece)) ||
+						((WHITE_K == piece || BLACK_K == piece) && first_iter)) {
 						return true;
 					}
 				}
 
 				break;
+			
 			}
+			first_iter = false;
 		}
 	}
 
@@ -524,11 +528,6 @@ bool is_check_on_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 }
 
 bool is_check_move(char board[BOARD_SIZE][BOARD_SIZE], struct position start_pos, struct position end_pos, char new_disc, COLOR color) {
-	//char temp_board[BOARD_SIZE][BOARD_SIZE];
-
-	// Copies the board to a temp board
-	//copy_boards(board, temp_board);
-
 	struct move mov;
 	mov.start_pos = start_pos;
 	mov.end_pos = end_pos;
