@@ -111,6 +111,7 @@ void GameSettingsNext_ButtonClick(control* input)
 
 int SettingMenu()
 {
+	print_board(board);
 	FreeTree(tree);
 	EventHandler_init(&Quit);
 

@@ -1,9 +1,18 @@
 #ifndef AISETTINGS_
 #define AISETTINGS_
 
-#ifndef GUI_
-#include "GUI.h"
+#ifndef SETTINGMENU_
+#include "SettingMenu.h"
 #endif
+
+#ifndef GAMEBOARD_
+#include "GameBoard.h"
+#endif
+
+#ifndef SETPIECES_
+#include "SetPieces.h"
+#endif
+
 
 // GameSettings Window Defs 
 #define AISETTINGNAME "AISettingsMenu"
@@ -33,6 +42,7 @@
 extern UINode* tree;
 
 void UserColor_ButtonClick(control* input);
+
 void AISetting();
 
 #endif

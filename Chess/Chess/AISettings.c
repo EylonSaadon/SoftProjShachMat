@@ -44,6 +44,7 @@ void SwitchOffHighlightAllMinimaxDepths()
 	SwitchOffHighlightbyName(BUTTON4NAME);
 	SwitchOffHighlightbyName(BUTTONBESTNAME);
 }
+
 void MinimaxDepth_ButtonClick(control* input)
 {
 	// 1

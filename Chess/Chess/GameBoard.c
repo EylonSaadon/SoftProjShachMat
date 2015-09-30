@@ -1,6 +1,6 @@
-#include "SetPieces.h"
+#include "GameBoard.h"
 
-void SetPiecesSquare_ButtonClick(control* input)
+void Square_ButtonClick(control* input)
 {
 	SwitchButtonHighlight(input);
 
@@ -11,7 +11,7 @@ void SetPiecesSquare_ButtonClick(control* input)
 	}
 }
 
-void SetPiecesWindow()
+int StartGame()
 {
 	FreeTree(tree);
 	EventHandler_init(&Quit);
@@ -41,7 +41,7 @@ void SetPiecesWindow()
 				MARGIN + (j*SQUARE_H),
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
-				&SetPiecesSquare_ButtonClick);
+				&Square_ButtonClick);
 			UINode* newGameButton_node = CreateAndAddNodeToTree(square, board_node);
 			AddToListeners(square);
 		}

@@ -88,8 +88,10 @@
     <ClCompile Include="Chess.c" />
     <ClCompile Include="Data_Structures.c" />
     <ClCompile Include="EventHandler.c" />
+    <ClCompile Include="GameBoard.c" />
     <ClCompile Include="GUI.c" />
     <ClCompile Include="Logic.c" />
+    <ClCompile Include="MainMenu.c" />
     <ClCompile Include="Minimax.c" />
     <ClCompile Include="SetPieces.c" />
     <ClCompile Include="SettingMenu.c" />
@@ -101,8 +103,10 @@
     <ClInclude Include="Data_Structures.h" />
     <ClInclude Include="Defs.h" />
     <ClInclude Include="EventHandler.h" />
+    <ClInclude Include="GameBoard.h" />
     <ClInclude Include="GUI.h" />
     <ClInclude Include="Logic.h" />
+    <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Minimax.h" />
     <ClInclude Include="SetPieces.h" />
     <ClInclude Include="SettingMenu.h" />

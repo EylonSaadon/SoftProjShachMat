@@ -1,12 +1,20 @@
 #ifndef SETTINGMENU_
 #define SETTINGMENU_
 
-#ifndef GUI_
-#include "GUI.h"
+#ifndef MAINMENU_
+#include "MainMenu.h"
+#endif
+
+#ifndef AISETTINGS_
+#include "AISettings.h"
 #endif
 
 #ifndef SETPIECES_
 #include "SetPieces.h"
+#endif
+
+#ifndef GAMEBOARD_
+#include "GameBoard.h"
 #endif
 
 // GameSettings Window Defs 
