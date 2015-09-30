@@ -1,7 +1,11 @@
 #ifndef EVENTHANDLER_
 #define EVENTHANDLER_
 
+#ifndef DATA_STRUCTURES_
 #include  "Data_Structures.h"
+#endif
+
+#define INITIALlISTENERSSIZE 100
 
 typedef void(*EmptyArgsProcedure)(void);
 

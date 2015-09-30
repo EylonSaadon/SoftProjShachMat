@@ -1,23 +1,35 @@
-#include "GUI.h"
-#include "Data_Structures.h"
+#include "EventHandler.h"
 
-control** _listeners;
-int _listenersCount;
-EmptyArgsProcedure quit_procedure;
+static control** _listeners;
+static int _listenersCount;
+static int _listenersSize;
+static EmptyArgsProcedure quit_procedure;
 
 int EventHandler_init(EmptyArgsProcedure quitFuncPtr)
 {
 	FreeEventHandler();
 	quit_procedure = quitFuncPtr; 
+	_listenersSize = INITIALlISTENERSSIZE;
+	_listeners = malloc(sizeof(control*) * _listenersSize);
 }
 
 int AddToListeners(control* buttonToAdd)
 {
+	if (_listenersCount == _listenersSize)
+	{
+		_listenersSize *= 2;
+		control** tmp = malloc(sizeof(control*) * (_listenersSize));
+		for (int i = 0; i < _listenersCount; i++)
+		{
+			tmp[i] = _listeners[i];
+		}
+		free(_listeners);
+		_listeners = tmp;
+	}
 	_listenersCount++;
+	_listeners[_listenersCount - 1] = buttonToAdd;
 	// TODO: Check failure
 	// TODO: free memory
-	_listeners = (control**)realloc(_listeners, sizeof(control*) * _listenersCount);
-	_listeners[_listenersCount - 1] = buttonToAdd;
 }
 
 //TODO: bool ?
@@ -76,6 +88,7 @@ void HandleMouseUpEvent(SDL_Event* event)
 void FreeEventHandler()
 {
 	free(_listeners);
+	_listenersCount = 0;
 }
 
 

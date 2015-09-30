@@ -22,12 +22,12 @@ int main(int argc, char* argv[])
 void console_main(char board[BOARD_SIZE][BOARD_SIZE]) {
 	print_board(board);
 
-	struct game_settings settings = set_settings(board);
+	game_settings settings = set_settings(board);
 
 	play(board, &settings);
 }
 
-struct game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
+game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 {
 	struct game_settings settings = { .next_turn = WHITE, .game_mode = 1, .minimax_depth = 1, .user_color = WHITE };
 

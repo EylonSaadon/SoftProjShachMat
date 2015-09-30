@@ -36,6 +36,21 @@
     <ClCompile Include="UIFramework.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SettingMenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetPieces.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AISettings.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainMenu.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameBoard.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -62,6 +77,21 @@
     <ClInclude Include="UIFrameWork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SettingMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SetPieces.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AISettings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameBoard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="background.bmp">
@@ -80,42 +110,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Button_SaveGame.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_king.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_black_rook.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_bishop.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_king.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_knight.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_pawn.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_queen.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="chess_piece_white_rook.bmp">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Chessboard_wood.bmp">
