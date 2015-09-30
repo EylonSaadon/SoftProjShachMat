@@ -8,8 +8,8 @@
 #ifndef SETTINGMENU
 #include "SettingMenu.h"
 #endif
-
-
+void DrawSquareButtons();
+void DrawBoardGui();
 void SetPiecesWindow();
 
 #endif

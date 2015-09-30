@@ -52,9 +52,9 @@
 #define BOARD_W 600
 #define BOARD_H 600
 
-#define GAMEBOARDBACKGROUNDNAME "SidePanel"
-#define GAMEBOARDBACKGROUNDFILENAME "SidePanel.bmp"
-#define GAMEBOARDBACKGROUND_W 900
+#define GAMEBOARDBACKGROUNDNAME "GameBoardBackground"
+#define GAMEBOARDBACKGROUNDFILENAME "GameBoardBackground.bmp"
+#define GAMEBOARDBACKGROUND_W 1000
 #define GAMEBOARDBACKGROUND_H 600
 
 #define MARGIN 20
@@ -64,6 +64,12 @@
 #define SQUAREBUTTONNAME "TransparentSquare"
 #define SQUAREBUTTONFILENAME "TransparentSquare.bmp"
 #define SQUAREBUTTONHIGHLIGHTEDFILENAME "TransparentSquare_Highlighted.bmp"
+
+#define DELETE_NAME "Chess_Piece_Delete"
+#define DELETE_FILENAME "Chess_Piece_Delete.bmp"
+
+#define BUTTONSTARTNAME "Button_Start"
+#define BUTTONSTARTFILENAME "Button_Start.bmp"
 
 #define BLACK_KING_NAME "Chess_Piece_Black_King"
 #define BLACK_KING_FILENAME "Chess_Piece_Black_King.bmp"

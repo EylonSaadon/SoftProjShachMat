@@ -9,7 +9,6 @@ void StartNewGame_ButtonClick(control* input)
 	curSettings->user_color = WHITE;
 
 	init_board(board);
-	print_board(board);
 	SettingMenu();
 }
 

@@ -12,7 +12,7 @@
 struct position {
 	char col;
 	char row;
-};
+}; typedef struct position position;
 
 // Position list - each item contains a struct position and a pointer to the next item.
 struct position_list {
