@@ -154,9 +154,19 @@ char ResolveLetterFromButtonName(char* name)
 }
 
 
+void initializeButtonsBoard()
+{
+	buttonsBoard = malloc(sizeof(control**)*(BOARD_SIZE));
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		buttonsBoard[i] = malloc(sizeof(control*)*(BOARD_SIZE));
+	}
+}
 
 void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
 {
+	initializeButtonsBoard();
+
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		for (int j = 0; j < BOARD_SIZE; j++)
@@ -172,6 +182,7 @@ void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
 				FuncPtr);
 			UINode* newGameButton_node = CreateAndAddNodeToTree(square, node);
 			AddToListeners(square);
+			buttonsBoard[i][j] = square;
 		}
 	}
 }
@@ -202,6 +213,43 @@ void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 {
 	char* Pieces = "mrnbqkMRNBQK ";
 	for (int i = 0; i < 13; i++)
+	{
+		char* fileName = ResolveFileNameFromLetter(Pieces[i]);
+		char* name = ResolveNameFromLetter(Pieces[i]);
+
+		if (fileName == NULL){
+			if (Pieces[i] == ' ') {
+				fileName = DELETE_FILENAME;
+				name = DELETE_NAME;
+			}
+		}
+
+		if (fileName != NULL){
+			control* chessPiece_control = Create_Button_from_bmp_transHighlight(
+				fileName,
+				SQUAREBUTTONHIGHLIGHTEDFILENAME,
+				name,
+				BOARD_W + MARGIN + (i % 2) * SQUARE_W,
+				0.5 * MARGIN + (i / 2) * SQUARE_H,
+				(Uint16)SQUARE_W,
+				(Uint16)SQUARE_H,
+				FuncPtr);
+			UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, panel_node);
+			AddToListeners(chessPiece_control);
+		}
+	}
+
+}
+
+void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c)
+{
+	char* Pieces = "mrnbq";
+	if (c == BLACK)
+	{
+		Pieces = "MRNBQ";
+	}
+	
+	for (int i = 0; i < 6; i++)
 	{
 		char* fileName = ResolveFileNameFromLetter(Pieces[i]);
 		char* name = ResolveNameFromLetter(Pieces[i]);

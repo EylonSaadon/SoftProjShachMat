@@ -75,5 +75,5 @@ char ResolveLetterFromButtonName(char* name);
 void DrawSquareButtons(UINode* node, ButtonAction FuncPtr);
 void DrawBoardGui(UINode* node);
 void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr);
-
+void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c);
 #endif

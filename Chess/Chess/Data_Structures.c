@@ -31,7 +31,7 @@ void free_position_list(struct position_list* pos_list) {
 	free(pos_list);
 }
 
-void free_move_list(struct move_list* move_node) {
+void free_move_list(move_list* move_node) {
 	if (NULL == move_node) {
 		return;
 	}

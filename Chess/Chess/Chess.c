@@ -282,6 +282,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 	char input[MAX_USER_COMMAND];
 
 	while (fgets(input, MAX_USER_COMMAND, stdin) != NULL) {
+		
 		bool should_print_enter_user_move = true;
 
 		// Move

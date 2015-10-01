@@ -259,6 +259,18 @@ void print_moves_from_pos(struct move_list* moves, struct position pos) {
 	} while (NULL != (current_move = current_move->next));
 }
 
+int get_moves_from_pos(move_list* moves, struct position pos, move_list** possible_moves) {
+	if (NULL == moves) {
+		return;
+	}
+	move_list* current_move = moves;
+	do {
+		if (is_equal_pos(pos, current_move->mov.start_pos)) {
+			if (!add_new_move_node_helper(possible_moves, pos, current_move->mov.end_pos, EMPTY)) return -1;
+		}
+		current_move = current_move->next;
+	} while (NULL != current_move);
+}
 void print_win_message(COLOR winner_color) {
 	if (WHITE == winner_color) {
 		printf(WHITE_PLAYER_WINS);

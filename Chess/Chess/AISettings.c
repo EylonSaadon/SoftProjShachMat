@@ -118,7 +118,7 @@ void AINext_ButtonClick(control* input)
 		SetPiecesWindow();
 	}
 	else{
-		StartGame();
+		Game();
 	}
 }
 

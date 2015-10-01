@@ -1,4 +1,5 @@
 #include "GameBoard.h"
+#include "Minimax.h"
 
 control* gameSelectedSquare_control;
 
@@ -12,15 +13,60 @@ void GameBoardSave_ButtonClick(control* input)
 	// TODO: implement
 }
 
-void GameBoardSquare_ButtonClick(control* input)
+void HightlightPosMoves(move_list* movesToHighlight)
 {
-	if (gameSelectedSquare_control == NULL)
+	move_list * curMove = movesToHighlight;
+
+	if (curMove == NULL)
 	{
-		SwitchButtonHighlight(input);
-		gameSelectedSquare_control = input;
+		return;
 	}
-	
-	
+	else
+	{
+		move mov = curMove->mov;
+		buttonsBoard[mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
+		curMove = curMove->next;
+		HightlightPosMoves(curMove);
+	}
+}
+
+int isPawnUpgradePossible(move move)
+{
+	if (curSettings->next_turn == WHITE)
+	{
+		return move.end_pos.row == BOARD_SIZE_FROM_ZERO;
+	}
+	else
+	{
+		return move.end_pos.row == 0;
+	}
+}
+
+void switchOffAllButtons()
+{
+	for (int i = 0; i < BOARD_SIZE; i++){
+		for (int j = 0; j < BOARD_SIZE; j++){
+			buttonsBoard[i][j]->ishighlighted = 0;
+		}
+	}
+}
+
+void upgradePieces_ButtonClick(control* input)
+{
+	char piece = ResolveLetterFromButtonName(input->name);
+
+	chosenMove->new_disc = piece;
+	if (is_move_in_move_list(chosenMove, curMovesList) == true){
+		make_move(board, chosenMove);
+		SwitchButtonHighlight(gameSelectedSquare_control);
+		gameSelectedSquare_control = NULL;
+		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
+		free_move_list(curMovesList);
+		free_move_list(posMovesFromCurPos);
+		free(chosenMove);
+		chosenMove = NULL;
+		Game();
+	}
 
 	DrawTree(tree);
 	/* We finished drawing*/
@@ -29,13 +75,128 @@ void GameBoardSquare_ButtonClick(control* input)
 	}
 }
 
-int StartGame()
+void GameBoardSquare_ButtonClick(control* input)
+{
+	if (curSettings->next_turn == curSettings->user_color || curSettings->game_mode == TWO_PLAYERS_GAME_MODE || isUpgrade){
+		if (input == gameSelectedSquare_control)
+		{
+			switchOffAllButtons();
+			gameSelectedSquare_control = NULL;
+			free_move_list(posMovesFromCurPos);
+			posMovesFromCurPos = NULL;
+		}
+		else if (gameSelectedSquare_control == NULL)
+		{
+			position* chosenPos = GetPosOfSquare(input);
+			if (is_piece_of_color(board[chosenPos->col][chosenPos->row], curSettings->next_turn) == true){
+				SwitchButtonHighlight(input);
+				gameSelectedSquare_control = input;
+				get_moves_from_pos(curMovesList, *chosenPos, &posMovesFromCurPos);
+				HightlightPosMoves(posMovesFromCurPos);
+			}
+			free(chosenPos);
+		}
+		else if (gameSelectedSquare_control != NULL)
+		{
+			position* startPos = GetPosOfSquare(gameSelectedSquare_control);
+			position* endPos = GetPosOfSquare(input);
+			chosenMove = malloc(sizeof(move));
+			chosenMove->start_pos = *startPos;
+			chosenMove->end_pos= *endPos;
+
+			if (is_move_in_move_list(chosenMove, curMovesList) == true){
+				if (isPawnUpgradePossible(*chosenMove) == true){
+					DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn);
+					isUpgrade = true;
+				}
+				else
+				{
+					make_move(board, chosenMove);
+					SwitchButtonHighlight(gameSelectedSquare_control);
+					gameSelectedSquare_control = NULL;
+					curSettings->next_turn = get_opposite_color(curSettings->next_turn);
+					free_move_list(curMovesList);
+					free_move_list(posMovesFromCurPos);
+					free(chosenMove);
+					chosenMove = NULL;
+					free(startPos);
+					free(endPos);
+					Game();
+					return;
+				}
+			}
+			free(startPos);
+			free(endPos);
+		}
+
+		DrawTree(tree);
+		/* We finished drawing*/
+		if (SDL_Flip(tree->control->surface) != 0) {
+			printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+		}
+	}
+}
+
+void ComputerTurn()
+{
+	struct move_list* best_move_list = NULL;
+	int number_of_boards_evaluated = 0;
+
+	int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+
+	// Check for errors
+	if (FAILED_ERROR == current_move_grade) {
+		free_move_list(curMovesList);
+		free_move_list(best_move_list);
+		// TODO: check 
+		exit(EXIT_FAILURE);
+	}
+
+	// Make the move
+	make_move(board, &best_move_list->mov);
+
+	curSettings->next_turn = get_opposite_color(curSettings->next_turn);
+	free_move_list(curMovesList);
+	free_move_list(posMovesFromCurPos);
+	free(chosenMove);
+	free_move_list(best_move_list);
+	Game();
+}
+
+void buildBoardUITree()
+{
+	control* board_control = Create_panel_from_bmp(
+		CHESSBOARDFILENAME,
+		                  CHESSBOARDNAME,
+		                  0,
+		                  0,
+		                  (Uint16)BOARD_W,
+		                  (Uint16)BOARD_H);
+	board_node = CreateAndAddNodeToTree(board_control, tree);
+
+	DrawSquareButtons(board_node, &GameBoardSquare_ButtonClick);
+
+	DrawBoardGui(board_node);
+}
+
+int Game()
 {
 	FreeTree(tree);
+	if (NULL != buttonsBoard){
+		FreeButtonsBoard();
+	}
 	EventHandler_init(&Quit);
 
 	selectedSquare_Control = NULL;
 	selectedPiece_Control = NULL;
+	
+	curMovesList = NULL;
+	posMovesFromCurPos = NULL;
+
+
+	gameOver = false;
+	get_moves_for_color(board, curSettings->next_turn, &curMovesList);
+	posMovesFromCurPos = NULL;
 
 	control* window = Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H);
 	tree = CreateTree(window);
@@ -50,19 +211,7 @@ int StartGame()
 		(Uint16)GAMEBOARDBACKGROUND_H);
 	UINode* gameBoarBackground_node = CreateAndAddNodeToTree(gameBoarBackground_control, tree);
 
-	control* board_control = Create_panel_from_bmp(
-		CHESSBOARDFILENAME,
-		CHESSBOARDNAME,
-		0,
-		0,
-		(Uint16)BOARD_W,
-		(Uint16)BOARD_H);
-	board_node = CreateAndAddNodeToTree(board_control, tree);
-
-
-	DrawSquareButtons(board_node, &GameBoardSquare_ButtonClick);
-
-	DrawBoardGui(board_node);
+	buildBoardUITree();
 
 	int quitButton_x_location = GAMEBOARDBACKGROUND_W - BUTTON_W - 0.5 * MARGIN;
 	int quitButton_y_location = GAMEBOARDBACKGROUND_H - BUTTON_H - 1.5 * MARGIN;
@@ -110,5 +259,10 @@ int StartGame()
 	/* We finished drawing*/
 	if (SDL_Flip(tree->control->surface) != 0) {
 		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	}
+
+	if (PLAYER_VS_AI_GAME_MODE == curSettings->game_mode && curSettings->next_turn != curSettings->user_color)
+	{
+		ComputerTurn();
 	}
 }
