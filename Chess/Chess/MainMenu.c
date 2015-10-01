@@ -8,12 +8,15 @@ void StartNewGame_ButtonClick(control* input)
 	curSettings->next_turn = WHITE;
 	curSettings->user_color = WHITE;
 
+	gameOver = false;
+
 	init_board(board);
 	SettingMenu();
 }
 
 void LoadGame_ButtonClick(control* input)
 {
+	gameOver = false;
 	// TODO: implement
 }
 

@@ -206,8 +206,8 @@ void AISetting()
 	UINode* fourButton_node = CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node);
 	AddToListeners(fourButton_control);
 
-	int bestButton_x_location = oneButton_x_location;
-	int bestButton_y_location = oneButton_y_location + BUTTON_H + 2* MARGIN;
+	int bestButton_x_location = threeButton_x_location;
+	int bestButton_y_location = threeButton_y_location + BUTTON_H + 2* MARGIN;
 	control* bestButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTONBESTFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
@@ -221,7 +221,7 @@ void AISetting()
 	AddToListeners(bestButton_control);
 
 	int UserColorLabel_x_location = MARGIN;
-	int UserColorLabel_y_location = 0.70 * AISETTING_H - BUTTON_H;
+	int UserColorLabel_y_location = 0.75 * AISETTING_H - BUTTON_H;
 	control* UserColorLabel_control = Create_panel_from_bmp(
 		LABELUSERCOLORFILENAME,
 		LABELUSERCOLORNAME,

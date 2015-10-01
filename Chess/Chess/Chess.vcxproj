@@ -94,6 +94,7 @@
     <ClCompile Include="Logic.c" />
     <ClCompile Include="MainMenu.c" />
     <ClCompile Include="Minimax.c" />
+    <ClCompile Include="SaveLoadWindow.c" />
     <ClCompile Include="SetPieces.c" />
     <ClCompile Include="SettingMenu.c" />
     <ClCompile Include="UIFramework.c" />
@@ -110,6 +111,7 @@
     <ClInclude Include="Logic.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="Minimax.h" />
+    <ClInclude Include="SaveLoadWindow.h" />
     <ClInclude Include="SetPieces.h" />
     <ClInclude Include="SettingMenu.h" />
     <ClInclude Include="UIFrameWork.h" />

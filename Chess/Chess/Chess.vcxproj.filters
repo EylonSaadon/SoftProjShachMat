@@ -54,6 +54,9 @@
     <ClCompile Include="CommonGameboard.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SaveLoadWindow.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Chess.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CommonGameboard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveLoadWindow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

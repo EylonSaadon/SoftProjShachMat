@@ -77,7 +77,7 @@ void upgradePieces_ButtonClick(control* input)
 
 void GameBoardSquare_ButtonClick(control* input)
 {
-	if (curSettings->next_turn == curSettings->user_color || curSettings->game_mode == TWO_PLAYERS_GAME_MODE || isUpgrade){
+	if ((curSettings->next_turn == curSettings->user_color || curSettings->game_mode == TWO_PLAYERS_GAME_MODE || isUpgrade) && gameOver == false){
 		if (input == gameSelectedSquare_control)
 		{
 			switchOffAllButtons();
@@ -139,28 +139,30 @@ void GameBoardSquare_ButtonClick(control* input)
 
 void ComputerTurn()
 {
-	struct move_list* best_move_list = NULL;
-	int number_of_boards_evaluated = 0;
+	if (gameOver == false){
+		struct move_list* best_move_list = NULL;
+		int number_of_boards_evaluated = 0;
 
-	int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+		int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
 
-	// Check for errors
-	if (FAILED_ERROR == current_move_grade) {
+		// Check for errors
+		if (FAILED_ERROR == current_move_grade) {
+			free_move_list(curMovesList);
+			free_move_list(best_move_list);
+			// TODO: check 
+			exit(EXIT_FAILURE);
+		}
+
+		// Make the move
+		make_move(board, &best_move_list->mov);
+
+		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
 		free_move_list(curMovesList);
+		free_move_list(posMovesFromCurPos);
+		free(chosenMove);
 		free_move_list(best_move_list);
-		// TODO: check 
-		exit(EXIT_FAILURE);
+		Game();
 	}
-
-	// Make the move
-	make_move(board, &best_move_list->mov);
-
-	curSettings->next_turn = get_opposite_color(curSettings->next_turn);
-	free_move_list(curMovesList);
-	free_move_list(posMovesFromCurPos);
-	free(chosenMove);
-	free_move_list(best_move_list);
-	Game();
 }
 
 void buildBoardUITree()
@@ -179,6 +181,27 @@ void buildBoardUITree()
 	DrawBoardGui(board_node);
 }
 
+void CheckGameOver()
+{
+	// Get the score of the board
+	int score = get_board_score_for_color(board, get_opposite_color(curSettings->next_turn));
+
+	// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
+	if (WIN_SCORE == score) {
+		print_win_message(get_opposite_color(get_opposite_color(curSettings->next_turn)));
+		gameOver = true;
+	}
+	else if (TIE_SCORE == score && NULL == curMovesList) {
+		gameOver = true;
+	}
+	else {
+		if (is_check_on_color(board, curSettings->next_turn)) {
+			// TODO: should turn to messagebox
+			print_message(CHECK);
+		}
+	}
+}
+
 int Game()
 {
 	FreeTree(tree);
@@ -193,9 +216,10 @@ int Game()
 	curMovesList = NULL;
 	posMovesFromCurPos = NULL;
 
-
-	gameOver = false;
 	get_moves_for_color(board, curSettings->next_turn, &curMovesList);
+
+	CheckGameOver();
+
 	posMovesFromCurPos = NULL;
 
 	control* window = Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H);
@@ -255,11 +279,19 @@ int Game()
 	UINode* mainMenuButton_node = CreateAndAddNodeToTree(mainMenuButton_control, gameBoarBackground_node);
 	AddToListeners(mainMenuButton_control);
 
+	if (gameOver)
+	{
+		//TODO: addLabel
+	}
+
+
 	DrawTree(tree);
 	/* We finished drawing*/
 	if (SDL_Flip(tree->control->surface) != 0) {
 		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
 	}
+
+
 
 	if (PLAYER_VS_AI_GAME_MODE == curSettings->game_mode && curSettings->next_turn != curSettings->user_color)
 	{
