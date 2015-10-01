@@ -339,7 +339,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 		else if (strstr(input, "get_best_moves ") == input) {
 			int minimax_depth = 0;
 
-			if (strstr(input, "best\n") == input) {
+			if (strstr(input, "get_best_moves best") == input) {
 				minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
 			}
 			else {
@@ -399,6 +399,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 
 			struct move_list one_move_list;
 			one_move_list.mov = mov;
+			one_move_list.next = NULL;
 
 			struct move_list* best_move_list = NULL;
 			int number_of_boards_evaluated = 0;
@@ -413,7 +414,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 				exit(EXIT_FAILURE);
 			}
 
-			printf("%d", current_move_grade);
+			printf("%d\n", current_move_grade);
 
 			free_move_list(best_move_list);
 		}

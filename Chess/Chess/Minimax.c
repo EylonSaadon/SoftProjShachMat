@@ -18,7 +18,7 @@ int get_best_moves_using_minimax(int max_depth, char board[BOARD_SIZE][BOARD_SIZ
 		// Temp board for current move
 		char minimax_board[BOARD_SIZE][BOARD_SIZE];
 
-		if (*number_of_boards_evaluated >= 10000000 && MAX_MINIMAX_DEPTH_POSSIBLE == max_depth) {
+		if (*number_of_boards_evaluated >= 1000000 && MAX_MINIMAX_DEPTH_POSSIBLE == max_depth) {
 			return grade;
 		}
 

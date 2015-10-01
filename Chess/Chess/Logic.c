@@ -144,6 +144,38 @@ bool is_valid_set(char board[BOARD_SIZE][BOARD_SIZE], char disc, struct position
 	int pawn_count = 0;
 	int rook_count = 0;
 
+	switch (disc) {
+	case WHITE_P:
+	case BLACK_P:
+		pawn_count++;
+		break;
+
+	case WHITE_B:
+	case BLACK_B:
+		bishop_count++;
+		break;
+
+	case WHITE_N:
+	case BLACK_N:
+		knight_count++;
+		break;
+
+	case WHITE_R:
+	case BLACK_R:
+		rook_count++;
+		break;
+
+	case WHITE_Q:
+	case BLACK_Q:
+		queen_count++;
+		break;
+
+	case WHITE_K:
+	case BLACK_K:
+		king_count++;
+		break;
+	}
+
 	for (int i = 0; i < BOARD_SIZE; i++){
 		for (int j = 0; j < BOARD_SIZE; j++){
 			if (!is_piece_of_color(board[i][j], color)) {
