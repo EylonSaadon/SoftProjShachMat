@@ -30,6 +30,11 @@
 #include "SettingMenu.h"
 #endif
 
+#ifndef SAVELOADWINDOW_
+#include "SaveLoadWindow.h"
+#endif
+
+
 // GLOBAL
 #define BUTTON_W 227
 #define BUTTON_H 47
@@ -49,6 +54,7 @@
 #define BUTTONWHITENAME "Button_White"
 #define BUTTONWHITEFILENAME "Button_White.bmp"
 
+bool isSaveMode;
 
 static int guiQuit = 0;
 control* window;

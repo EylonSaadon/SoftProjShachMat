@@ -1,5 +1,5 @@
 #include "GameBoard.h"
-#include "Minimax.h"
+
 
 control* gameSelectedSquare_control;
 
@@ -10,7 +10,16 @@ void GameBoardMainMenu_ButtonClick(control* input)
 
 void GameBoardSave_ButtonClick(control* input)
 {
-	// TODO: implement
+	isSaveMode = true;
+
+	free_move_list(curMovesList);
+	curMovesList = NULL;
+	free_move_list(posMovesFromCurPos);
+	posMovesFromCurPos = NULL;
+	free(chosenMove);
+	chosenMove = NULL;
+
+	SaveLoadMenu();
 }
 
 void HightlightPosMoves(move_list* movesToHighlight)
@@ -62,7 +71,9 @@ void upgradePieces_ButtonClick(control* input)
 		gameSelectedSquare_control = NULL;
 		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
 		free_move_list(curMovesList);
+		curMovesList = NULL;
 		free_move_list(posMovesFromCurPos);
+		posMovesFromCurPos = NULL;
 		free(chosenMove);
 		chosenMove = NULL;
 		Game();
@@ -116,7 +127,9 @@ void GameBoardSquare_ButtonClick(control* input)
 					gameSelectedSquare_control = NULL;
 					curSettings->next_turn = get_opposite_color(curSettings->next_turn);
 					free_move_list(curMovesList);
+					curMovesList = NULL;
 					free_move_list(posMovesFromCurPos);
+					posMovesFromCurPos = NULL;
 					free(chosenMove);
 					chosenMove = NULL;
 					free(startPos);
@@ -148,6 +161,7 @@ void ComputerTurn()
 		// Check for errors
 		if (FAILED_ERROR == current_move_grade) {
 			free_move_list(curMovesList);
+			curMovesList = NULL;
 			free_move_list(best_move_list);
 			// TODO: check 
 			exit(EXIT_FAILURE);
@@ -158,8 +172,11 @@ void ComputerTurn()
 
 		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
 		free_move_list(curMovesList);
+		curMovesList = NULL;
 		free_move_list(posMovesFromCurPos);
+		posMovesFromCurPos = NULL;
 		free(chosenMove);
+		chosenMove = NULL;
 		free_move_list(best_move_list);
 		Game();
 	}
@@ -212,9 +229,6 @@ int Game()
 
 	selectedSquare_Control = NULL;
 	selectedPiece_Control = NULL;
-	
-	curMovesList = NULL;
-	posMovesFromCurPos = NULL;
 
 	get_moves_for_color(board, curSettings->next_turn, &curMovesList);
 

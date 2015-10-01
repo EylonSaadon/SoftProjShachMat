@@ -16,8 +16,9 @@ void StartNewGame_ButtonClick(control* input)
 
 void LoadGame_ButtonClick(control* input)
 {
+	isSaveMode = false;
 	gameOver = false;
-	// TODO: implement
+	SaveLoadMenu();
 }
 
 int MainMenu()

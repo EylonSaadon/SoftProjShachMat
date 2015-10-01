@@ -5,8 +5,24 @@
 #include "GUI.h"
 #endif
 
-#define BUTTON_W 100
-#define BUTTON_H 72
+#define NUMOFSLOTS 7
+
+#define SAVELOAD_W 800
+#define SAVELOAD_H 600
+#define SAVELOADBACKGROUNDNAME "BlueBackground"
+#define SAVELOADBACKGROUNDFILENAME "BlueBackground.bmp"
+
+#define LABELLOADGAMENAME "Label_LoadGame"
+#define LABELLOADGAMEFILENAME "Label_LoadGame.bmp"
+#define LABELSAVEGAMENAME "Label_SaveGame"
+#define LABELSAVEGAMEFILENAME "Label_SaveGame.bmp"
+
+#define SAVELOAD_TITLE_LOCATION_X_CENTER (0.5*SAVELOAD_W - 200)
+
+
+#define BUTTONSAVESLOT_W 100
+#define BUTTONSAVESLOT_H 72
+
 #define BUTTONSAVESLOT1NAME "Button_Save_Slot1"
 #define BUTTONSAVESLOT1FILENAME "Button_Save_Slot1.bmp"
 #define BUTTONSAVESLOT2NAME "Button_Save_Slot2"
@@ -27,5 +43,13 @@
 #define BUTTONSAVESLOT9FILENAME "Button_Save_Slot9.bmp"
 #define BUTTONSAVESLOT10NAME "Button_Save_Slot10"
 #define BUTTONSAVESLOT10FILENAME "Button_Save_Slot10.bmp"
+
+#define BUTTONIMGFILENAMEPREFIX "Button_Save_Slot"
+#define SAVEFILNAMEPREFIX "ChessSaveNo_"
+
+#define BUTTONSAVESLOTHIGHLIGHTFILENAME "Button_Save_Highlight.bmp"
+
+
+int SaveLoadMenu();
 
 #endif

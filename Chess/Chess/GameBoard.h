@@ -9,6 +9,10 @@
 #include "SetPieces.h"
 #endif
 
+#ifndef MINIMAX_
+#include "Minimax.h"
+#endif
+
 extern UINode* tree;
 
 extern int setPieces;
