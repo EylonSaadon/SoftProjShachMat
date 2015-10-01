@@ -106,7 +106,7 @@ void GameSettingsNext_ButtonClick(control* input)
 		return;
 	}
 	else{
-		StartGame();
+		Game();
 		return;
 	}
 }

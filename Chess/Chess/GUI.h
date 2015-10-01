@@ -58,13 +58,22 @@ int setPieces;
 
 game_settings* curSettings;
 
+move_list* curMovesList;
+move_list* posMovesFromCurPos;
+move* chosenMove;
+
+bool gameOver;
+bool isUpgrade;
 char board[BOARD_SIZE][BOARD_SIZE];
+control*** buttonsBoard;
 
 void start_gui();
 
 SDL_Surface* LoadBMP(char* fileName);
 
 void releaseResouces();
+
+void FreeButtonsBoard();
 
 void Quit();
 

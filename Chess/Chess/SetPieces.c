@@ -98,7 +98,7 @@ void SetPiecesCancel_ButtonClick(control* input)
 void SetPiecesStart_ButtonClick(control* input)
 {
 	if (is_valid_board_init(board) == true) {
-		StartGame();
+		Game();
 	}
 }
 

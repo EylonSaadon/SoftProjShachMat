@@ -19,7 +19,15 @@ extern char board[BOARD_SIZE][BOARD_SIZE];
 
 void Square_ButtonClick(control input);
 
-int StartGame();
+void HightlightPosMoves(move_list* move_list);
+
+int isPawnUpgradePossible(move move);
+
+void buildBoardUITree();
+
+void ComputerTurn();
+
+int Game();
 
 
 #endif

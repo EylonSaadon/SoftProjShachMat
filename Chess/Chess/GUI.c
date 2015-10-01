@@ -1,10 +1,31 @@
 #include "GUI.h"
 
+void FreeButtonsBoard()
+{
+	// might be reduntent since we free the tree and all controls are there;
+	/*for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		for (int j = 0; j < BOARD_SIZE; j++)
+		{
+			free(buttonsBoard[i][j]);
+		}
+	}*/
+	for (int i = 0; i < BOARD_SIZE; i++)
+	{
+		free(buttonsBoard[i]);
+	}
+	free(buttonsBoard);
+	buttonsBoard = NULL;
+}
+
 void releaseResouces()
 {
 	FreeTree(tree);
 	FreeEventHandler();
 	free(curSettings);
+	if (buttonsBoard != NULL){
+		FreeButtonsBoard();
+	}
 }
 
 void Quit()
@@ -58,7 +79,7 @@ void start_gui()
 		exit(EXIT_FAILURE);
 	}
 	atexit(SDL_Quit);
-
+	buttonsBoard = NULL;
 	SDL_WM_SetCaption("Chess", NULL);
 	MainMenu();
 

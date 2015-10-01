@@ -25,13 +25,13 @@ struct move {
 	struct position start_pos;
 	struct position end_pos;
 	char new_disc;
-};
+}; typedef struct move move;
 
 // Move list - each item contains a move and a pointer to the next item.
 struct move_list {
 	struct move mov;
 	struct move_list* next;
-};
+}; typedef struct move_list move_list;
 
 // Creates position list from leaf - the leaf is the last position in the list
 // Returns NULL on failure and frees pos_list

@@ -42,6 +42,9 @@ void print_move(struct move* mov);
 // Prints move list
 void print_moves_from_pos(struct move_list* moves, struct position pos);
 
+// get move list
+int get_moves_from_pos(move_list* moves, struct position pos, move_list** possible_moves);
+
 // Get opposite color (if white returns black, and vice versa)
 COLOR get_opposite_color(COLOR color);
 
