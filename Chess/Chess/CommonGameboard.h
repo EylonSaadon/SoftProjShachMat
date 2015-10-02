@@ -60,11 +60,36 @@
 #define SQUARE_W 70
 #define SQUARE_H 70
 
+#define LABELBLACKCHECKNAME "Label_BlackCheck"
+#define LABELBLACKCHECKFILENAME "Label_BlackCheck.bmp"
+#define LABELWHITECHECKNAME "Label_WhiteCheck"
+#define LABELWHITECHECKFILENAME "Label_WhiteCheck.bmp"
+#define LABELBLACKWINSNAME "Label_BlackWins"
+#define LABELBLACKWINSFILENAME "Label_BlackWins.bmp"
+#define LABELWHITEWINSNAME "Label_WhiteWins"
+#define LABELWHITEWINSFILENAME "Label_WhiteWins.bmp"
+#define LABELCHECKMATENAME "Label_CheckMate"
+#define LABELCHECKMATEFILENAME "Label_CheckMate.bmp"
+#define LABELTIENAME "Label_Tie"
+#define LABELTIEFILENAME "Label_Tie.bmp"
+#define LABELGAMEOVERNAME "Label_GameOver"
+#define LABELGAMEOVERFILENAME "Label_GameOver.bmp"
 
-control* selectedSquare_Control;
-control* selectedPiece_Control;
+#define BUTTONBESTMOVENAME "Button_BestMove"
+#define BUTTONBESTMOVEFILENAME "Button_BestMove.bmp"
 
-UINode* board_node;
+/////////////////////
+// Global Variables//
+/////////////////////
+
+
+
+
+
+/////////////
+//Functions//
+/////////////
+
 
 position* GetPosOfSquare(control* square);
 

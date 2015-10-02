@@ -1,5 +1,5 @@
 #include "SettingMenu.h"
-#include "AISettings.h"
+
 
 void ChooseMode_ButtonClick(control* input)
 {
@@ -46,7 +46,7 @@ void SetPiece_ButtonClick(control* input)
 	}
 	else
 	{
-		setPieces == 0;
+		setPieces = 0;
 	}
 	DrawTree(tree);
 	/* We finished drawing*/
@@ -92,6 +92,7 @@ void NextPlayer_ButtonClick(control* input)
 }
 void GameSettingsCancel_ButtonClick(control* input)
 {
+	releaseResouces();
 	MainMenu();
 }
 
@@ -117,11 +118,11 @@ int SettingMenu()
 	FreeTree(tree);
 	EventHandler_init(&Quit);
 
-	setPieces = 0;
-
 	control* window = Create_window(GAMESETTING_W, GAMESETTING_H);
 	tree = CreateTree(window);
 
+	// Drawing all controls
+	#pragma region Drawing
 	control* gameSettingBackground_control = Create_panel_from_bmp(
 		GAMESETTINGFILENAME,
 		GAMESETTINGNAME,
@@ -236,7 +237,7 @@ int SettingMenu()
 	AddToListeners(blackButton_control);
 
 
-	int cancelButton_x_location = MARGIN ;
+	int cancelButton_x_location = MARGIN;
 	int cancelButton_y_location = GAMESETTING_H - BUTTON_H - MARGIN * 2;
 	control* cancelButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
@@ -263,6 +264,7 @@ int SettingMenu()
 		&GameSettingsNext_ButtonClick);
 	UINode* nextButton_node = CreateAndAddNodeToTree(nextButton_control, gameSettingBackground_node);
 	AddToListeners(nextButton_control);
+#pragma endregion
 
 	if (curSettings->game_mode == TWO_PLAYERS_GAME_MODE)
 	{
@@ -270,7 +272,7 @@ int SettingMenu()
 	}
 	else
 	{
-		pvcButton_control->ishighlighted = 0;
+		pvcButton_control->ishighlighted = 1;
 	}
 
 	if (curSettings->next_turn == WHITE)
@@ -279,7 +281,7 @@ int SettingMenu()
 	}
 	else
 	{
-		blackButton_control->ishighlighted = 0;
+		blackButton_control->ishighlighted = 1;
 	}
 
 	DrawTree(tree);

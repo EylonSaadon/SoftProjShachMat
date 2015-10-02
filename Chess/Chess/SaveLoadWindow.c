@@ -112,7 +112,7 @@ int SaveLoadMenu()
 		AddToListeners(slotButton_control);
 
 
-		//free(saveFileName);
+		free(saveFileName);
 		free(fileNameNoSuffix);
 		free(fileName);
 	}

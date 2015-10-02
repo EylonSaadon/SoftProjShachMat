@@ -23,12 +23,25 @@
 #define BUTTONLOADGAMEFILENAME "Button_LoadGame.bmp"
 #define MAINMENU_BUTTONLOCATION_X_CENTER (0.5*MAINMENU_W - 0.5*BUTTON_W)
 
-void StartNewGame_ButtonClick(control input);
 
-void LoadGame_ButtonClick(control input);
+/////////////////////
+// Global Variables//
+/////////////////////
 
-void Quit_ButtonClick(control input);
 
+
+
+/////////////
+//Functions//
+/////////////
+
+// The Function linked to the New Game button.
+void StartNewGame_ButtonClick(control* input);
+
+// The Function linked to the Load Game button.
+void LoadGame_ButtonClick(control* input);
+
+// Draws the Main Menu window and creates all the buttons and adds them to the event handler listeners.
 int MainMenu();
 
 #endif

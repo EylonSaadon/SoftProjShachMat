@@ -40,12 +40,33 @@
 
 #define GAMESETTING_BUTTONLOCATION_X_CENTER (0.5*GAMESETTING_W - 0.5*BUTTON_W)
 
+/////////////////////
+// Global Variables//
+/////////////////////
+
 
 extern UINode* tree;
 
 extern game_settings* curSettings;
 
 extern int setPieces;
+
+
+
+/////////////
+//Functions//
+/////////////
+
+
+void ChooseMode_ButtonClick(control* input);
+
+void SetPiece_ButtonClick(control* input);
+
+void NextPlayer_ButtonClick(control* input);
+
+void GameSettingsCancel_ButtonClick(control* input);
+
+void GameSettingsNext_ButtonClick(control* input);
 
 int SettingMenu();
 

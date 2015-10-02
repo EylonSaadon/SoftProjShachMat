@@ -11,7 +11,7 @@
 #define BUTTONTYPE "button"
 
 
-
+//Functions
 control* Create_window(int window_w, int window_h);
 
 control* Create_panel_from_bmp(char* background_filename, char* name, Sint16 x_location, Sint16 y_location, Uint16 picture_width, Uint16 picture_height);
@@ -29,4 +29,5 @@ void FreeControl(control* control);
 void FreeTree(UINode* node);
 
 UINode* SearchTreeByName(UINode* node, char* name);
+
 #endif

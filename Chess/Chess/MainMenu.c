@@ -10,6 +10,8 @@ void StartNewGame_ButtonClick(control* input)
 
 	gameOver = false;
 
+	setPieces = 0;
+
 	init_board(board);
 	SettingMenu();
 }
@@ -18,12 +20,17 @@ void LoadGame_ButtonClick(control* input)
 {
 	isSaveMode = false;
 	gameOver = false;
+	setPieces = 0;
+
+	curSettings = malloc(sizeof(game_settings));
+
 	SaveLoadMenu();
 }
 
 int MainMenu()
 {
-	FreeTree(tree);
+	releaseResouces();
+	InitGlobalVariable();
 	EventHandler_init(&Quit);
 
 	control* window = Create_window(MAINMENU_W, MAINMENU_H);

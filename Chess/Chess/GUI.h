@@ -36,6 +36,12 @@
 
 
 // GLOBAL
+#define NUMBUTTON_W 75
+#define NUMBUTTON_H 73
+#define NUMBUTTONHIGHLIGHTEDFILENAME "Button_NumHighlight.bmp"
+
+#define BLINKNUM 6
+
 #define BUTTON_W 227
 #define BUTTON_H 47
 #define BUTTONCANCELNAME "Button_Cancel"
@@ -54,42 +60,80 @@
 #define BUTTONWHITENAME "Button_White"
 #define BUTTONWHITEFILENAME "Button_White.bmp"
 
-bool isSaveMode;
+
+/////////////////////
+// Global Variables//
+/////////////////////
 
 static int guiQuit = 0;
 control* window;
 UINode* tree;
 
-int setPieces;
+//GameBoard
+control* selectedSquare_Control;
+control* selectedPiece_Control;
 
-game_settings* curSettings;
+UINode* board_node;
 
 move_list* curMovesList;
 move_list* posMovesFromCurPos;
 move* chosenMove;
 
 bool gameOver;
+bool check;
+bool tie;
 bool isUpgrade;
+bool showDepthOptions;
+
 char board[BOARD_SIZE][BOARD_SIZE];
 control*** buttonsBoard;
 
+//SaveLoad
+bool isSaveMode;
+
+
+//Settings
+int setPieces;
+
+game_settings* curSettings;
+
+
+/////////////
+//Functions//
+/////////////
+
+// Starts the main gui contains the event handleing loop.
 void start_gui();
 
+// loads a .bmp file and returns an SDL_Surface that contains it, also removes green pixels.
 SDL_Surface* LoadBMP(char* fileName);
 
+// Releases All resources in an orderly fashion in case of quitting.
 void releaseResouces();
 
+// Releases the Buttonboard in an orderly fashion.
 void FreeButtonsBoard();
 
+// This is the Function the Event handler calls when the X button at the top right of the window is clicked.
 void Quit();
 
+// The Function linked to the alls Quit Buttons across all windows.
+void Quit_ButtonClick(control* input);
+
+// Switches the Highlight flag of the control given as an argument.
 void SwitchButtonHighlight(control* input);
 
+// Sets the Highlight flag of the control given as an argument to 0.
 void SwitchOffHighlightbyName(char* name);
 
+// Sets the Highlight flag of the control given as an argument to 1.
 void SwitchOnHighlightbyName(char* name);
 
+// initializtion
+void InitGlobalVariable();
 
+// sets the ishighlighted of all the depths potions to 0.
+void SwitchOffHighlightAllMinimaxDepths();
 
 #endif
 
