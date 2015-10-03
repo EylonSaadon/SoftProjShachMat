@@ -34,6 +34,7 @@ void LoadGame_ButtonClick(control* input)
 		guiQuit = -1;
 		error = "ERROR: Failed allocating memory for gameSettings";
 	}
+	curSettings->minimax_depth = 1;
 
 	SaveLoadMenu();
 }
