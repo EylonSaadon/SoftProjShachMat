@@ -45,7 +45,7 @@ int CreateControl(SDL_Surface* control_Background, SDL_Surface* control_Backgrou
 			return -1;
 		}
 
-		for (int i = 0; i < strlen(name); i++)
+		for (unsigned int i = 0; i < strlen(name); i++)
 		{
 			(*control_ret)->name[i] = name[i];
 		}
@@ -200,7 +200,7 @@ int Create_Button_from_bmp_transHighlight(char* background_filename, char* highl
 	}
 
 	// Highlighting the Button Surface;
-	if (-1 == HighlightButtonSurface(Button_Highlighted, TranparentHighlightedButton, &error))
+	if (-1 == HighlightButtonSurface(Button_Highlighted, TranparentHighlightedButton, error))
 	{
 		SDL_FreeSurface(Button_Background);
 		Button_Background = NULL;
