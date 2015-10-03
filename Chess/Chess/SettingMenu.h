@@ -68,6 +68,6 @@ void GameSettingsCancel_ButtonClick(control* input);
 
 void GameSettingsNext_ButtonClick(control* input);
 
-int SettingMenu();
+void SettingMenu();
 
 #endif

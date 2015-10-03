@@ -31,7 +31,7 @@ void ChooseMode_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -50,7 +50,7 @@ void SetPiece_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -115,7 +115,7 @@ void GameSettingsNext_ButtonClick(control* input)
 }
 
 
-int SettingMenu()
+void SettingMenu()
 {
 	FreeTree(tree);
 	if (-1 == EventHandler_init(&Quit, &error))
@@ -435,7 +435,7 @@ int SettingMenu()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

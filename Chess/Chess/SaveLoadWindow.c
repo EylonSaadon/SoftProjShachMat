@@ -38,7 +38,7 @@ void SaveLoadSlot_ButtonClick(control* input)
 }
 
 
-int SaveLoadMenu()
+void SaveLoadMenu()
 {
 	FreeTree(tree);
 	if (-1 == EventHandler_init(&Quit, &error))
@@ -119,6 +119,9 @@ int SaveLoadMenu()
 		char numberstr[3];
 		_itoa_s(i+1,numberstr,3,10);
 		
+		Sint16 location_x = (Sint16) 2 * MARGIN + (i / 7) * BUTTON_W + MARGIN * 2;
+		Sint16 location_y = (Sint16) 0.15 * SAVELOAD_H + (i & 7) * (BUTTON_H + MARGIN);
+
 
 		char* saveFileName = concat(SAVEFILNAMEPREFIX, numberstr);
 
@@ -129,8 +132,8 @@ int SaveLoadMenu()
 			fileName,
 			BUTTONSAVESLOTHIGHLIGHTFILENAME,
 			saveFileName,
-			2 * MARGIN + (i / 7) * BUTTON_W + MARGIN *2,
-			0.15 * SAVELOAD_H + (i & 7) * (BUTTON_H + MARGIN),
+			location_x,
+			location_y,
 			(Uint16)BUTTON_H,
 			(Uint16)BUTTON_W,
 			&SaveLoadSlot_ButtonClick,
@@ -156,8 +159,8 @@ int SaveLoadMenu()
 	}
 
 
-	int cancelButton_x_location = SAVELOAD_W - BUTTON_W - 0.5 * MARGIN;
-	int cancelButton_y_location = SAVELOAD_H - BUTTON_H - 1.5 * MARGIN;
+	Sint16 cancelButton_x_location = (Sint16)SAVELOAD_W - BUTTON_W - 0.5 * MARGIN;
+	Sint16 cancelButton_y_location = (Sint16)SAVELOAD_H - BUTTON_H - 1.5 * MARGIN;
 	control* cancelButton_control;
 	if(-1 ==Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
@@ -184,7 +187,7 @@ int SaveLoadMenu()
 		}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

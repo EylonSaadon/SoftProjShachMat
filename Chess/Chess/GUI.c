@@ -34,6 +34,7 @@ int FlipTree(char** error)
 		*error = SDL_GetError();
 		return -1;
 	}
+	return 0;
 }
 
 void releaseResouces()

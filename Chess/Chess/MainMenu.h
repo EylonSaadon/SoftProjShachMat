@@ -47,6 +47,6 @@ void StartNewGame_ButtonClick(control* input);
 void LoadGame_ButtonClick(control* input);
 
 // Draws the Main Menu window and creates all the buttons and adds them to the event handler listeners.
-int MainMenu();
+void MainMenu();
 
 #endif

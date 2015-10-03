@@ -68,7 +68,7 @@ void HighlightBestMove(int blinknum)
 		}
 
 		// DrawTree
-		if (-1 == FlipTree(error))
+		if (-1 == FlipTree(&error))
 		{
 			guiQuit = -1;
 		}
@@ -139,7 +139,7 @@ void GameMinimaxDepth_ButtonClick(control* input)
 	HighlightBestMove(BLINKNUM);
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -319,7 +319,7 @@ void GameBoardBest_ButtonClick(control * input)
 		HighlightBestMove(BLINKNUM);
 
 		// DrawTree
-		if (-1 == FlipTree(error))
+		if (-1 == FlipTree(&error))
 		{
 			guiQuit = -1;
 		}
@@ -363,7 +363,7 @@ void HightlightPosMoves(move_list* movesToHighlight)
 	}
 }
 
-int isPawnUpgradePossible(move move, char piece)
+bool isPawnUpgradePossible(move move, char piece)
 {
 	if (piece == WHITE_P || piece == BLACK_P){
 		if (curSettings->next_turn == WHITE)
@@ -375,6 +375,7 @@ int isPawnUpgradePossible(move move, char piece)
 			return move.end_pos.row == 0;
 		}
 	}
+	return false;
 }
 
 void switchOffAllButtons()
@@ -406,7 +407,7 @@ void upgradePieces_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -469,7 +470,7 @@ void GameBoardSquare_ButtonClick(control* input)
 		}
 
 		// DrawTree
-		if (-1 == FlipTree(error))
+		if (-1 == FlipTree(&error))
 		{
 			guiQuit = -1;
 		}
@@ -554,7 +555,7 @@ void CheckGameOver()
 	}
 }
 
-int Game()
+void Game()
 {
 	check = false;
 
@@ -872,7 +873,7 @@ int Game()
 
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

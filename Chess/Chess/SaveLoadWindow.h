@@ -64,6 +64,6 @@
 /////////////
 
 
-int SaveLoadMenu();
+void SaveLoadMenu();
 
 #endif

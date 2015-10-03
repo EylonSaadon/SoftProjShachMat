@@ -49,7 +49,7 @@ void SetPiecesBoardSquare_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -77,7 +77,7 @@ void SetPiecesSidePanelPiece_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -250,7 +250,7 @@ void SetPiecesWindow()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

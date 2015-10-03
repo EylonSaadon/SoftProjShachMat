@@ -39,7 +39,7 @@ void LoadGame_ButtonClick(control* input)
 	SaveLoadMenu();
 }
 
-int MainMenu()
+void MainMenu()
 {
 	releaseResouces();
 	InitGlobalVariable();
@@ -158,7 +158,7 @@ int MainMenu()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

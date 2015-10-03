@@ -122,6 +122,8 @@ int addNodeAsChild(UINode* node, UINode* father, char** error)
 
 	node->father = father;
 	node->root = father->root;
+
+	return 0;
 }
 
 int CreateAndAddNodeToTree(control* control, UINode* father, UINode** node, char** error){
@@ -156,6 +158,7 @@ int CreateAndAddNodeToTree(control* control, UINode* father, UINode** node, char
 		*node = NULL;
 		return -1;
 	}
+	return 0;
 }
 
 char* concat(char *s1, char *s2)

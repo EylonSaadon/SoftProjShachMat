@@ -30,7 +30,7 @@ void UserColor_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -91,7 +91,7 @@ void AIMinimaxDepth_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}
@@ -467,7 +467,7 @@ void AISetting()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(error))
+	if (-1 == FlipTree(&error))
 	{
 		guiQuit = -1;
 	}

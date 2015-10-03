@@ -37,12 +37,13 @@ void Square_ButtonClick(control input);
 
 void HightlightPosMoves(move_list* move_list);
 
-int isPawnUpgradePossible(move move, char piece);
+bool isPawnUpgradePossible(move move, char piece);
+
 void buildBoardUITree();
 
 void ComputerTurn();
 
-int Game();
+void Game();
 
 
 #endif
