@@ -2,14 +2,6 @@
 
 void FreeButtonsBoard()
 {
-	// might be reduntent since we free the tree and all controls are there;
-	/*for (int i = 0; i < BOARD_SIZE; i++)
-	{
-		for (int j = 0; j < BOARD_SIZE; j++)
-		{
-			free(buttonsBoard[i][j]);
-		}
-	}*/
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		free(buttonsBoard[i]);
@@ -18,15 +10,33 @@ void FreeButtonsBoard()
 	buttonsBoard = NULL;
 }
 
+void SwitchOffHighlightAllMinimaxDepths()
+{
+	SwitchOffHighlightbyName(BUTTON1NAME);
+	SwitchOffHighlightbyName(BUTTON2NAME);
+	SwitchOffHighlightbyName(BUTTON3NAME);
+	SwitchOffHighlightbyName(BUTTON4NAME);
+	SwitchOffHighlightbyName(BUTTONBESTNAME);
+}
+
 void releaseResouces()
 {
 	FreeTree(tree);
+	tree = NULL;
 	FreeEventHandler();
 	free(curSettings);
+	curSettings = NULL;
 	if (buttonsBoard != NULL){
 		FreeButtonsBoard();
 	}
+	free(curMovesList);
+	curMovesList = NULL;
+	free(posMovesFromCurPos);
+	posMovesFromCurPos = NULL;
+	free(chosenMove);
+	chosenMove = NULL;
 }
+
 
 void Quit()
 {
@@ -39,7 +49,41 @@ void Quit_ButtonClick(control* input)
 	Quit();
 }
 
+// initializtion
+void InitGlobalVariable()
+{
+	window = NULL;
+	tree = NULL;
 
+	//GameBoard
+	selectedSquare_Control = NULL;
+	selectedPiece_Control = NULL;
+
+	board_node = NULL;
+
+	curMovesList = NULL;
+	posMovesFromCurPos = NULL;
+	chosenMove = NULL;
+
+	gameOver = 0;
+	check = 0;
+	tie = 0;
+
+	showDepthOptions = 0;
+
+	isUpgrade = 0;
+
+	control*** buttonsBoard = NULL;
+
+	//SaveLoad
+	isSaveMode = 0;
+
+
+	//Settings
+	setPieces = 0;
+
+	curSettings = NULL;
+}
 
 void SwitchButtonHighlight(control* input)
 {
@@ -79,7 +123,9 @@ void start_gui()
 		exit(EXIT_FAILURE);
 	}
 	atexit(SDL_Quit);
-	buttonsBoard = NULL;
+	
+	InitGlobalVariable();
+	guiQuit = 0;
 	SDL_WM_SetCaption("Chess", NULL);
 	MainMenu();
 

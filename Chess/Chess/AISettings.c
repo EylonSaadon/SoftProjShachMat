@@ -36,16 +36,8 @@ void UserColor_ButtonClick(control* input)
 	}
 }
 
-void SwitchOffHighlightAllMinimaxDepths()
-{
-	SwitchOffHighlightbyName(BUTTON1NAME);
-	SwitchOffHighlightbyName(BUTTON2NAME);
-	SwitchOffHighlightbyName(BUTTON3NAME);
-	SwitchOffHighlightbyName(BUTTON4NAME);
-	SwitchOffHighlightbyName(BUTTONBESTNAME);
-}
 
-void MinimaxDepth_ButtonClick(control* input)
+void AIMinimaxDepth_ButtonClick(control* input)
 {
 	// 1
 	if (strcmp(input->name, BUTTON1NAME) == 0)
@@ -151,44 +143,44 @@ void AISetting()
 	UINode* minimaxDepthLabel_node = CreateAndAddNodeToTree(minimaxDepthLabel_control, AISettingBackground_node);
 
 	int oneButton_x_location = minimaxDepthLabel_x_location + 250;
-	int oneButton_y_location = minimaxDepthLabel_y_location - 0.7 * BUTTON_H;
+	int oneButton_y_location = minimaxDepthLabel_y_location - 0.7 * NUMBUTTON_H;
 	control* oneButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTON1FILENAME,
-		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
+		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON1NAME,
 		oneButton_x_location,
 		oneButton_y_location,
-		(Uint16)BUTTON_W,
-		(Uint16)BUTTON_H,
-		&MinimaxDepth_ButtonClick);
+		(Uint16)NUMBUTTON_W,
+		(Uint16)NUMBUTTON_H,
+		&AIMinimaxDepth_ButtonClick);
 	UINode* oneButton_node = CreateAndAddNodeToTree(oneButton_control, AISettingBackground_node);
 	AddToListeners(oneButton_control);
 
-	int twoButton_x_location = oneButton_x_location + BUTTON_W + MARGIN;
+	int twoButton_x_location = oneButton_x_location + NUMBUTTON_W + MARGIN;
 	int twoButton_y_location = oneButton_y_location;
 	control* twoButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTON2FILENAME,
-		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
+		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON2NAME,
 		twoButton_x_location,
 		twoButton_y_location,
-		(Uint16)BUTTON_W,
-		(Uint16)BUTTON_H,
-		&MinimaxDepth_ButtonClick);
+		(Uint16)NUMBUTTON_W,
+		(Uint16)NUMBUTTON_H,
+		&AIMinimaxDepth_ButtonClick);
 	UINode* twoButton_node = CreateAndAddNodeToTree(twoButton_control, AISettingBackground_node);
 	AddToListeners(twoButton_control);
 
 	int threeButton_x_location = oneButton_x_location;
-	int threeButton_y_location = oneButton_y_location + BUTTON_H + 2* MARGIN;
+	int threeButton_y_location = oneButton_y_location + NUMBUTTON_H + MARGIN;
 	control* threeButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTON3FILENAME,
-		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
+		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON3NAME,
 		threeButton_x_location,
 		threeButton_y_location,
-		(Uint16)BUTTON_W,
-		(Uint16)BUTTON_H,
-		&MinimaxDepth_ButtonClick);
+		(Uint16)NUMBUTTON_W,
+		(Uint16)NUMBUTTON_H,
+		&AIMinimaxDepth_ButtonClick);
 	UINode* threeButton_node = CreateAndAddNodeToTree(threeButton_control, AISettingBackground_node);
 	AddToListeners(threeButton_control);
 
@@ -196,27 +188,27 @@ void AISetting()
 	int fourButton_y_location = threeButton_y_location;
 	control* fourButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTON4FILENAME,
-		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
+		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON4NAME,
 		fourButton_x_location,
 		fourButton_y_location,
-		(Uint16)BUTTON_W,
-		(Uint16)BUTTON_H,
-		&MinimaxDepth_ButtonClick);
+		(Uint16)NUMBUTTON_W,
+		(Uint16)NUMBUTTON_H,
+		&AIMinimaxDepth_ButtonClick);
 	UINode* fourButton_node = CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node);
 	AddToListeners(fourButton_control);
 
 	int bestButton_x_location = threeButton_x_location;
-	int bestButton_y_location = threeButton_y_location + BUTTON_H + 2* MARGIN;
+	int bestButton_y_location = threeButton_y_location + NUMBUTTON_H + MARGIN;
 	control* bestButton_control = Create_Button_from_bmp_transHighlight(
 		BUTTONBESTFILENAME,
-		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
+		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTONBESTNAME,
 		bestButton_x_location,
 		bestButton_y_location,
-		(Uint16)BUTTON_W,
-		(Uint16)BUTTON_H,
-		&MinimaxDepth_ButtonClick);
+		(Uint16)NUMBUTTON_W,
+		(Uint16)NUMBUTTON_H,
+		&AIMinimaxDepth_ButtonClick);
 	UINode* bestButton_node = CreateAndAddNodeToTree(bestButton_control, AISettingBackground_node);
 	AddToListeners(bestButton_control);
 
@@ -294,7 +286,7 @@ void AISetting()
 	}
 	else
 	{
-		blackButton_control->ishighlighted = 0;
+		blackButton_control->ishighlighted = 1;
 	}
 
 	switch (curSettings->minimax_depth){

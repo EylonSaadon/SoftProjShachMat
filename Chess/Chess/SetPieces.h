@@ -9,10 +9,23 @@
 #include "SettingMenu.h"
 #endif
 
+
+/////////////////////
+// Global Variables//
+/////////////////////
+
+
 extern control* selectedSquare_Control;
 extern control* selectedPiece_Control;
 
 extern UINode* board_node;
+
+
+
+/////////////
+//Functions//
+/////////////
+
 
 void PlacePiece();
 

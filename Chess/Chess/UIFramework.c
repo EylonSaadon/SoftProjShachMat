@@ -9,6 +9,30 @@ SDL_Surface* LoadBMP(char* fileName)
 	return surface;
 }
 
+control* CreateControl(SDL_Surface* Button_Background, SDL_Surface* Button_Background_Highlighted, SDL_Rect* Button_Rect, char* name, ButtonAction action, char* type)
+{
+	control* ret = (control*)malloc(sizeof(control));
+	ret->surface = Button_Background;
+	ret->highlighted_surface = Button_Background_Highlighted;
+	ret->location_rect = Button_Rect;
+	ret->type = type;
+	if (name != NULL){
+		ret->name = malloc((strlen(name)+1) * sizeof(char));
+		for (int i = 0; i < strlen(name); i++)
+		{
+			ret->name[i] = name[i];
+		}
+		ret->name[strlen(name)] = NULL;
+	}
+	else
+	{
+		ret->name = name;
+	}
+	ret->Action = action;
+	ret->ishighlighted = 0;
+	return ret;
+}
+
 control* Create_window(int window_w, int window_h)
 {
 	SDL_Surface *window = SDL_SetVideoMode(window_w, window_h, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
@@ -18,15 +42,7 @@ control* Create_window(int window_w, int window_h)
 		return 1;
 	}
 
-	control* ret = (control*)malloc(sizeof(control));
-	ret->surface = window;
-	ret->type = WINDOWTYPE;
-	ret->Action = NULL;
-	ret->highlighted_surface = NULL;
-	ret->location_rect = NULL;
-	ret->ishighlighted = 0;
-	ret->name = "";
-	return ret;
+	return CreateControl(window, NULL, NULL, NULL, NULL,WINDOWTYPE);
 }
 
 
@@ -40,16 +56,10 @@ control* Create_panel_from_bmp(char* background_filename, char* name, Sint16 x_l
 	Panel_Rect->h = picture_height;
 	Panel_Rect->w = picture_width;
 
-	control* ret = (control*)malloc(sizeof(control));
-	ret->surface = Panel_Background;
-	ret->type = PANELTYPE;
-	ret->Action = NULL;
-	ret->highlighted_surface = NULL;
-	ret->location_rect = Panel_Rect;
-	ret->name=name;
-	ret->ishighlighted = 0;
-	return ret;
+	return CreateControl(Panel_Background, NULL, Panel_Rect, name, NULL, PANELTYPE);
 }
+
+
 
 control* Create_Button_from_bmp(char* background_filename, char* background_filename_highlighted, char* name, Sint16 x_location, Sint16 y_location, Uint16 button_width, Uint16 button_height, ButtonAction buttonFunctionPtr)
 {
@@ -62,15 +72,7 @@ control* Create_Button_from_bmp(char* background_filename, char* background_file
 	Button_Rect->h = button_height;
 	Button_Rect->w = button_width;
 
-	control* ret = (control*)malloc(sizeof(control));
-	ret->surface = Button_Background;
-	ret->highlighted_surface = Button_Background_Highlighted;
-	ret->location_rect = Button_Rect;
-	ret->type = BUTTONTYPE;
-	ret->name;
-	ret->Action = buttonFunctionPtr;
-	ret->ishighlighted = 0;
-	return ret;
+	return CreateControl(Button_Background, Button_Background_Highlighted, Button_Rect, name, buttonFunctionPtr, BUTTONTYPE);
 }
 
 void HighlightButtonSurface(SDL_Surface* button_surface, SDL_Surface* button_highlighted_transparent)
@@ -93,15 +95,7 @@ control* Create_Button_from_bmp_transHighlight(char* background_filename, char* 
 	Button_Rect->h = button_height;
 	Button_Rect->w = button_width;
 
-	control* ret = (control*)malloc(sizeof(control));
-	ret->surface = Button_Background;
-	ret->highlighted_surface = Button_Highlighted;
-	ret->location_rect = Button_Rect;
-	ret->type = BUTTONTYPE;
-	ret->Action = buttonFunctionPtr;
-	ret->ishighlighted = 0;
-	ret->name = name;
-	return ret;
+	return CreateControl(Button_Background, Button_Highlighted, Button_Rect, name, buttonFunctionPtr, BUTTONTYPE);
 }
 
 control* GetRoot(UINode* node)
@@ -146,6 +140,10 @@ void FreeControl(control* control)
 	SDL_FreeSurface(control->surface);
 	SDL_FreeSurface(control->highlighted_surface);
 	free(control->location_rect);
+	free(control->name);
+	control->Action = NULL;
+	control->type = NULL;
+	free(control);
 }
 
 void FreeTree(UINode* node)
@@ -163,7 +161,16 @@ void FreeTree(UINode* node)
 		}
 	}
 	FreeControl(node->control);
+	node->control = NULL;
+
 	free(node->children);
+	node->children = NULL;
+
+	node->childrenCount = 0;
+	node->childrenSize = 0;
+	node->father = NULL;
+	node->root = NULL;
+	
 	free(node);
 }
 
@@ -174,6 +181,7 @@ UINode* SearchTreeByName(UINode* node,char* name)
 		return NULL;
 	}
 
+	if (node->control->name != NULL)
 	if (strcmp(node->control->name, name) == 0)
 	{
 		return node;

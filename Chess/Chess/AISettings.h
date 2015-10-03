@@ -25,6 +25,8 @@
 #define LABELUSERCOLORNAME "Label_UserColor"
 #define LABELUSERCOLORFILENAME "Label_UserColor.bmp"
 
+
+
 #define BUTTON1NAME "Button_1"
 #define BUTTON1FILENAME "Button_1.bmp"
 #define BUTTON2NAME "Button_2"
@@ -39,7 +41,19 @@
 #define AISETTING_BUTTONLOCATION_X_CENTER (0.5*AISETTING_W - 0.5*AISETTING_H)
 
 
+/////////////////////
+// Global Variables//
+/////////////////////
+
+
 extern UINode* tree;
+
+
+
+/////////////
+//Functions//
+/////////////
+
 
 void UserColor_ButtonClick(control* input);
 

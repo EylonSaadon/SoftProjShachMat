@@ -80,7 +80,7 @@ struct control
 	SDL_Rect* location_rect;
 	char* type;
 	char* name;
-	int ishighlighted;
+	bool ishighlighted;
 	void (*Action)(struct control*);
 }; typedef struct control control;
 

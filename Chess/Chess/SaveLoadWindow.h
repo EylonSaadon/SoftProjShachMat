@@ -50,6 +50,17 @@
 #define BUTTONSAVESLOTHIGHLIGHTFILENAME "Button_Save_Highlight.bmp"
 
 
+/////////////////////
+// Global Variables//
+/////////////////////
+
+
+
+/////////////
+//Functions//
+/////////////
+
+
 int SaveLoadMenu();
 
 #endif

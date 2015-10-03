@@ -88,6 +88,7 @@ void HandleMouseUpEvent(SDL_Event* event)
 void FreeEventHandler()
 {
 	free(_listeners);
+	_listeners = NULL;
 	_listenersCount = 0;
 }
 
