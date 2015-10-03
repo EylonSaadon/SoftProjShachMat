@@ -61,6 +61,14 @@ int CreateControl(SDL_Surface* control_Background, SDL_Surface* control_Backgrou
 
 int Create_window(int window_w, int window_h, control** control_toRet, char** error)
 {
+	SDL_Surface* icon;
+	LoadBMP("icon.bmp", &icon, error);
+	if (!icon) {
+		return -1;
+	}
+
+	SDL_WM_SetIcon(icon, NULL);
+
 	SDL_Surface *window = SDL_SetVideoMode(window_w, window_h, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	
 	if (window == NULL) {
