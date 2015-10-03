@@ -3,8 +3,8 @@ all: Chess
 clean:
 	-rm Data_Structures.o Chess.o Logic.o Minimax.o chessprog 
 
-Chess: Data_Structures.o Logic.o Minimax.o MainMenu.o UIFramework.o GUI.o Chess.o
-	gcc -o chessprog Data_Structures.o Logic.o Minimax.o MainMenu.o UIFramework.o GUI.o Chess.o -lm -std=c99 -pedantic-errors -g -lxml2 `sdl-config --libs`
+Chess: Data_Structures.o Logic.o Minimax.o UIFrameWork.o Chess.o
+	gcc -o chessprog Data_Structures.o Logic.o Minimax.o UIFrameWork.o Chess.o -lm -std=c99 -pedantic-errors -g -lxml2 `sdl-config --libs`
 
 Data_Structures.o: Data_Structures.h Data_Structures.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm Data_Structures.c `sdl-config --cflags`
@@ -15,8 +15,8 @@ Logic.o: Logic.h Logic.c
 Minimax.o: Minimax.h Minimax.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm Minimax.c
 
-UIFramework.o: UIFramework.h UIFramework.c
-	gcc -std=c99 -pedantic-errors -c -Wall -g -lm UIFramework.c `sdl-config --cflags`
+UIFrameWork.o: UIFrameWork.h UIFrameWork.c
+	gcc -std=c99 -pedantic-errors -c -Wall -g -lm UIFrameWork.c `sdl-config --cflags`
 
 AISetting.o: AISetting.h AISetting.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm AISetting.c `sdl-config --cflags`
