@@ -93,7 +93,7 @@
 /////////////
 
 
-position* GetPosOfSquare(control* square);
+int GetPosOfSquare(control* square, position** pos_ret, char** error_ret);
 
 char* ResolveFileNameFromLetter(char piece);
 char* ResolveNameFromLetter(char piece);

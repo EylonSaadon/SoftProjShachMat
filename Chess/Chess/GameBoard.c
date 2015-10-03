@@ -49,10 +49,9 @@ void HighlightBestMove(int blinknum)
 				control* chessPiece_control;
 				if (-1 == Create_panel_from_bmp(
 					fileName,
-					SQUAREBUTTONHIGHLIGHTEDFILENAME,
 					name,
-					BOARD_W + MARGIN,
-					BOARD_W - SQUARE_H - 0.5,
+					(Sint16)(BOARD_W + MARGIN),
+					(Sint16)(BOARD_W - SQUARE_H - 0.5),
 					(Uint16)SQUARE_W,
 					(Uint16)SQUARE_H,
 					&chessPiece_control, &error))
@@ -161,8 +160,8 @@ void GameBoardBest_ButtonClick(control * input)
 
 
 			UINode* gameBoarBackground_node = tree->children[0];
-			int oneButton_x_location = BOARD_W + 0.5 * MARGIN;
-			int oneButton_y_location = BOARD_H *0.5 + 0.5 * NUMBUTTON_H;
+			int oneButton_x_location = (Sint16)(BOARD_W + 0.5 * MARGIN);
+			int oneButton_y_location = (Sint16)(BOARD_H *0.5 + 0.5 * NUMBUTTON_H);
 
 			control* oneButton_control;
 			if (-1 == Create_Button_from_bmp_transHighlight(
@@ -190,8 +189,8 @@ void GameBoardBest_ButtonClick(control * input)
 			}
 
 
-			int twoButton_x_location = oneButton_x_location + NUMBUTTON_W + 0.5 * MARGIN;
-			int twoButton_y_location = oneButton_y_location;
+			Sint16 twoButton_x_location = (Sint16)(oneButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+			Sint16 twoButton_y_location = (Sint16)(oneButton_y_location);
 
 			control* twoButton_control;
 			if (-1 == Create_Button_from_bmp_transHighlight(
@@ -219,8 +218,8 @@ void GameBoardBest_ButtonClick(control * input)
 			}
 
 
-			int threeButton_x_location = twoButton_x_location + NUMBUTTON_W + 0.5 * MARGIN;
-			int threeButton_y_location = oneButton_y_location;
+			Sint16 threeButton_x_location = (Sint16)(twoButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+			Sint16 threeButton_y_location = (Sint16)(oneButton_y_location);
 
 			control* threeButton_control;
 			if (-1 == Create_Button_from_bmp_transHighlight(
@@ -246,8 +245,8 @@ void GameBoardBest_ButtonClick(control * input)
 				guiQuit = -1;
 			}
 
-			int fourButton_x_location = threeButton_x_location + NUMBUTTON_W + 0.5 * MARGIN;
-			int fourButton_y_location = oneButton_y_location;
+			Sint16 fourButton_x_location = (Sint16)(threeButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+			Sint16 fourButton_y_location = (Sint16)(oneButton_y_location);
 			control* fourButton_control;
 			if (-1 == Create_Button_from_bmp_transHighlight(
 				BUTTON4FILENAME,
@@ -272,8 +271,8 @@ void GameBoardBest_ButtonClick(control * input)
 				guiQuit = -1;
 			}
 
-			int bestButton_x_location = fourButton_x_location + NUMBUTTON_W + 0.5 *MARGIN;
-			int bestButton_y_location = oneButton_y_location;
+			Sint16 bestButton_x_location = (Sint16)(fourButton_x_location + NUMBUTTON_W + 0.5 *MARGIN);
+			Sint16 bestButton_y_location = (Sint16)(oneButton_y_location);
 			control* bestButton_control;
 			if (-1 == Create_Button_from_bmp_transHighlight(
 				BUTTONBESTFILENAME,
@@ -425,7 +424,11 @@ void GameBoardSquare_ButtonClick(control* input)
 		}
 		else if (gameSelectedSquare_control == NULL)
 		{
-			position* chosenPos = GetPosOfSquare(input);
+			position* chosenPos;
+			if(-1 == GetPosOfSquare(input, &chosenPos, &error))
+			{
+				guiQuit = -1;
+			}
 			if (is_piece_of_color(board[chosenPos->col][chosenPos->row], curSettings->next_turn) == true){
 				SwitchButtonHighlight(input);
 				gameSelectedSquare_control = input;
@@ -436,9 +439,23 @@ void GameBoardSquare_ButtonClick(control* input)
 		}
 		else if (gameSelectedSquare_control != NULL)
 		{
-			position* startPos = GetPosOfSquare(gameSelectedSquare_control);
-			position* endPos = GetPosOfSquare(input);
-			chosenMove = malloc(sizeof(move));//TODO checkFailure
+			position* startPos;
+			if (-1 == GetPosOfSquare(gameSelectedSquare_control, &startPos, &error))
+			{
+				guiQuit = -1;
+			}
+				
+			position* endPos;
+			if (-1 == GetPosOfSquare(input, &endPos, &error))
+			{
+				guiQuit = -1;
+			};
+			chosenMove = malloc(sizeof(move));
+			if (chosenMove == NULL)
+			{
+				guiQuit = -1;
+				return;
+			}
 			chosenMove->start_pos = *startPos;
 			chosenMove->end_pos = *endPos;
 
@@ -611,8 +628,8 @@ void Game()
 
 	buildBoardUITree();
 
-	int quitButton_x_location = GAMEBOARDBACKGROUND_W - BUTTON_W - 0.5 * MARGIN;
-	int quitButton_y_location = GAMEBOARDBACKGROUND_H - BUTTON_H - 1.5 * MARGIN;
+	Sint16 quitButton_x_location = (Sint16)(GAMEBOARDBACKGROUND_W - BUTTON_W - 0.5 * MARGIN);
+	Sint16 quitButton_y_location = (Sint16)(GAMEBOARDBACKGROUND_H - BUTTON_H - 1.5 * MARGIN);
 	control* quitButton_control;
 	if (-1 == Create_Button_from_bmp(
 		BUTTONQUITFILENAME,
@@ -639,8 +656,8 @@ void Game()
 	}
 
 
-	int bestButton_x_location = quitButton_x_location;
-	int bestButton_y_location = quitButton_y_location - BUTTON_H - 1.5 * MARGIN;
+	Sint16 bestButton_x_location = quitButton_x_location;
+	Sint16 bestButton_y_location = (Sint16)(quitButton_y_location - BUTTON_H - 1.5 * MARGIN);
 	control* bestButton_control;
 	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONBESTMOVEFILENAME,
@@ -700,8 +717,8 @@ void Game()
 	}
 
 
-	int mainMenuButton_x_location = quitButton_x_location;
-	int mainMenuButton_y_location = saveButton_y_location + BUTTON_H + 1.5 *MARGIN;
+	Sint16 mainMenuButton_x_location = (Sint16)(quitButton_x_location);
+	Sint16 mainMenuButton_y_location = (Sint16)(saveButton_y_location + BUTTON_H + 1.5 *MARGIN);
 	control* mainMenuButton_control;
 	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONMAINMENUFILENAME,
@@ -768,8 +785,8 @@ void Game()
 
 	if (gameOver)
 	{
-		int checkMateLabel_x_location = 0.5 * BOARD_H;
-		int checkMateLabel_y_location = 0.25 * BOARD_H - 20;
+		Sint16 checkMateLabel_x_location = (Sint16)(0.5 * BOARD_H);
+		Sint16 checkMateLabel_y_location = (Sint16)(0.25 * BOARD_H - 20);
 		control* checkMateLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			LABELCHECKMATEFILENAME,
@@ -804,8 +821,8 @@ void Game()
 			name = LABELWHITEWINSNAME;
 		}
 
-		int winsLabel_x_location = checkMateLabel_x_location;
-		int winsLabel_y_location = 0.50 * BOARD_H - 20;
+		Sint16 winsLabel_x_location = (Sint16)(checkMateLabel_x_location);
+		Sint16 winsLabel_y_location = (Sint16)(0.50 * BOARD_H - 20);
 		control* winsLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			filename,
@@ -827,8 +844,8 @@ void Game()
 	}
 	else if (tie)
 	{
-		int tieLabel_x_location = 0.5 * BOARD_H;
-		int tieLabel_y_location = 0.25 * BOARD_H - 20;
+		Sint16 tieLabel_x_location = (Sint16)(0.5 * BOARD_H);
+		Sint16 tieLabel_y_location = (Sint16)(0.25 * BOARD_H - 20);
 		control* tieLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			LABELTIEFILENAME,
@@ -848,8 +865,8 @@ void Game()
 			guiQuit = -1;
 		}
 
-		int gameOverLabel_x_location = tieLabel_x_location;
-		int gameOver_y_location = 0.50 * BOARD_H - 20;
+		Sint16 gameOverLabel_x_location = (Sint16)(tieLabel_x_location);
+		Sint16 gameOver_y_location = (Sint16)(0.50 * BOARD_H - 20);
 		control* gameOverLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			LABELGAMEOVERFILENAME,
@@ -864,7 +881,7 @@ void Game()
 			guiQuit = -1;
 		}
 		UINode* gameOverLabel_node;
-		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, gameBoarBackground_node, &gameOverLabel_control, &error))
+		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, gameBoarBackground_node, &gameOverLabel_node, &error))
 		{
 			guiQuit = -1;
 		}

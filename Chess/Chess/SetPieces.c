@@ -2,7 +2,11 @@
 
 void PlacePiece()
 {
-	position* pos = GetPosOfSquare(selectedSquare_Control);
+	position* pos;
+	if (-1 == GetPosOfSquare(selectedSquare_Control, &pos, &error))
+	{
+		guiQuit = -1;
+	}
 
 	char piece = ResolveLetterFromButtonName(selectedPiece_Control->name);
 	COLOR c;
