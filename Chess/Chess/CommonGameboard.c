@@ -5,11 +5,13 @@ int GetPosOfSquare(control* square, position** pos_ret, char** error_ret)
 	position* pos = (position*)malloc(sizeof(position));
 	if (NULL == pos)
 	{
+		*pos_ret = NULL;
 		*error_ret = "ERROR: Failed allocating memory for position";
 		return -1;
 	}
 	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
 	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
+	*pos_ret = pos;
 	return 0;
 }
 char* ResolveFileNameFromLetter(char piece)

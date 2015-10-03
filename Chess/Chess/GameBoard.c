@@ -146,186 +146,188 @@ void GameMinimaxDepth_ButtonClick(control* input)
 
 void GameBoardBest_ButtonClick(control * input)
 {
-	if (showDepthOptions == false){
-		showDepthOptions = true;
-		input->ishighlighted = 1;
-	}
-	else
-	{
-		showDepthOptions = false;
-		input->ishighlighted = 0;
-	}
-	if (showDepthOptions){
-		if (curSettings->game_mode == TWO_PLAYERS_GAME_MODE){
-
-
-			UINode* gameBoarBackground_node = tree->children[0];
-			int oneButton_x_location = (Sint16)(BOARD_W + 0.5 * MARGIN);
-			int oneButton_y_location = (Sint16)(BOARD_H *0.5 + 0.5 * NUMBUTTON_H);
-
-			control* oneButton_control;
-			if (-1 == Create_Button_from_bmp_transHighlight(
-				BUTTON1FILENAME,
-				NUMBUTTONHIGHLIGHTEDFILENAME,
-				BUTTON1NAME,
-				oneButton_x_location,
-				oneButton_y_location,
-				(Uint16)NUMBUTTON_W,
-				(Uint16)NUMBUTTON_H,
-				&GameMinimaxDepth_ButtonClick,
-				&oneButton_control,
-				&error))
-			{
-				guiQuit = -1;
-			}
-			UINode* oneButton_node;
-			if (-1 == CreateAndAddNodeToTree(oneButton_control, gameBoarBackground_node, &oneButton_node, &error))
-			{
-				guiQuit = -1;
-			}
-			if (-1 == AddToListeners(oneButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-
-
-			Sint16 twoButton_x_location = (Sint16)(oneButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
-			Sint16 twoButton_y_location = (Sint16)(oneButton_y_location);
-
-			control* twoButton_control;
-			if (-1 == Create_Button_from_bmp_transHighlight(
-				BUTTON2FILENAME,
-				NUMBUTTONHIGHLIGHTEDFILENAME,
-				BUTTON2NAME,
-				twoButton_x_location,
-				twoButton_y_location,
-				(Uint16)NUMBUTTON_W,
-				(Uint16)NUMBUTTON_H,
-				&GameMinimaxDepth_ButtonClick,
-				&twoButton_control,
-				&error))
-			{
-				guiQuit = -1;
-			}
-			UINode* twoButton_node;
-			if (-1 == CreateAndAddNodeToTree(twoButton_control, gameBoarBackground_node, &twoButton_node, &error))
-			{
-				guiQuit = -1;
-			}
-			if (-1 == AddToListeners(twoButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-
-
-			Sint16 threeButton_x_location = (Sint16)(twoButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
-			Sint16 threeButton_y_location = (Sint16)(oneButton_y_location);
-
-			control* threeButton_control;
-			if (-1 == Create_Button_from_bmp_transHighlight(
-				BUTTON3FILENAME,
-				NUMBUTTONHIGHLIGHTEDFILENAME,
-				BUTTON3NAME,
-				threeButton_x_location,
-				threeButton_y_location,
-				(Uint16)NUMBUTTON_W,
-				(Uint16)NUMBUTTON_H,
-				&GameMinimaxDepth_ButtonClick,
-				&threeButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-			UINode* threeButton_node;
-			if (-1 == CreateAndAddNodeToTree(threeButton_control, gameBoarBackground_node, &threeButton_node, &error))
-			{
-				guiQuit = -1;
-			}
-			if (-1 == AddToListeners(threeButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-
-			Sint16 fourButton_x_location = (Sint16)(threeButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
-			Sint16 fourButton_y_location = (Sint16)(oneButton_y_location);
-			control* fourButton_control;
-			if (-1 == Create_Button_from_bmp_transHighlight(
-				BUTTON4FILENAME,
-				NUMBUTTONHIGHLIGHTEDFILENAME,
-				BUTTON4NAME,
-				fourButton_x_location,
-				fourButton_y_location,
-				(Uint16)NUMBUTTON_W,
-				(Uint16)NUMBUTTON_H,
-				&GameMinimaxDepth_ButtonClick,
-				&fourButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-			UINode* fourButton_node;
-			if (-1 == CreateAndAddNodeToTree(fourButton_control, gameBoarBackground_node, &fourButton_node, &error))
-			{
-				guiQuit = -1;
-			}
-			if (-1 == AddToListeners(fourButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-
-			Sint16 bestButton_x_location = (Sint16)(fourButton_x_location + NUMBUTTON_W + 0.5 *MARGIN);
-			Sint16 bestButton_y_location = (Sint16)(oneButton_y_location);
-			control* bestButton_control;
-			if (-1 == Create_Button_from_bmp_transHighlight(
-				BUTTONBESTFILENAME,
-				NUMBUTTONHIGHLIGHTEDFILENAME,
-				BUTTONBESTNAME,
-				bestButton_x_location,
-				bestButton_y_location,
-				(Uint16)NUMBUTTON_W,
-				(Uint16)NUMBUTTON_H,
-				&GameMinimaxDepth_ButtonClick, &bestButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-			UINode* bestButton_node;
-			if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error))
-			{
-				guiQuit = -1;
-			}
-			if (-1 == AddToListeners(bestButton_control, &error))
-			{
-				guiQuit = -1;
-			}
-
-			switch (curSettings->minimax_depth){
-			case 1:
-				oneButton_control->ishighlighted = 1;
-				break;
-			case 2:
-				twoButton_control->ishighlighted = 1;
-				break;
-			case 3:
-				threeButton_control->ishighlighted = 1;
-				break;
-			case 4:
-				fourButton_control->ishighlighted = 1;
-				break;
-			case MAX_MINIMAX_DEPTH_POSSIBLE:
-				bestButton_control->ishighlighted = 1;
-				break;
-			}
+	if (gameOver == 0){
+		if (showDepthOptions == false){
+			showDepthOptions = true;
+			input->ishighlighted = 1;
 		}
-
-		HighlightBestMove(BLINKNUM);
-
-		// DrawTree
-		if (-1 == FlipTree(&error))
+		else
 		{
-			guiQuit = -1;
+			showDepthOptions = false;
+			input->ishighlighted = 0;
 		}
-	}
-	else
-	{
-		Game();
+		if (showDepthOptions){
+			if (curSettings->game_mode == TWO_PLAYERS_GAME_MODE){
+
+
+				UINode* gameBoarBackground_node = tree->children[0];
+				int oneButton_x_location = (Sint16)(BOARD_W + 0.5 * MARGIN);
+				int oneButton_y_location = (Sint16)(BOARD_H *0.5 + 0.5 * NUMBUTTON_H);
+
+				control* oneButton_control;
+				if (-1 == Create_Button_from_bmp_transHighlight(
+					BUTTON1FILENAME,
+					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTON1NAME,
+					oneButton_x_location,
+					oneButton_y_location,
+					(Uint16)NUMBUTTON_W,
+					(Uint16)NUMBUTTON_H,
+					&GameMinimaxDepth_ButtonClick,
+					&oneButton_control,
+					&error))
+				{
+					guiQuit = -1;
+				}
+				UINode* oneButton_node;
+				if (-1 == CreateAndAddNodeToTree(oneButton_control, gameBoarBackground_node, &oneButton_node, &error))
+				{
+					guiQuit = -1;
+				}
+				if (-1 == AddToListeners(oneButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+
+
+				Sint16 twoButton_x_location = (Sint16)(oneButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+				Sint16 twoButton_y_location = (Sint16)(oneButton_y_location);
+
+				control* twoButton_control;
+				if (-1 == Create_Button_from_bmp_transHighlight(
+					BUTTON2FILENAME,
+					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTON2NAME,
+					twoButton_x_location,
+					twoButton_y_location,
+					(Uint16)NUMBUTTON_W,
+					(Uint16)NUMBUTTON_H,
+					&GameMinimaxDepth_ButtonClick,
+					&twoButton_control,
+					&error))
+				{
+					guiQuit = -1;
+				}
+				UINode* twoButton_node;
+				if (-1 == CreateAndAddNodeToTree(twoButton_control, gameBoarBackground_node, &twoButton_node, &error))
+				{
+					guiQuit = -1;
+				}
+				if (-1 == AddToListeners(twoButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+
+
+				Sint16 threeButton_x_location = (Sint16)(twoButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+				Sint16 threeButton_y_location = (Sint16)(oneButton_y_location);
+
+				control* threeButton_control;
+				if (-1 == Create_Button_from_bmp_transHighlight(
+					BUTTON3FILENAME,
+					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTON3NAME,
+					threeButton_x_location,
+					threeButton_y_location,
+					(Uint16)NUMBUTTON_W,
+					(Uint16)NUMBUTTON_H,
+					&GameMinimaxDepth_ButtonClick,
+					&threeButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+				UINode* threeButton_node;
+				if (-1 == CreateAndAddNodeToTree(threeButton_control, gameBoarBackground_node, &threeButton_node, &error))
+				{
+					guiQuit = -1;
+				}
+				if (-1 == AddToListeners(threeButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+
+				Sint16 fourButton_x_location = (Sint16)(threeButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
+				Sint16 fourButton_y_location = (Sint16)(oneButton_y_location);
+				control* fourButton_control;
+				if (-1 == Create_Button_from_bmp_transHighlight(
+					BUTTON4FILENAME,
+					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTON4NAME,
+					fourButton_x_location,
+					fourButton_y_location,
+					(Uint16)NUMBUTTON_W,
+					(Uint16)NUMBUTTON_H,
+					&GameMinimaxDepth_ButtonClick,
+					&fourButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+				UINode* fourButton_node;
+				if (-1 == CreateAndAddNodeToTree(fourButton_control, gameBoarBackground_node, &fourButton_node, &error))
+				{
+					guiQuit = -1;
+				}
+				if (-1 == AddToListeners(fourButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+
+				Sint16 bestButton_x_location = (Sint16)(fourButton_x_location + NUMBUTTON_W + 0.5 *MARGIN);
+				Sint16 bestButton_y_location = (Sint16)(oneButton_y_location);
+				control* bestButton_control;
+				if (-1 == Create_Button_from_bmp_transHighlight(
+					BUTTONBESTFILENAME,
+					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTONBESTNAME,
+					bestButton_x_location,
+					bestButton_y_location,
+					(Uint16)NUMBUTTON_W,
+					(Uint16)NUMBUTTON_H,
+					&GameMinimaxDepth_ButtonClick, &bestButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+				UINode* bestButton_node;
+				if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error))
+				{
+					guiQuit = -1;
+				}
+				if (-1 == AddToListeners(bestButton_control, &error))
+				{
+					guiQuit = -1;
+				}
+
+				switch (curSettings->minimax_depth){
+				case 1:
+					oneButton_control->ishighlighted = 1;
+					break;
+				case 2:
+					twoButton_control->ishighlighted = 1;
+					break;
+				case 3:
+					threeButton_control->ishighlighted = 1;
+					break;
+				case 4:
+					fourButton_control->ishighlighted = 1;
+					break;
+				case MAX_MINIMAX_DEPTH_POSSIBLE:
+					bestButton_control->ishighlighted = 1;
+					break;
+				}
+			}
+
+			HighlightBestMove(BLINKNUM);
+
+			// DrawTree
+			if (-1 == FlipTree(&error))
+			{
+				guiQuit = -1;
+			}
+		}
+		else
+		{
+			Game();
+		}
 	}
 }
 
@@ -567,7 +569,6 @@ void CheckGameOver()
 	else {
 		if (is_check_on_color(board, curSettings->next_turn)) {
 			check = true;
-			print_message(CHECK);
 		}
 	}
 }
@@ -682,12 +683,6 @@ void Game()
 		guiQuit = -1;
 	}
 
-
-	if (showDepthOptions)
-	{
-
-	}
-
 	int saveButton_x_location = quitButton_x_location;
 	int saveButton_y_location = 2 * MARGIN;
 	control* saveButton_control;
@@ -785,7 +780,7 @@ void Game()
 
 	if (gameOver)
 	{
-		Sint16 checkMateLabel_x_location = (Sint16)(0.5 * BOARD_H);
+		Sint16 checkMateLabel_x_location = 0;
 		Sint16 checkMateLabel_y_location = (Sint16)(0.25 * BOARD_H - 20);
 		control* checkMateLabel_control;
 		if (-1 == Create_panel_from_bmp(
@@ -802,7 +797,7 @@ void Game()
 		}
 
 		UINode* checkMateLabel_node;
-		if (-1 == CreateAndAddNodeToTree(checkMateLabel_control, gameBoarBackground_node, &checkMateLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(checkMateLabel_control, board_node, &checkMateLabel_node, &error))
 		{
 			guiQuit = -1;
 		}
@@ -821,14 +816,14 @@ void Game()
 			name = LABELWHITEWINSNAME;
 		}
 
-		Sint16 winsLabel_x_location = (Sint16)(checkMateLabel_x_location);
-		Sint16 winsLabel_y_location = (Sint16)(0.50 * BOARD_H - 20);
+		Sint16 winsLabel_x_location = 0;
+		Sint16 winsLabel_y_location = (Sint16)(0.5 * BOARD_H - 20);
 		control* winsLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			filename,
 			name,
 			winsLabel_x_location,
-			winsLabel_x_location,
+			winsLabel_y_location,
 			GAMEBOARDBACKGROUND_W,
 			GAMEBOARDBACKGROUND_H,
 			&winsLabel_control,
@@ -837,14 +832,14 @@ void Game()
 			guiQuit = -1;
 		}
 		UINode* winsLabel_node;
-		if (-1 == CreateAndAddNodeToTree(winsLabel_control, gameBoarBackground_node, &winsLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(winsLabel_control, board_node, &winsLabel_node, &error))
 		{
 			guiQuit = -1;
 		}
 	}
 	else if (tie)
 	{
-		Sint16 tieLabel_x_location = (Sint16)(0.5 * BOARD_H);
+		Sint16 tieLabel_x_location = 0;
 		Sint16 tieLabel_y_location = (Sint16)(0.25 * BOARD_H - 20);
 		control* tieLabel_control;
 		if (-1 == Create_panel_from_bmp(
@@ -860,19 +855,19 @@ void Game()
 			guiQuit = -1;
 		}
 		UINode* tieLabel_node;
-		if (-1 == CreateAndAddNodeToTree(tieLabel_control, gameBoarBackground_node, &tieLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(tieLabel_control, board_node, &tieLabel_node, &error))
 		{
 			guiQuit = -1;
 		}
 
-		Sint16 gameOverLabel_x_location = (Sint16)(tieLabel_x_location);
-		Sint16 gameOver_y_location = (Sint16)(0.50 * BOARD_H - 20);
+		Sint16 gameOverLabel_x_location = 0;
+		Sint16 gameOverLabel_y_location = (Sint16)(0.50 * BOARD_H - 20);
 		control* gameOverLabel_control;
 		if (-1 == Create_panel_from_bmp(
 			LABELGAMEOVERFILENAME,
 			LABELGAMEOVERNAME,
 			gameOverLabel_x_location,
-			gameOverLabel_x_location,
+			gameOverLabel_y_location,
 			GAMEBOARDBACKGROUND_W,
 			GAMEBOARDBACKGROUND_H, 
 			&gameOverLabel_control,
@@ -881,7 +876,7 @@ void Game()
 			guiQuit = -1;
 		}
 		UINode* gameOverLabel_node;
-		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, gameBoarBackground_node, &gameOverLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, board_node, &gameOverLabel_node, &error))
 		{
 			guiQuit = -1;
 		}
