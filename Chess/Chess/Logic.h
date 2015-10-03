@@ -42,7 +42,7 @@ void print_move(struct move* mov);
 // Prints move list
 void print_moves_from_pos(struct move_list* moves, struct position pos);
 
-// get move list
+// Get move list from position
 int get_moves_from_pos(move_list* moves, struct position pos, move_list** possible_moves);
 
 // Get opposite color (if white returns black, and vice versa)
@@ -63,12 +63,22 @@ void make_move(char board[BOARD_SIZE][BOARD_SIZE], struct move* mov);
 // Gets board score for color
 int get_board_score_for_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color);
 
-// TODO: add comments
+// Set line in board
 void set_line_in_board(char board[BOARD_SIZE][BOARD_SIZE], int line_number, const char line[BOARD_SIZE]);
+
+// Check if there is a check on 'color'
 bool is_check_on_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color);
+
+// Get piece from string
 char get_piece_from_string(char* piece_string, COLOR color);
-void load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
+
+// Check if set command is valid
 bool is_valid_set(char board[BOARD_SIZE][BOARD_SIZE], char disc, struct position pos, COLOR color);
+
+// Load game from XML
+void load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
+
+// Save game to XML
 int save_game_to_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
 
 #endif

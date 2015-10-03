@@ -62,7 +62,6 @@ void set_line_in_board(char board[BOARD_SIZE][BOARD_SIZE], int line_number, cons
 	}
 }
 
-// TODO: make sure libxml2 donesn't cause problems in nova
 void load_game_from_xml_rec(xmlNode * a_node, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE])
 {
 	for (xmlNode *cur_node = a_node; cur_node; cur_node = cur_node->next) {
@@ -216,7 +215,6 @@ bool is_valid_set(char board[BOARD_SIZE][BOARD_SIZE], char disc, struct position
 		}
 	}
 
-	// TODO: should add check that there is one king of each kind before the game starts (maybe also should check check and mate...)
 	return (2 >= rook_count && 1 >= king_count && 2 >= bishop_count && 2 >= knight_count && 8 >= pawn_count && 1 >= queen_count);
 }
 
@@ -293,8 +291,9 @@ void print_moves_from_pos(struct move_list* moves, struct position pos) {
 
 int get_moves_from_pos(move_list* moves, struct position pos, move_list** possible_moves) {
 	if (NULL == moves) {
-		return;
+		return 0;
 	}
+
 	move_list* current_move = moves;
 	do {
 		if (is_equal_pos(pos, current_move->mov.start_pos)) {
@@ -302,7 +301,10 @@ int get_moves_from_pos(move_list* moves, struct position pos, move_list** possib
 		}
 		current_move = current_move->next;
 	} while (NULL != current_move);
+
+	return 0;
 }
+
 void print_win_message(COLOR winner_color) {
 	if (WHITE == winner_color) {
 		printf(WHITE_PLAYER_WINS);
@@ -418,6 +420,7 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 
 	xmlFreeTextWriter(writer);
 
+	// Cleaning
 	xmlCleanupCharEncodingHandlers();
 	xmlCleanupParser();
 
@@ -1062,7 +1065,7 @@ void make_move(char board[BOARD_SIZE][BOARD_SIZE], struct move* mov)
 	set_piece(board, mov->start_pos, EMPTY);
 
 	// Check if the disc is pawn and if it in the last row
-	if ((WHITE_M == disc && BOARD_SIZE_FROM_ZERO == mov->end_pos.row) || (BLACK_M == disc && 0 == mov->end_pos.row)) {
+	if ((WHITE_P == disc && BOARD_SIZE_FROM_ZERO == mov->end_pos.row) || (BLACK_P == disc && 0 == mov->end_pos.row)) {
 		set_piece(board, mov->end_pos, mov->new_disc);
 	}
 	else {
@@ -1156,9 +1159,3 @@ int get_board_score_for_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 
 	return FAILED_ERROR;
 }
-
-// TODO: http://moodle.tau.ac.il/2014/mod/forum/discuss.php?d=76502
-
-
-// TODO: TESTS
-// load file - check what happen when file not exists

@@ -1,45 +1,8 @@
 #include "Data_Structures.h"
 
-struct position_list* add_new_pos_node(struct position_list* pos_list, struct position pos) {
-	struct position_list* pos_node = (struct position_list*)calloc(1, sizeof(struct position_list));
-
-	if (NULL == pos_node) {
-		perror_message("calloc");
-		return NULL;
-	}
-
-	pos_node->pos = pos;
-
-	if (NULL != pos_list) {
-		pos_node->next = pos_list;
-	}
-
-	return pos_node;
-}
-
 bool is_equal_pos(struct position pos1, struct position pos2) {
 	return pos1.col == pos2.col && pos1.row == pos2.row;
 }
-
-void free_position_list(struct position_list* pos_list) {
-	if (NULL == pos_list) {
-		return;
-	}
-
-	free_position_list(pos_list->next);
-
-	free(pos_list);
-}
-
-//void free_move_list(struct move_list* move_node) {
-//	if (NULL == move_node) {
-//		return;
-//	}
-//
-//    free_move_list(move_node->next);
-//
-//	free(move_node);
-//}
 
 void free_move_list(struct move_list* move_node) {
 	if (NULL == move_node) {
@@ -74,43 +37,6 @@ struct move_list* add_new_move_node(struct move_list* move_list,
 	return move_node;
 }
 
-struct position_list* create_position_list_from_position_list(struct position_list* new_pos_list, struct position_list* old_pos_list) {
-	struct position_list* current_pos = old_pos_list;
-    do {
-		if (NULL != current_pos->next) {
-			struct position_list* new_pos_node = add_new_pos_node(new_pos_list, current_pos->pos);
-
-			if (NULL == new_pos_node) {
-				free_position_list(new_pos_list);
-				return NULL;
-			}
-
-			new_pos_list = new_pos_node;
-        }
-	} while (NULL != (current_pos = current_pos->next));
-
-	return new_pos_list;
-}
-
-bool is_equal_position_lists(struct position_list* pos_list1, struct position_list* pos_list2) {
-	if (NULL == pos_list1 || NULL == pos_list2) {
-		return false;
-	}
-
-	struct position_list* current_pos_node1 = pos_list1;
-	struct position_list* current_pos_node2 = pos_list2;
-	do {
-		if (!is_equal_pos(current_pos_node1->pos, current_pos_node2->pos)) {
-			return false;
-		}
-
-		current_pos_node1 = current_pos_node1->next;
-		current_pos_node2 = current_pos_node2->next;
-	} while (NULL != current_pos_node1 && NULL != current_pos_node2);
-
-	return (NULL == current_pos_node1 && NULL == current_pos_node2);
-}
-
 bool is_equal_moves(struct move* move1, struct move* move2) {
 	return is_equal_pos(move1->start_pos, move2->start_pos) && is_equal_pos(move1->end_pos, move2->end_pos);
 }
@@ -135,21 +61,6 @@ bool is_move_in_move_list(struct move* mov, struct move_list* move_list)
             return true;
         }
 	} while (NULL != (current_move_node = current_move_node->next));
-
-	return false;
-}
-
-bool is_pos_in_pos_list(struct position pos, struct position_list* pos_list) {
-	if (NULL == pos_list) {
-		return false;
-	}
-
-	struct position_list* current_pos = pos_list;
-	do {
-		if (is_equal_pos(pos, current_pos->pos)) {
-			return true;
-		}
-	} while (NULL != (current_pos = current_pos->next));
 
 	return false;
 }
@@ -179,6 +90,7 @@ void addNodeAsChild(UINode* node, UINode* father)
 	node->father = father;
 	node->root = father->root;
 }
+
 UINode* CreateAndAddNodeToTree(control* control, UINode* father){
 	UINode* node = (UINode*)malloc(sizeof(UINode));
 	node->control = control;

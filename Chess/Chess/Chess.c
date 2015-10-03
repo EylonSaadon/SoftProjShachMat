@@ -172,7 +172,6 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 		}
 		// Start
 		else if (strstr(input, "start\n") == input) {
-			// TODO: decide if need to check checkmate/tie situation (not must: http://moodle.tau.ac.il/2014/mod/forum/discuss.php?d=74261#p113074)
 			if (is_valid_board_init(board)) {
 				return settings;
 			}
