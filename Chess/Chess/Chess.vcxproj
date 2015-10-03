@@ -97,7 +97,7 @@
     <ClCompile Include="SaveLoadWindow.c" />
     <ClCompile Include="SetPieces.c" />
     <ClCompile Include="SettingMenu.c" />
-    <ClCompile Include="UIFramework.c" />
+    <ClCompile Include="UIFrameWork.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AISettings.h" />
