@@ -88,7 +88,7 @@ void MainMenu()
 		newGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&StartNewGame_ButtonClick, &newGameButton, &error))
+		StartNewGame_ButtonClick, &newGameButton, &error))
 	{
 		guiQuit = -1;
 	}
@@ -143,7 +143,7 @@ void MainMenu()
 		quitGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&Quit_ButtonClick, &quitButton, &error))
+		Quit_ButtonClick, &quitButton, &error))
 	{
 		guiQuit = -1;
 	}
