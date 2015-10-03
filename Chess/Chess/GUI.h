@@ -69,7 +69,6 @@
 // Global Variables//
 /////////////////////
 
-static int guiQuit = 0;
 char* error;
 
 control* window;
