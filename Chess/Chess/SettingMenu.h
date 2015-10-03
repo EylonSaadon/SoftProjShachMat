@@ -21,7 +21,7 @@
 #define GAMESETTINGNAME "GameSettingsMenu"
 #define GAMESETTINGFILENAME "GameSettingsMenu.bmp"
 #define GAMESETTING_W 800
-#define GAMESETTING_H 600
+#define GAMESETTING_H 565
 
 #define LABELCHOOSEMODENAME "Label_ChooseMode"
 #define LABELCHOOSEMODEFILENAME "Label_ChooseMode.bmp"

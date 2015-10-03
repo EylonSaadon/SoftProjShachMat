@@ -5,20 +5,33 @@ static int _listenersCount;
 static int _listenersSize;
 static EmptyArgsProcedure quit_procedure;
 
-int EventHandler_init(EmptyArgsProcedure quitFuncPtr)
+int EventHandler_init(EmptyArgsProcedure quitFuncPtr, char** error)
 {
 	FreeEventHandler();
 	quit_procedure = quitFuncPtr; 
 	_listenersSize = INITIALlISTENERSSIZE;
 	_listeners = malloc(sizeof(control*) * _listenersSize);
+	if (NULL == _listeners)
+	{
+		*error = "ERROR: Failed allocating memory in EvenHandler initializing for _listeners,";
+		return -1;
+	}
+	return 0;
 }
 
-int AddToListeners(control* buttonToAdd)
+int AddToListeners(control* buttonToAdd, char** error)
 {
 	if (_listenersCount == _listenersSize)
 	{
 		_listenersSize *= 2;
 		control** tmp = malloc(sizeof(control*) * (_listenersSize));
+		if (NULL == tmp)
+		{
+			free(_listeners);
+			_listeners = NULL;
+			*error = "ERROR: Failed allocating memory in EvenHandler initializing for _listeners,";
+			return -1;
+		}
 		for (int i = 0; i < _listenersCount; i++)
 		{
 			tmp[i] = _listeners[i];
@@ -28,12 +41,10 @@ int AddToListeners(control* buttonToAdd)
 	}
 	_listenersCount++;
 	_listeners[_listenersCount - 1] = buttonToAdd;
-	// TODO: Check failure
-	// TODO: free memory
+	return 0;
 }
 
-//TODO: bool ?
-int CheckIfClicked(control* button, SDL_Event* event)
+bool CheckIfClicked(control* button, SDL_Event* event)
 {
 	if ((event->button.x < button->location_rect->x + button->location_rect->w) &&
 		(event->button.x > button->location_rect->x) &&
@@ -46,10 +57,10 @@ int CheckIfClicked(control* button, SDL_Event* event)
 	}
 }
 
-int HandleEvents()
+void HandleEvents()
 {
 	SDL_Event e;
-	// TODO: Switch case?
+
 	while (SDL_PollEvent(&e) != 0) {
 		switch (e.type) {
 

@@ -171,7 +171,8 @@ void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
 	{
 		for (int j = 0; j < BOARD_SIZE; j++)
 		{
-			control* square = Create_Button_from_bmp(
+			control* square;
+			if (-1 == Create_Button_from_bmp(
 				SQUAREBUTTONFILENAME,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				SQUAREBUTTONNAME,
@@ -179,9 +180,21 @@ void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
 				MARGIN + (j*SQUARE_H),
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
-				FuncPtr);
-			UINode* newGameButton_node = CreateAndAddNodeToTree(square, node);
-			AddToListeners(square);
+				FuncPtr,
+				&square,
+				&error))
+			{
+				guiQuit = -1;
+			}
+			UINode* newGameButton_node;
+			if (-1 == CreateAndAddNodeToTree(square, node, &newGameButton_node, &error))
+			{
+				guiQuit = -1;
+			}
+			if (-1 == AddToListeners(square, &error))
+			{
+				guiQuit = -1;
+			}
 			buttonsBoard[i][j] = square;
 		}
 	}
@@ -196,14 +209,25 @@ void DrawBoardGui(UINode* node)
 			char* name = ResolveNameFromLetter(board[i][j]);
 
 			if (fileName != NULL){
-				control* chessPiece_control = Create_panel_from_bmp(
+				control* chessPiece_control;
+				if (-1 == Create_panel_from_bmp(
 					fileName,
 					name,
-					MARGIN + i*SQUARE_W,
+					MARGIN + i * SQUARE_W,
 					(BOARD_H - MARGIN - (j + 1)*SQUARE_W),
 					(Uint16)SQUARE_W,
-					(Uint16)SQUARE_H);
-				UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, node);
+					(Uint16)SQUARE_H,
+					&chessPiece_control,
+					&error))
+				{
+					guiQuit = -1;
+				}
+
+				UINode* chessPiece_node;
+				if (-1 == CreateAndAddNodeToTree(chessPiece_control, node, &chessPiece_node, &error))
+				{
+					guiQuit = -1;
+				}
 			}
 		}
 	}
@@ -211,7 +235,7 @@ void DrawBoardGui(UINode* node)
 
 void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 {
-	char* Pieces = "mrnbqkMRNBQK ";
+	char* Pieces = "mMrRnNbBqQkK";
 	for (int i = 0; i < 13; i++)
 	{
 		char* fileName = ResolveFileNameFromLetter(Pieces[i]);
@@ -225,17 +249,30 @@ void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 		}
 
 		if (fileName != NULL){
-			control* chessPiece_control = Create_Button_from_bmp_transHighlight(
+			control* chessPiece_control;
+			if(-1 == Create_Button_from_bmp_transHighlight(
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
-				BOARD_W + MARGIN + (i % 2) * SQUARE_W,
+				GAMEBOARDBACKGROUND_W - 160 - SQUARE_W - 13  + (i % 2) * (SQUARE_W + 22),
 				0.5 * MARGIN + (i / 2) * SQUARE_H,
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
-				FuncPtr);
-			UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, panel_node);
-			AddToListeners(chessPiece_control);
+				FuncPtr,
+				&chessPiece_control,
+				&error))
+			{
+				guiQuit = -1;
+			}
+			UINode* chessPiece_node;
+			if(-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, &error))
+			{
+				guiQuit = -1;
+			}
+			if(-1 == AddToListeners(chessPiece_control, &error))
+			{
+				guiQuit = -1;
+			}
 		}
 	}
 
@@ -248,7 +285,7 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 	{
 		Pieces = "MRNBQ";
 	}
-	
+
 	for (int i = 0; i < 6; i++)
 	{
 		char* fileName = ResolveFileNameFromLetter(Pieces[i]);
@@ -262,7 +299,8 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 		}
 
 		if (fileName != NULL){
-			control* chessPiece_control = Create_Button_from_bmp_transHighlight(
+			control* chessPiece_control;
+			if(-1 == Create_Button_from_bmp_transHighlight(
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
@@ -270,9 +308,21 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 				0.5 * MARGIN + (i / 2) * SQUARE_H,
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
-				FuncPtr);
-			UINode* chessPiece_node = CreateAndAddNodeToTree(chessPiece_control, panel_node);
-			AddToListeners(chessPiece_control);
+				FuncPtr, 
+				&chessPiece_control,
+				&error))
+			{
+				guiQuit = -1;
+			}
+			UINode* chessPiece_node;
+			if (-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, &error))
+			{
+				guiQuit = -1;
+			}
+			if (-1 == AddToListeners(chessPiece_control, &error))
+			{
+				guiQuit = -1;
+			}
 		}
 	}
 

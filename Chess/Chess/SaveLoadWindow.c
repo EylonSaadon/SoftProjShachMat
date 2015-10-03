@@ -1,15 +1,6 @@
 #include "SaveLoadWindow.h"
 
 
-char* concat(char *s1, char *s2)
-{
-	char *result = malloc(strlen(s1) + strlen(s2) + 1);
-
-	strcpy(result, s1);
-	strcat(result, s2);
-	return result;
-}
-
 void SaveLoadCancel_ButtonClick(control* input)
 {
 	if (isSaveMode)
@@ -50,66 +41,113 @@ void SaveLoadSlot_ButtonClick(control* input)
 int SaveLoadMenu()
 {
 	FreeTree(tree);
-	EventHandler_init(&Quit);
+	if (-1 == EventHandler_init(&Quit, &error))
+	{
+		guiQuit = -1;
+	}
 
-	control* window = Create_window(SAVELOAD_W, SAVELOAD_H);
-	tree = CreateTree(window);
-
-	control* background_control = Create_panel_from_bmp(
-		SAVELOADBACKGROUNDFILENAME,
-		SAVELOADBACKGROUNDNAME,
-		0,
-		0,
-		(Uint16)SAVELOAD_W,
-		(Uint16)SAVELOAD_H);
-	UINode* background_node = CreateAndAddNodeToTree(background_control, tree);
+	control* window;
+	if (-1 == Create_window(SAVELOAD_W, SAVELOAD_H, &window, &error))
+	{
+		guiQuit = -1;
+	}
 
 
-	int titleLabel_x_location = SAVELOAD_TITLE_LOCATION_X_CENTER-100;
-	int titleLabel_y_location = MARGIN;
+	if (-1 == CreateTree(window, &tree, &error))
+	{
+		guiQuit = -1;
+	}
 
-	char* filename = LABELLOADGAMEFILENAME;
-	char* name = LABELLOADGAMENAME;
+
+	char* filename = LOADMENUBACKGROUNDFILENAME;
+	char* name = LOADMENUBACKGROUNDNAME;
 
 	if (isSaveMode)
 	{
-		filename = LABELSAVEGAMEFILENAME;
-		name = LABELSAVEGAMENAME;
+		filename = SAVEMENUBACKGROUNDFILENAME;
+		name = SAVEMENUBACKGROUNDFILENAME;
 	}
 
-	control* titleLabel_control = Create_panel_from_bmp(
+
+
+	control* background_control;
+	Create_panel_from_bmp(
+		filename,
+		name,
+		0,
+		0,
+		(Uint16)SAVELOAD_W,
+		(Uint16)SAVELOAD_H,
+		&background_control,
+		&error);
+	UINode* background_node;
+	if (-1 == CreateAndAddNodeToTree(background_control, tree, &background_node, &error))
+	{
+		guiQuit = -1;
+	}
+
+
+	/*int titleLabel_x_location = SAVELOAD_TITLE_LOCATION_X_CENTER-100;
+	int titleLabel_y_location = MARGIN;
+
+
+	
+
+	control* titleLabel_control;
+	if(-1 == Create_panel_from_bmp(
 		filename,
 		name,
 		titleLabel_x_location,
 		titleLabel_y_location,
 		0,
-		0);
-	UINode* titleLabel_node = CreateAndAddNodeToTree(titleLabel_control, background_node);
-
-
-
-	for (int i = 0; i < NUMOFSLOTS; i++)
+		0,
+		&titleLabel_control,
+		&error))
 	{
-		char c = i + 1 + '0';
-		char* numberstr[2];
-		numberstr[0] = c;
-		numberstr[1] = NULL;
+		guiQuit = -1;
+	}
+	UINode* titleLabel_node;
+	if (-1 == CreateAndAddNodeToTree(titleLabel_control, background_node, &titleLabel_node, &error))
+	{
+		guiQuit = -1;
+	}
+*/
+
+
+	for (int i = 0; i < 10; i++)
+	{
+		char numberstr[3];
+		_itoa_s(i+1,numberstr,3,10);
+		
 
 		char* saveFileName = concat(SAVEFILNAMEPREFIX, numberstr);
 
 		char* fileNameNoSuffix = concat(BUTTONIMGFILENAMEPREFIX, numberstr);
 		char* fileName = concat(fileNameNoSuffix, ".bmp");
-		control* slotButton_control = Create_Button_from_bmp_transHighlight(
+		control* slotButton_control;
+		if( -1 == Create_Button_from_bmp_transHighlight(
 			fileName,
 			BUTTONSAVESLOTHIGHLIGHTFILENAME,
 			saveFileName,
-			2 * MARGIN + (i % 3) * BUTTONSAVESLOT_W + MARGIN *2,
-			0.20 * SAVELOAD_H + (i / 3) * BUTTONSAVESLOT_H + MARGIN,
-			(Uint16)BUTTONSAVESLOT_H,
-			(Uint16)BUTTONSAVESLOT_W,
-			&SaveLoadSlot_ButtonClick);
-		UINode* slotButton_node = CreateAndAddNodeToTree(slotButton_control, background_node);
-		AddToListeners(slotButton_control);
+			2 * MARGIN + (i / 7) * BUTTON_W + MARGIN *2,
+			0.15 * SAVELOAD_H + (i & 7) * (BUTTON_H + MARGIN),
+			(Uint16)BUTTON_H,
+			(Uint16)BUTTON_W,
+			&SaveLoadSlot_ButtonClick,
+			&slotButton_control,
+			&error))
+		{
+			guiQuit = -1;
+		}
+		UINode* slotButton_node;
+		if (-1 == CreateAndAddNodeToTree(slotButton_control, background_node, &slotButton_node, &error))
+		{
+			guiQuit = -1;
+		}
+		if (-1 == AddToListeners(slotButton_control, &error))
+		{
+			guiQuit = -1;
+		}
 
 
 		free(saveFileName);
@@ -118,9 +156,10 @@ int SaveLoadMenu()
 	}
 
 
-	int cancelButton_x_location = MARGIN;
-	int cancelButton_y_location = SAVELOAD_H - BUTTON_H - MARGIN * 2;
-	control* cancelButton_control = Create_Button_from_bmp_transHighlight(
+	int cancelButton_x_location = SAVELOAD_W - BUTTON_W - 0.5 * MARGIN;
+	int cancelButton_y_location = SAVELOAD_H - BUTTON_H - 1.5 * MARGIN;
+	control* cancelButton_control;
+	if(-1 ==Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONCANCELNAME,
@@ -128,13 +167,25 @@ int SaveLoadMenu()
 		cancelButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&SaveLoadCancel_ButtonClick);
-	UINode* cancelButton_node = CreateAndAddNodeToTree(cancelButton_control, background_node);
-	AddToListeners(cancelButton_control);
+		&SaveLoadCancel_ButtonClick,
+		&cancelButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* cancelButton_node;
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, background_node, &cancelButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if(-1 ==AddToListeners(cancelButton_control, &error))
+		{
+			guiQuit = -1;
+		}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }

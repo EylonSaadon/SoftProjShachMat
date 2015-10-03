@@ -20,7 +20,7 @@ void UserColor_ButtonClick(control* input)
 	{
 		if (curSettings->user_color == WHITE)
 		{
-			curSettings->user_color= BLACK;
+			curSettings->user_color = BLACK;
 			UINode* node = SearchTreeByName(tree, BUTTONWHITENAME);
 			if (node != NULL){
 				SwitchButtonHighlight(node->control);
@@ -29,10 +29,10 @@ void UserColor_ButtonClick(control* input)
 		}
 	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }
 
@@ -90,12 +90,11 @@ void AIMinimaxDepth_ButtonClick(control* input)
 		}
 	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
-
 }
 
 
@@ -117,34 +116,71 @@ void AINext_ButtonClick(control* input)
 void AISetting()
 {
 	FreeTree(tree);
-	EventHandler_init(&Quit);
+	
+	if (-1 == EventHandler_init(&Quit, &error))
+	{
+		guiQuit = -1;
+	}
 
-	control* window = Create_window(AISETTING_W, AISETTING_H);
-	tree = CreateTree(window);
+	control* window;
+	if (-1 == Create_window(AISETTING_W, AISETTING_H, &window, &error))
+	{
+		guiQuit = -1;
+	}
 
-	control* AISettingBackground_control = Create_panel_from_bmp(
+
+	if (-1 == CreateTree(window, &tree, &error))
+	{
+		guiQuit = -1;
+	}
+
+
+	control* AISettingBackground_control;
+	if (-1 == Create_panel_from_bmp(
 		AISETTINGFILENAME,
 		AISETTINGNAME,
 		0,
 		0,
 		(Uint16)AISETTING_W,
-		(Uint16)AISETTING_H);
-	UINode* AISettingBackground_node = CreateAndAddNodeToTree(AISettingBackground_control, tree);
+		(Uint16)AISETTING_H,
+		&AISettingBackground_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* AISettingBackground_node;
+	if (-1 == CreateAndAddNodeToTree(AISettingBackground_control, tree, &AISettingBackground_node, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int minimaxDepthLabel_x_location = MARGIN;
+	/*int minimaxDepthLabel_x_location = MARGIN;
 	int minimaxDepthLabel_y_location = 0.30 * AISETTING_H - 20;
-	control* minimaxDepthLabel_control = Create_panel_from_bmp(
+
+	control* minimaxDepthLabel_control;
+	if (-1 == Create_panel_from_bmp(
 		LABELMINIMAXFILENAME,
 		LABELMINIMAXNAME,
 		minimaxDepthLabel_x_location,
 		minimaxDepthLabel_y_location,
 		0,
-		0);
-	UINode* minimaxDepthLabel_node = CreateAndAddNodeToTree(minimaxDepthLabel_control, AISettingBackground_node);
+		0,
+		&minimaxDepthLabel_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* minimaxDepthLabel_node;
+	if (-1 == CreateAndAddNodeToTree(minimaxDepthLabel_control, AISettingBackground_node, &minimaxDepthLabel_node, &error))
+	{
+		guiQuit = -1;
+	}*/
 
-	int oneButton_x_location = minimaxDepthLabel_x_location + 250;
-	int oneButton_y_location = minimaxDepthLabel_y_location - 0.7 * NUMBUTTON_H;
-	control* oneButton_control = Create_Button_from_bmp_transHighlight(
+	int oneButton_x_location = 330;
+	int oneButton_y_location = 48;
+
+	control* oneButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTON1FILENAME,
 		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON1NAME,
@@ -152,13 +188,25 @@ void AISetting()
 		oneButton_y_location,
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
-		&AIMinimaxDepth_ButtonClick);
-	UINode* oneButton_node = CreateAndAddNodeToTree(oneButton_control, AISettingBackground_node);
-	AddToListeners(oneButton_control);
+		&AIMinimaxDepth_ButtonClick,
+		&oneButton_control, &error))
+	{
+		guiQuit = -1;
+	}
+	UINode* oneButton_node;
+	if (-1 == CreateAndAddNodeToTree(oneButton_control, AISettingBackground_node, &oneButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(oneButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int twoButton_x_location = oneButton_x_location + NUMBUTTON_W + MARGIN;
+	int twoButton_x_location = oneButton_x_location + NUMBUTTON_W + 28;
 	int twoButton_y_location = oneButton_y_location;
-	control* twoButton_control = Create_Button_from_bmp_transHighlight(
+	control* twoButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTON2FILENAME,
 		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON2NAME,
@@ -166,13 +214,26 @@ void AISetting()
 		twoButton_y_location,
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
-		&AIMinimaxDepth_ButtonClick);
-	UINode* twoButton_node = CreateAndAddNodeToTree(twoButton_control, AISettingBackground_node);
-	AddToListeners(twoButton_control);
+		&AIMinimaxDepth_ButtonClick,
+		&twoButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* twoButton_node;
+	if (-1 == CreateAndAddNodeToTree(twoButton_control, AISettingBackground_node, &twoButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(twoButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int threeButton_x_location = oneButton_x_location;
-	int threeButton_y_location = oneButton_y_location + NUMBUTTON_H + MARGIN;
-	control* threeButton_control = Create_Button_from_bmp_transHighlight(
+	int threeButton_x_location = twoButton_x_location + NUMBUTTON_W + 28;
+	int threeButton_y_location = oneButton_y_location;
+	control* threeButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTON3FILENAME,
 		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON3NAME,
@@ -180,13 +241,25 @@ void AISetting()
 		threeButton_y_location,
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
-		&AIMinimaxDepth_ButtonClick);
-	UINode* threeButton_node = CreateAndAddNodeToTree(threeButton_control, AISettingBackground_node);
-	AddToListeners(threeButton_control);
+		&AIMinimaxDepth_ButtonClick,
+		&threeButton_control, &error))
+	{
+		guiQuit = -1;
+	}
+	UINode* threeButton_node;
+	if (-1 == CreateAndAddNodeToTree(threeButton_control, AISettingBackground_node, &threeButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(threeButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int fourButton_x_location = twoButton_x_location;
+	int fourButton_x_location = threeButton_x_location + NUMBUTTON_W + 28;
 	int fourButton_y_location = threeButton_y_location;
-	control* fourButton_control = Create_Button_from_bmp_transHighlight(
+	control* fourButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTON4FILENAME,
 		NUMBUTTONHIGHLIGHTEDFILENAME,
 		BUTTON4NAME,
@@ -194,38 +267,73 @@ void AISetting()
 		fourButton_y_location,
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
-		&AIMinimaxDepth_ButtonClick);
-	UINode* fourButton_node = CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node);
-	AddToListeners(fourButton_control);
+		&AIMinimaxDepth_ButtonClick,
+		&fourButton_control, &error))
+	{
+		guiQuit = -1;
+	}
+	UINode* fourButton_node;
+	if (-1 == CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node, &fourButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(fourButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int bestButton_x_location = threeButton_x_location;
-	int bestButton_y_location = threeButton_y_location + NUMBUTTON_H + MARGIN;
-	control* bestButton_control = Create_Button_from_bmp_transHighlight(
+	int bestButton_x_location = fourButton_x_location + NUMBUTTON_W + 45;
+	int bestButton_y_location = fourButton_y_location;
+	control* bestButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONBESTFILENAME,
-		NUMBUTTONHIGHLIGHTEDFILENAME,
+		BUTTONBESTHIGHLIGHTFILENAME,
 		BUTTONBESTNAME,
 		bestButton_x_location,
 		bestButton_y_location,
-		(Uint16)NUMBUTTON_W,
-		(Uint16)NUMBUTTON_H,
-		&AIMinimaxDepth_ButtonClick);
-	UINode* bestButton_node = CreateAndAddNodeToTree(bestButton_control, AISettingBackground_node);
-	AddToListeners(bestButton_control);
+		(Uint16)BESTBUTTON_W,
+		(Uint16)BESTBUTTON_H,
+		&AIMinimaxDepth_ButtonClick, &bestButton_control, &error))
+	{
+		guiQuit = -1;
+	}
+	UINode* bestButton_node;
+	if (-1 == CreateAndAddNodeToTree(bestButton_control, AISettingBackground_node, &bestButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(bestButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int UserColorLabel_x_location = MARGIN;
+	/*int UserColorLabel_x_location = MARGIN;
 	int UserColorLabel_y_location = 0.75 * AISETTING_H - BUTTON_H;
-	control* UserColorLabel_control = Create_panel_from_bmp(
+	control* UserColorLabel_control;
+	if (-1 == Create_panel_from_bmp(
 		LABELUSERCOLORFILENAME,
 		LABELUSERCOLORNAME,
 		UserColorLabel_x_location,
 		UserColorLabel_y_location,
 		0,
-		0);
-	UINode* UserColorLabel_node = CreateAndAddNodeToTree(UserColorLabel_control, AISettingBackground_node);
+		0,
+		&Create_panel_from_bmp, 
+		&UserColorLabel_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+
+	UINode* UserColorLabel_node = NULL;
+	if (-1 == CreateAndAddNodeToTree(UserColorLabel_control, AISettingBackground_node, &UserColorLabel_node, &error))
+	{
+		guiQuit = -1;
+	}*/
 
 	int whiteButton_x_location = oneButton_x_location;
-	int whiteButton_y_location = UserColorLabel_y_location;
-	control* whiteButton_control = Create_Button_from_bmp_transHighlight(
+	int whiteButton_y_location = 156;
+	control* whiteButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONWHITEFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONWHITENAME,
@@ -233,13 +341,26 @@ void AISetting()
 		whiteButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&UserColor_ButtonClick);
-	UINode* whiteButton_node = CreateAndAddNodeToTree(whiteButton_control, AISettingBackground_node);
-	AddToListeners(whiteButton_control);
+		&UserColor_ButtonClick,
+		&whiteButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* whiteButton_node;
+	if (-1 == CreateAndAddNodeToTree(whiteButton_control, AISettingBackground_node, &whiteButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(whiteButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int blackButton_x_location = whiteButton_x_location + BUTTON_W + MARGIN;
+	int blackButton_x_location = whiteButton_x_location + BUTTON_W + 28;
 	int blackButton_y_location = whiteButton_y_location;
-	control* blackButton_control = Create_Button_from_bmp_transHighlight(
+	control* blackButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONBLACKFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONBLACKNAME,
@@ -247,14 +368,27 @@ void AISetting()
 		blackButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&UserColor_ButtonClick);
-	UINode* blackButton_node = CreateAndAddNodeToTree(blackButton_control, AISettingBackground_node);
-	AddToListeners(blackButton_control);
+		&UserColor_ButtonClick,
+		&blackButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* blackButton_node;
+	if (-1 == CreateAndAddNodeToTree(blackButton_control, AISettingBackground_node, &blackButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(blackButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
 
-	int cancelButton_x_location = MARGIN;
-	int cancelButton_y_location = AISETTING_H - BUTTON_H - MARGIN * 2;
-	control* cancelButton_control = Create_Button_from_bmp_transHighlight(
+	int cancelButton_x_location = 44;
+	int cancelButton_y_location = 398;
+	control* cancelButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONCANCELNAME,
@@ -262,13 +396,26 @@ void AISetting()
 		cancelButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&AICancel_ButtonClick);
-	UINode* cancelButton_node = CreateAndAddNodeToTree(cancelButton_control, AISettingBackground_node);
-	AddToListeners(cancelButton_control);
+		&AICancel_ButtonClick,
+		&cancelButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* cancelButton_node;
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, AISettingBackground_node, &cancelButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(cancelButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	int nextButton_x_location = AISETTING_W - BUTTON_W - MARGIN;
-	int nextButton_y_location = AISETTING_H - BUTTON_H - MARGIN * 2;
-	control* nextButton_control = Create_Button_from_bmp_transHighlight(
+	int nextButton_x_location = cancelButton_x_location;
+	int nextButton_y_location = 474;
+	control* nextButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONNEXTFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONNEXTNAME,
@@ -276,9 +423,21 @@ void AISetting()
 		nextButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&AINext_ButtonClick);
-	UINode* nextButton_node = CreateAndAddNodeToTree(nextButton_control, AISettingBackground_node);
-	AddToListeners(nextButton_control);
+		&AINext_ButtonClick,
+		&nextButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* nextButton_node;
+	if (-1 == CreateAndAddNodeToTree(nextButton_control, AISettingBackground_node, &nextButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(nextButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
 	if (curSettings->user_color == WHITE)
 	{
@@ -307,9 +466,9 @@ void AISetting()
 		break;
 	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }

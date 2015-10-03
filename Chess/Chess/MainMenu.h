@@ -13,9 +13,14 @@
 
 // MainMenu Window Defs
 #define MAINMENUNAME "MainMenuBackGround"
-#define MAINMENUFILENAME "MainMenu.bmp"
+#define MAINMENUFILENAME "MainMenu2.bmp"
+
 #define MAINMENU_W 800
-#define MAINMENU_H 600
+#define MAINMENU_H 565
+
+#define MAINMENULEFTMARGIN 56
+#define MAINMENUTOPMARGIN 142
+#define MAINMENUBUTTONMARGIN 33
 
 #define BUTTONNEWGAMENAME "Button_NewGame"
 #define BUTTONNEWGAMEFILENAME "Button_NewGame.bmp"

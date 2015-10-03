@@ -70,9 +70,10 @@ bool is_move_in_move_list(struct move* mov, struct move_list* move_list);
 // Checks is 2 positions are equal
 bool is_equal_pos(struct position pos1, struct position pos2);
 
-
+// TODO: add documentaion
 #define INITIALCHILDRENSIZE 100
 
+// TODO: add documentaion
 struct control
 {
 	SDL_Surface* surface;
@@ -84,8 +85,10 @@ struct control
 	void (*Action)(struct control*);
 }; typedef struct control control;
 
+// TODO: add documentaion
 typedef void(*ButtonAction)(struct control*);
 
+// TODO: add documentaion
 struct UINode
 {
 	control* control;
@@ -96,7 +99,16 @@ struct UINode
 	struct UINode* root;
 };  typedef struct UINode UINode;
 
+// TODO: add documentaion
+int CreateTree(control* window, UINode** node_ret, char** error);
 
-UINode* CreateTree(control* window);
-UINode* CreateAndAddNodeToTree(control* control, UINode* father);
+//TODO: add Documentation
+int addNodeAsChild(UINode* node, UINode* father, char** error);
+
+// TODO: add documentaion
+int CreateAndAddNodeToTree(control* control, UINode* father, UINode** node, char** error);
+
+// TODO: add documentaion
+char* concat(char *s1, char *s2);
 #endif
+

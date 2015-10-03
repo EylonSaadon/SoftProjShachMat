@@ -154,40 +154,108 @@ bool is_pos_in_pos_list(struct position pos, struct position_list* pos_list) {
 	return false;
 }
 
-UINode* CreateTree(control* window)
+int CreateTree(control* window, UINode** node_ret, char** error)
 {
 	UINode* root = (UINode*)malloc(sizeof(UINode));
+	if (NULL == root)
+	{
+		*node_ret = NULL;
+		*error = "ERROR: Failed allocatin memory for UINode.";
+		return -1;
+	}
+
 	root->control = window;
 	root->childrenCount = 0;
 	root->childrenSize = INITIALCHILDRENSIZE;
 	root->children = (UINode**)malloc(sizeof(UINode*) * root->childrenSize);
+	if (NULL == root->children)
+	{
+		free(root);
+		root = NULL;
+		*node_ret = NULL;
+		*error = "ERROR: Failed allocatin memory for UINode array (children of a node).";
+		return -1;
+	}
 	root->father = NULL;
 	root->root = root;
-	return root;
+
+	*node_ret = root;
+
+	return 0;
 }
 
-void addNodeAsChild(UINode* node, UINode* father)
+int addNodeAsChild(UINode* node, UINode* father, char** error)
 {
 	if (father->childrenCount == father->childrenSize)
 	{
 		father->childrenSize *= 2;
-		father->children = realloc(father->children, sizeof(UINode*) * father->childrenSize);
+
+		UINode** tmp = (UINode**)malloc(sizeof(UINode*) * father->childrenSize);
+		if (NULL == tmp)
+		{
+			// not freeing the children array because the father should still be part of a tree that will be freed in an orderly fashion.
+			*error = "ERROR: Failed trying to allocate memory for UINode array (while enlarging the children array).";
+			return -1;
+		}
+
+		for (int i = 0; i < father->childrenCount; i++)
+		{
+			tmp[i] = father->children[i];
+		}
+
+		father->children = tmp;
 	}
+
 	father->childrenCount ++;
 	father->children[father->childrenCount - 1] = node;
 
 	node->father = father;
 	node->root = father->root;
 }
-UINode* CreateAndAddNodeToTree(control* control, UINode* father){
-	UINode* node = (UINode*)malloc(sizeof(UINode));
-	node->control = control;
-	node->childrenCount = 0;
-	node->childrenSize = INITIALCHILDRENSIZE;
-	node->children = (UINode**)malloc(sizeof(UINode*) * node->childrenSize);
-	node->father = NULL;
 
-	addNodeAsChild(node, father);
+int CreateAndAddNodeToTree(control* control, UINode* father, UINode** node, char** error){
 
-	return node;
+	(*node) = (UINode*)malloc(sizeof(UINode));
+	if (NULL == (*node))
+	{
+		*node = NULL;
+		*error = "ERROR: Failed allocatin memory for UINode.";
+		return -1;
+	}
+
+	(*node)->control = control;
+	(*node)->childrenCount = 0;
+	(*node)->childrenSize = INITIALCHILDRENSIZE;
+	(*node)->father = NULL;
+
+	(*node)->children = (UINode**)malloc(sizeof(UINode*) * (*node)->childrenSize);
+	if (NULL == (*node)->children)
+	{
+		free(*node);
+		*node = NULL;
+		*error = "ERROR: Failed allocatin memory for UINode array (children of a node).";
+		return -1;
+	}
+
+	if (-1 == addNodeAsChild((*node), father, error))
+	{
+		free((*node)->children);
+		(*node)->children = NULL;
+		free(*node);
+		*node = NULL;
+		return -1;
+	}
+}
+
+char* concat(char *s1, char *s2)
+{
+	char* result= malloc(strlen(s1) + strlen(s2) + 1);
+	if (NULL == result)
+	{
+		return NULL;
+	}
+
+	strcpy(result, s1);
+	strcat(result, s2);
+	return result;
 }

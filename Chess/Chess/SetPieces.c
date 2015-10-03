@@ -6,7 +6,7 @@ void PlacePiece()
 
 	char piece = ResolveLetterFromButtonName(selectedPiece_Control->name);
 	COLOR c;
-	if ('a' < piece && piece <'z')
+	if ('a' < piece && piece < 'z')
 	{
 		c = WHITE;
 	}
@@ -28,7 +28,7 @@ void PlacePiece()
 
 
 void SetPiecesBoardSquare_ButtonClick(control* input)
-{ 
+{
 	if (selectedSquare_Control != NULL)
 	{
 		SwitchButtonHighlight(selectedSquare_Control);
@@ -48,16 +48,16 @@ void SetPiecesBoardSquare_ButtonClick(control* input)
 		}
 	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }
 
 void SetPiecesSidePanelPiece_ButtonClick(control* input)
 {
-	if (selectedPiece_Control!= NULL)
+	if (selectedPiece_Control != NULL)
 	{
 		SwitchButtonHighlight(selectedPiece_Control);
 		selectedPiece_Control = NULL;
@@ -76,10 +76,10 @@ void SetPiecesSidePanelPiece_ButtonClick(control* input)
 		}
 	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }
 
@@ -106,32 +106,61 @@ void SetPiecesStart_ButtonClick(control* input)
 void SetPiecesWindow()
 {
 	FreeTree(tree);
-	EventHandler_init(&Quit);
+	if (-1 == EventHandler_init(&Quit, &error))
+	{
+		guiQuit = -1;
+	}
 
+	control* window;
+	if (-1 == Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H, &window, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == CreateTree(window, &tree, &error))
+	{
+		guiQuit = -1;
+	}
 	selectedSquare_Control = NULL;
 	selectedPiece_Control = NULL;
 
-	control* window = Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H);
-	tree = CreateTree(window);
 
-
-	control* gameBoarBackground_control = Create_panel_from_bmp(
-		GAMEBOARDBACKGROUNDFILENAME,
-		GAMEBOARDBACKGROUNDNAME,
+	control* gameBoarBackground_control;
+	if (-1 == Create_panel_from_bmp(
+		SETTINGGAMEBOARDBACKGROUNDFILENAME,
+		STTINGGAMEBOARDBACKGROUNDNAME,
 		0,
 		0,
 		(Uint16)GAMEBOARDBACKGROUND_W,
-		(Uint16)GAMEBOARDBACKGROUND_H);
-	UINode* gameBoarBackground_node = CreateAndAddNodeToTree(gameBoarBackground_control, tree);
+		(Uint16)GAMEBOARDBACKGROUND_H,
+		&gameBoarBackground_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* gameBoarBackground_node;
+	if (-1 == CreateAndAddNodeToTree(gameBoarBackground_control, tree, &gameBoarBackground_node, &error))
+	{
+		guiQuit = -1;
+	}
 
-	control* board_control = Create_panel_from_bmp(
+	control* board_control;
+	if (-1 == Create_panel_from_bmp(
 		CHESSBOARDFILENAME,
 		CHESSBOARDNAME,
 		0,
 		0,
 		(Uint16)BOARD_W,
-		(Uint16)BOARD_H);
-	board_node = CreateAndAddNodeToTree(board_control, tree);
+		(Uint16)BOARD_H,
+		&board_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+
+	if (-1 == CreateAndAddNodeToTree(board_control, tree, &board_node, &error))
+	{
+		guiQuit = -1;
+	}
 
 
 	DrawSquareButtons(board_node, &SetPiecesBoardSquare_ButtonClick);
@@ -140,9 +169,36 @@ void SetPiecesWindow()
 
 	DrawPiecesOnSidePanel(gameBoarBackground_node, &SetPiecesSidePanelPiece_ButtonClick);
 
-	int cancelButton_x_location = GAMEBOARDBACKGROUND_W - BUTTON_W - 0.5 * MARGIN;
-	int cancelButton_y_location = GAMEBOARDBACKGROUND_H - BUTTON_H - 1.5 * MARGIN;
-	control* cancelButton_control = Create_Button_from_bmp_transHighlight(
+	control* chessPiece_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
+		DELETE_FILENAME,
+		SQUAREBUTTONHIGHLIGHTEDFILENAME,
+		DELETE_NAME,
+		BOARD_W +MARGIN,
+		0,
+		(Uint16)SQUARE_W,
+		(Uint16)SQUARE_H,
+		&SetPiecesSidePanelPiece_ButtonClick,
+		&chessPiece_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* chessPiece_node;
+	if (-1 == CreateAndAddNodeToTree(chessPiece_control, gameBoarBackground_node, &chessPiece_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(chessPiece_control, &error))
+	{
+		guiQuit = -1;
+	}
+
+
+	int cancelButton_x_location = GAMEBOARDBACKGROUND_W - 160 - SQUARE_W - 13;
+	int cancelButton_y_location = GAMEBOARDBACKGROUND_H - BUTTON_H - MARGIN;
+	control* cancelButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONCANCELNAME,
@@ -150,13 +206,26 @@ void SetPiecesWindow()
 		cancelButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&SetPiecesCancel_ButtonClick);
-	UINode* cancelButton_node = CreateAndAddNodeToTree(cancelButton_control, gameBoarBackground_node);
-	AddToListeners(cancelButton_control);
+		&SetPiecesCancel_ButtonClick,
+		&cancelButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* cancelButton_node;
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, gameBoarBackground_node, &cancelButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(cancelButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
 	int startButton_x_location = cancelButton_x_location;
-	int startButton_y_location = cancelButton_y_location - BUTTON_H - 2 * MARGIN;
-	control* startButton_control = Create_Button_from_bmp_transHighlight(
+	int startButton_y_location = cancelButton_y_location - BUTTON_H - 1 * MARGIN;
+	control* startButton_control;
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONSTARTFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONSTARTNAME,
@@ -164,14 +233,26 @@ void SetPiecesWindow()
 		startButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&SetPiecesStart_ButtonClick);
-	UINode* startButton_node = CreateAndAddNodeToTree(startButton_control, gameBoarBackground_node);
-	AddToListeners(startButton_control);
+		&SetPiecesStart_ButtonClick,
+		&startButton_control,
+		&error))
+	{
+		guiQuit = -1;
+	}
+	UINode* startButton_node;
+	if (-1 == CreateAndAddNodeToTree(startButton_control, gameBoarBackground_node, &startButton_node, &error))
+	{
+		guiQuit = -1;
+	}
+	if (-1 == AddToListeners(startButton_control, &error))
+	{
+		guiQuit = -1;
+	}
 
-	DrawTree(tree);
-	/* We finished drawing*/
-	if (SDL_Flip(tree->control->surface) != 0) {
-		printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+	// DrawTree
+	if (-1 == FlipTree(error))
+	{
+		guiQuit = -1;
 	}
 }
 

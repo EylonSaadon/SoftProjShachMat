@@ -9,15 +9,17 @@
 // Game Window Defs 
 #define CHESSBOARDNAME "Chess_Board"
 #define CHESSBOARDFILENAME "Chess_Board.bmp"
-#define BOARD_W 600
-#define BOARD_H 600
+#define BOARD_W 540
+#define BOARD_H 540
 
 #define GAMEBOARDBACKGROUNDNAME "GameBoardBackground"
 #define GAMEBOARDBACKGROUNDFILENAME "GameBoardBackground.bmp"
-#define GAMEBOARDBACKGROUND_W 1000
-#define GAMEBOARDBACKGROUND_H 600
+#define STTINGGAMEBOARDBACKGROUNDNAME "SetPiecesGameBoardBackground"
+#define SETTINGGAMEBOARDBACKGROUNDFILENAME "SetPiecesGameBoardBackground.bmp"
+#define GAMEBOARDBACKGROUND_W 900
+#define GAMEBOARDBACKGROUND_H 540
 
-#define MARGIN 20
+
 #define ACTUALBOARD_W (BOARD_W-2*MARGIN)
 #define ACTUALBOARD_H (BOARD_H-2*MARGIN)
 
@@ -57,8 +59,8 @@
 #define WHITE_KNIGHT_NAME "Chess_Piece_White_Knight"
 #define WHITE_KNIGHT_FILENAME "Chess_Piece_White_Knight.bmp"
 
-#define SQUARE_W 70
-#define SQUARE_H 70
+#define SQUARE_W 63
+#define SQUARE_H 63
 
 #define LABELBLACKCHECKNAME "Label_BlackCheck"
 #define LABELBLACKCHECKFILENAME "Label_BlackCheck.bmp"

@@ -18,7 +18,7 @@
 #define AISETTINGNAME "AISettingsMenu"
 #define AISETTINGFILENAME "AISettingsMenu.bmp"
 #define AISETTING_W 800
-#define AISETTING_H 600
+#define AISETTING_H 565
 
 #define LABELMINIMAXNAME "Label_MinimaxDepth"
 #define LABELMINIMAXFILENAME "Label_MinimaxDepth.bmp"
@@ -37,6 +37,7 @@
 #define BUTTON4FILENAME "Button_4.bmp"
 #define BUTTONBESTNAME "Button_Best"
 #define BUTTONBESTFILENAME "Button_Best.bmp"
+#define BUTTONBESTHIGHLIGHTFILENAME "Button_BestHighlight.bmp"
 
 #define AISETTING_BUTTONLOCATION_X_CENTER (0.5*AISETTING_W - 0.5*AISETTING_H)
 

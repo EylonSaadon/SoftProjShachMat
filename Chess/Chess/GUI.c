@@ -1,5 +1,6 @@
 #include "GUI.h"
 
+
 void FreeButtonsBoard()
 {
 	for (int i = 0; i < BOARD_SIZE; i++)
@@ -19,6 +20,22 @@ void SwitchOffHighlightAllMinimaxDepths()
 	SwitchOffHighlightbyName(BUTTONBESTNAME);
 }
 
+int FlipTree(char** error)
+{
+	if (-1 == DrawTree(tree, error))
+	{
+		return -1;
+	}
+
+	/* We finished drawing*/
+	if (SDL_Flip(tree->control->surface) != 0) {
+		// TODO: printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
+
+		*error = SDL_GetError();
+		return -1;
+	}
+}
+
 void releaseResouces()
 {
 	FreeTree(tree);
@@ -36,7 +53,6 @@ void releaseResouces()
 	free(chosenMove);
 	chosenMove = NULL;
 }
-
 
 void Quit()
 {
@@ -124,12 +140,15 @@ void start_gui()
 	}
 	atexit(SDL_Quit);
 	
+	error = NULL;
+
 	InitGlobalVariable();
 	guiQuit = 0;
 	SDL_WM_SetCaption("Chess", NULL);
+	//TODO: Handle Failure
 	MainMenu();
 
-	while (!guiQuit) {
+	while (guiQuit == 0) {
 		HandleEvents();
 		SDL_Delay(125);
 	}

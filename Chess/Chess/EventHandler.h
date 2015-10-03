@@ -9,13 +9,13 @@
 
 typedef void(*EmptyArgsProcedure)(void);
 
-int EventHandler_init(EmptyArgsProcedure quitFuncPtr);
+int EventHandler_init(EmptyArgsProcedure quitFuncPtr, char** error);
 
-int CheckIfClicked(control* button, SDL_Event* event);
+bool CheckIfClicked(control* button, SDL_Event* event);
 
-int AddToListeners(control* buttonToAdd);
+int AddToListeners(control* buttonToAdd, char** error);
 
-int HandleEvents();
+void HandleEvents();
 
 void HandleMouseUpEvent(SDL_Event* event);
 

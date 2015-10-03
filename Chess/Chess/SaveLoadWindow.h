@@ -8,14 +8,17 @@
 #define NUMOFSLOTS 7
 
 #define SAVELOAD_W 800
-#define SAVELOAD_H 600
-#define SAVELOADBACKGROUNDNAME "BlueBackground"
-#define SAVELOADBACKGROUNDFILENAME "BlueBackground.bmp"
+#define SAVELOAD_H 565
+#define SAVEMENUBACKGROUNDNAME "SaveMenu"
+#define SAVEMENUBACKGROUNDFILENAME "SaveMenu.bmp"
 
-#define LABELLOADGAMENAME "Label_LoadGame"
-#define LABELLOADGAMEFILENAME "Label_LoadGame.bmp"
-#define LABELSAVEGAMENAME "Label_SaveGame"
-#define LABELSAVEGAMEFILENAME "Label_SaveGame.bmp"
+#define LOADMENUBACKGROUNDNAME "LoadMenu"
+#define LOADMENUBACKGROUNDFILENAME "LoadMenu.bmp"
+
+//#define LABELLOADGAMENAME "Label_LoadGame"
+//#define LABELLOADGAMEFILENAME "Label_LoadGame.bmp"
+//#define LABELSAVEGAMENAME "Label_SaveGame"
+//#define LABELSAVEGAMEFILENAME "Label_SaveGame.bmp"
 
 #define SAVELOAD_TITLE_LOCATION_X_CENTER (0.5*SAVELOAD_W - 200)
 

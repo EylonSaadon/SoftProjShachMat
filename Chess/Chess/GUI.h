@@ -36,14 +36,18 @@
 
 
 // GLOBAL
-#define NUMBUTTON_W 75
-#define NUMBUTTON_H 73
+#define NUMBUTTON_W 50
+#define NUMBUTTON_H 48
+#define BESTBUTTON_W 101
+#define BESTBUTTON_H 48
 #define NUMBUTTONHIGHLIGHTEDFILENAME "Button_NumHighlight.bmp"
+
+#define MARGIN 18
 
 #define BLINKNUM 6
 
-#define BUTTON_W 227
-#define BUTTON_H 47
+#define BUTTON_W 205
+#define BUTTON_H 52
 #define BUTTONCANCELNAME "Button_Cancel"
 #define BUTTONCANCELFILENAME "Button_Cancel.bmp"
 #define BUTTONTRANSPARENTHIGHLIGHTEDFILENAME "TransparentButton_Highlighted.bmp"
@@ -66,6 +70,8 @@
 /////////////////////
 
 static int guiQuit = 0;
+char* error;
+
 control* window;
 UINode* tree;
 
@@ -102,11 +108,11 @@ game_settings* curSettings;
 //Functions//
 /////////////
 
+// helper
+char* concat(char *s1, char *s2);
+
 // Starts the main gui contains the event handleing loop.
 void start_gui();
-
-// loads a .bmp file and returns an SDL_Surface that contains it, also removes green pixels.
-SDL_Surface* LoadBMP(char* fileName);
 
 // Releases All resources in an orderly fashion in case of quitting.
 void releaseResouces();
@@ -135,5 +141,6 @@ void InitGlobalVariable();
 // sets the ishighlighted of all the depths potions to 0.
 void SwitchOffHighlightAllMinimaxDepths();
 
+int FlipTree(char** error);
 #endif
 
