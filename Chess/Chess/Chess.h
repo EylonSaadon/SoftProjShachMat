@@ -5,12 +5,11 @@
 #include <stdbool.h>
 #include <string.h>
 
-
 #include "Defs.h"
 #include "Data_Structures.h"
 #include "Logic.h"
 
-// TODO - comments:
+// Console main function
 void console_main(char board[BOARD_SIZE][BOARD_SIZE]);
 
 // Set the settings of the game

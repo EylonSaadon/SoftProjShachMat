@@ -14,13 +14,7 @@ struct position {
 	char row;
 }; typedef struct position position;
 
-// Position list - each item contains a struct position and a pointer to the next item.
-struct position_list {
-	struct position pos;
-	struct position_list* next;
-};
-
-// Move - represent a move - contains a start position and a list of positions to move to (in the order of the move).
+// Move - represent a move - contains a start position, end position and new_disc if needed
 struct move {
 	struct position start_pos;
 	struct position end_pos;
@@ -32,22 +26,6 @@ struct move_list {
 	struct move mov;
 	struct move_list* next;
 }; typedef struct move_list move_list;
-
-// Creates position list from leaf - the leaf is the last position in the list
-// Returns NULL on failure and frees pos_list
-struct position_list* create_position_list_from_position_list(struct position_list* new_pos_list, struct position_list* old_pos_list);
-
-// Add a node to a position list, returns NULL on failure
-struct position_list* add_new_pos_node(struct position_list* pos_list, struct position pos);
-
-// Free position list
-void free_position_list(struct position_list* pos_list);
-
-// Checks if 2 position lists are equal
-bool is_equal_position_lists(struct position_list* pos_list1, struct position_list* pos_list2);
-
-// Checks if a position is part of a position list
-bool is_pos_in_pos_list(struct position pos, struct position_list* pos_list);
 
 // Add a node to a move list, returns NULL on failure
 struct move_list* add_new_move_node(struct move_list* move_list,

@@ -59,7 +59,8 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 				settings.minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
 			}
 			else {
-				int minimax_depth = atoi(input + 17);
+				input[12] = 0;
+				int minimax_depth = atoi(input + 11);
 
 				if (minimax_depth < 1 || minimax_depth > 4) {
 					print_message(WRONG_MINIMAX_DEPTH);
@@ -171,7 +172,6 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 		}
 		// Start
 		else if (strstr(input, "start\n") == input) {
-			// TODO: decide if need to check checkmate/tie situation (not must: http://moodle.tau.ac.il/2014/mod/forum/discuss.php?d=74261#p113074)
 			if (is_valid_board_init(board)) {
 				return settings;
 			}
@@ -367,7 +367,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 
 			struct move_list* current_move_node = best_move_list;
 			do {
-				print_move(&best_move_list->mov);
+				print_move(&current_move_node->mov);
 			} while (NULL != (current_move_node = current_move_node->next));
 
 			free_move_list(best_move_list);

@@ -10,7 +10,16 @@ void copy_boards(char from_board[BOARD_SIZE][BOARD_SIZE], char to_board[BOARD_SI
 	}
 }
 
-int get_best_moves_using_minimax(int max_depth, char board[BOARD_SIZE][BOARD_SIZE], COLOR current_color, COLOR run_for_color, int current_depth, struct move_list* move_list, struct move_list** best_move_list, int alpha, int beta, int* number_of_boards_evaluated) {
+int get_best_moves_using_minimax(	int max_depth,
+									char board[BOARD_SIZE][BOARD_SIZE],
+									COLOR current_color,
+									COLOR run_for_color,
+									int current_depth,
+									struct move_list* move_list,
+									struct move_list** best_move_list,
+									int alpha, int
+									beta,
+									int* number_of_boards_evaluated) {
 	int grade = FAILED_ERROR;
 
 	struct move_list* current_move_node = move_list;
@@ -45,20 +54,6 @@ int get_best_moves_using_minimax(int max_depth, char board[BOARD_SIZE][BOARD_SIZ
 			// Get the move list for the next turn
 			struct move_list* minimax_move_list = NULL;
 
-			// TODO: delete this - only for debugging
-			//if (current_depth == 0) {
-			//	//print_move(&current_move_node->mov);
-			//	//printf("%d\n", current_move_grade);
-			//	if (current_move_node->mov.end_pos.col == 4 && current_move_node->mov.end_pos.row == 4 && current_move_node->mov.start_pos.col == 2 && current_move_node->mov.start_pos.row == 2) {
-			//		printf("bla\n");
-			//	}
-			//}
-			//if (current_depth == 2) {
-			//	if (current_move_node->mov.end_pos.col == 2 && current_move_node->mov.end_pos.row == 4 && current_move_node->mov.start_pos.col == 3 && current_move_node->mov.start_pos.row == 6) {
-			//		printf("bla2\n");
-			//	}
-			//}
-
 			if (-1 == get_moves_for_color(minimax_board, next_color, &minimax_move_list)) {
 				// get_moves_for_color failed
 				return FAILED_ERROR;
@@ -85,8 +80,6 @@ int get_best_moves_using_minimax(int max_depth, char board[BOARD_SIZE][BOARD_SIZ
 		}
 
 		// Update the grade if it the first move or take the max grade or the min grade according to the depth
-		// TODO: check if need to check current_move_grade >= grade or current_move_grade > grade
-		//		 ref: facebook post and http://stackoverflow.com/questions/31429974/alphabeta-pruning-alpha-equals-or-greater-than-beta-why-equals
 		if ((FAILED_ERROR == grade) || (current_depth % 2 == 0 && current_move_grade >= grade) || (current_depth % 2 == 1 && current_move_grade <= grade)) {
 			if (FAILED_ERROR != grade) {
 				if (current_depth % 2 == 0 && current_move_grade > grade) {

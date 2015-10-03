@@ -1,10 +1,6 @@
 #ifndef DEFINES_
 #define DEFINES_
 
-// TODO: delete the next 2 lines
-#define WHITE_M 'm'
-#define BLACK_M 'M'
-
 #define WHITE_P 'm'
 #define WHITE_B 'b'
 #define WHITE_N 'n'
@@ -24,7 +20,8 @@
 #define BOARD_SIZE 8
 #define BOARD_SIZE_FROM_ZERO BOARD_SIZE - 1
 #define MAX_USER_COMMAND 51
-#define MAX_MINIMAX_DEPTH_POSSIBLE 7 //5949
+// TODO: decide what to do with this minimax best depth
+#define MAX_MINIMAX_DEPTH_POSSIBLE 10 //5949
 
 #define WIN_SCORE 1000
 #define LOSE_SCORE -WIN_SCORE
@@ -32,10 +29,9 @@
 #define FAILED_ERROR 3000
 #define BETA_INIT 4000
 #define ALPHA_INIT -BETA_INIT
-#define TWO_PLAYERS_GAME_MODE 1
-#define PLAYER_VS_AI_GAME_MODE 2
 
 typedef char** board_t;
+
 #define ENTER_SETTINGS "Enter game settings:\n"
 #define ENTER_USER_MOVE " player - enter your move:\n"
 #define WRONG_MINIMAX_DEPTH "Wrong value for minimax depth. The value should be between 1 to 4\n"
@@ -63,10 +59,13 @@ typedef enum { WHITE = 0, BLACK = 1 } COLOR;
 // Enum for representing the turn options (computer and user)
 typedef enum { COMP = 0, USER = 1 } TURN;
 
+// Enum for representing the game mode
+typedef enum { TWO_PLAYERS_GAME_MODE = 1, PLAYER_VS_AI_GAME_MODE = 2 } GAME_MODE;
+
 // Game Settings - minimax depth and user color
 struct game_settings {
 	COLOR next_turn;
-	int game_mode;
+	GAME_MODE game_mode;
 	int minimax_depth;
 	COLOR user_color;
 }; typedef struct game_settings game_settings;
