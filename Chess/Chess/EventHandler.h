@@ -7,7 +7,7 @@
 
 #define INITIALlISTENERSSIZE 100
 
-typedef void(*EmptyArgsProcedure)(void);
+typedef void(*EmptyArgsProcedure)();
 
 int EventHandler_init(EmptyArgsProcedure quitFuncPtr, char** error);
 

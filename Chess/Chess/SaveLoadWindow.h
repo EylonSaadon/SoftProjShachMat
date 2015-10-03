@@ -5,7 +5,7 @@
 #include "GUI.h"
 #endif
 
-#define NUMOFSLOTS 7
+#define NUMOFSLOTS 10
 
 #define SAVELOAD_W 800
 #define SAVELOAD_H 565

@@ -1,11 +1,16 @@
 #include "CommonGameboard.h"
 
-position* GetPosOfSquare(control* square, position** pos_ret)
+int GetPosOfSquare(control* square, position** pos_ret, char** error_ret)
 {
 	position* pos = (position*)malloc(sizeof(position));
+	if (NULL == pos)
+	{
+		*error_ret = "ERROR: Failed allocating memory for position";
+		return -1;
+	}
 	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
 	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
-	return pos;
+	return 0;
 }
 char* ResolveFileNameFromLetter(char piece)
 {
@@ -254,8 +259,8 @@ void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
-				GAMEBOARDBACKGROUND_W - 160 - SQUARE_W - 13  + (i % 2) * (SQUARE_W + 22),
-				0.5 * MARGIN + (i / 2) * SQUARE_H,
+				(Sint16)(GAMEBOARDBACKGROUND_W - 160 - SQUARE_W - 13 + (i % 2) * (SQUARE_W + 22)),
+				(Sint16)(0.5 * MARGIN + (i / 2) * SQUARE_H),
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
 				FuncPtr,
@@ -304,8 +309,8 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
-				BOARD_W + MARGIN + (i % 2) * SQUARE_W,
-				0.5 * MARGIN + (i / 2) * SQUARE_H,
+				(Sint16)(BOARD_W + MARGIN + (i % 2) * SQUARE_W),
+				(Sint16)(0.5 * MARGIN + (i / 2) * SQUARE_H),
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
 				FuncPtr, 
