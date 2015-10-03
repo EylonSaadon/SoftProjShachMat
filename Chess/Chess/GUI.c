@@ -90,7 +90,7 @@ void InitGlobalVariable()
 
 	isUpgrade = 0;
 
-	control*** buttonsBoard = NULL;
+	buttonsBoard = NULL;
 
 	//SaveLoad
 	isSaveMode = 0;
