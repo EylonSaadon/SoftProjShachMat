@@ -1,8 +1,8 @@
 #include "CommonGameboard.h"
 
-position* GetPosOfSquare(control* square)
+position* GetPosOfSquare(control* square, position** pos_ret)
 {
-	position* pos = malloc(sizeof(position));
+	position* pos = (position*)malloc(sizeof(position));
 	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
 	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
 	return pos;

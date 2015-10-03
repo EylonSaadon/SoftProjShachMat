@@ -14,7 +14,7 @@ void HighlightBestMove(int blinknum)
 	int number_of_boards_evaluated = 0;
 
 	// Get the best next move
-	int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, curSettings->next_turn, curSettings->minimax_depth, 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+	int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, curSettings->next_turn, curSettings->next_turn, 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
 
 	// Check for errors
 	if (FAILED_ERROR == current_move_grade) {
@@ -22,9 +22,6 @@ void HighlightBestMove(int blinknum)
 		guiQuit = 1;
 		return;
 	}
-
-	struct move_list* current_move_node = best_move_list;
-
 
 	move bestMove = best_move_list->mov;
 	position startPos = bestMove.start_pos;
@@ -368,7 +365,7 @@ void HightlightPosMoves(move_list* movesToHighlight)
 
 int isPawnUpgradePossible(move move, char piece)
 {
-	if (piece == WHITE_P || piece == BLACK_PAWN_NAME){
+	if (piece == WHITE_P || piece == BLACK_P){
 		if (curSettings->next_turn == WHITE)
 		{
 			return move.end_pos.row == BOARD_SIZE_FROM_ZERO;
@@ -440,7 +437,7 @@ void GameBoardSquare_ButtonClick(control* input)
 		{
 			position* startPos = GetPosOfSquare(gameSelectedSquare_control);
 			position* endPos = GetPosOfSquare(input);
-			chosenMove = malloc(sizeof(move));
+			chosenMove = malloc(sizeof(move));//TODO checkFailure
 			chosenMove->start_pos = *startPos;
 			chosenMove->end_pos = *endPos;
 
