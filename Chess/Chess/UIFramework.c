@@ -45,7 +45,7 @@ int CreateControl(SDL_Surface* control_Background, SDL_Surface* control_Backgrou
 			return -1;
 		}
 
-		for (Uint16 i = 0; i < strlen(name); i++)
+		for (unsigned int i = 0; i < strlen(name); i++)
 		{
 			(*control_ret)->name[i] = name[i];
 		}
