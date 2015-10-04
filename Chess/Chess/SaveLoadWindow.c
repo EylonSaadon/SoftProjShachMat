@@ -1,6 +1,6 @@
 #include "SaveLoadWindow.h"
 
-#include <stdlib.h>
+#include <stdio.h>
 
 void SaveLoadCancel_ButtonClick(control* input)
 {
