@@ -18,8 +18,8 @@ int HighlightBestMove(int blinknum, char** error)
 	position startPos = bestMove.start_pos;
 	position endPos = bestMove.end_pos;
 
-	control* startSquare = buttonsBoard[startPos.col][(char)(7 - (int)startPos.row)];
-	control* endSquare = buttonsBoard[endPos.col][(char)(7 - (int)endPos.row)];
+	control* startSquare = buttonsBoard[startPos.col][7 - startPos.row];
+	control* endSquare = buttonsBoard[endPos.col][7 - endPos.row];
 
 	bool startHiglighted = startSquare->ishighlighted;
 	bool endHiglighted = endSquare->ishighlighted;
