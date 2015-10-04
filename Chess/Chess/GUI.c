@@ -35,9 +35,9 @@ void releaseResouces()
 	if (buttonsBoard != NULL){
 		FreeButtonsBoard();
 	}
-	free(curMovesList);
+	free_move_list(curMovesList);
 	curMovesList = NULL;
-	free(posMovesFromCurPos);
+	free_move_list(posMovesFromCurPos);
 	posMovesFromCurPos = NULL;
 	free(chosenMove);
 	chosenMove = NULL;
