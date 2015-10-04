@@ -573,6 +573,7 @@ void GameBoardSquare_ButtonClick(control* input)
 			}
 			chosenMove->start_pos = startPos;
 			chosenMove->end_pos = endPos;
+			chosenMove->new_disc = EMPTY;
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
 				if (isPawnUpgradePossible(*chosenMove, get_piece(board, startPos)) == true){
