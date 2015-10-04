@@ -336,11 +336,11 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 	}
 
 	// Start the document with the xml default for the version
-	rc = xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
-	if (rc < 0) {
-		printf("testXmlwriterFilename: Error at xmlTextWriterStartDocument\n");
-		return -1;
-	}
+	//rc = xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+	//if (rc < 0) {
+	//	printf("testXmlwriterFilename: Error at xmlTextWriterStartDocument\n");
+	//	return -1;
+	//}
 
 	rc = xmlTextWriterStartElement(writer, BAD_CAST "game");
 	if (rc < 0) {
