@@ -2,11 +2,7 @@
 
 int PlacePiece(char** error)
 {
-	position* pos;
-	if (-1 == GetPosOfSquare(selectedSquare_Control, &pos, error))
-	{
-		return -1;
-	}
+	position pos = GetPosOfSquare(selectedSquare_Control);
 
 	char piece = ResolveLetterFromButtonName(selectedPiece_Control->name);
 	COLOR c;
@@ -19,15 +15,14 @@ int PlacePiece(char** error)
 		c = BLACK;
 	}
 	if (piece != ' '){
-		if (is_valid_set(board, piece, *pos, c)){
-			board[pos->col][pos->row] = piece;
+		if (is_valid_set(board, piece, pos, c)){
+			board[pos.col][pos.row] = piece;
 		}
 	}
 	else
 	{
-		board[pos->col][pos->row] = piece;
+		board[pos.col][pos.row] = piece;
 	}
-	free(pos);
 	return 0;
 }
 

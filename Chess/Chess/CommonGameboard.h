@@ -93,7 +93,7 @@ extern int guiQuit;
 /////////////
 
 
-int GetPosOfSquare(control* square, position** pos_ret, char** error_ret);
+position GetPosOfSquare(control* square);
 
 char* ResolveFileNameFromLetter(char piece);
 char* ResolveNameFromLetter(char piece);

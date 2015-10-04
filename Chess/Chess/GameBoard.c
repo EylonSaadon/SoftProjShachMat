@@ -521,12 +521,12 @@ void upgradePieces_ButtonClick(control* input)
 		make_move(board, chosenMove);
 		SwitchButtonHighlight(gameSelectedSquare_control);
 		gameSelectedSquare_control = NULL;
+
 		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
 		free_move_list(curMovesList);
 		curMovesList = NULL;
 		free_move_list(posMovesFromCurPos);
 		posMovesFromCurPos = NULL;
-		free(chosenMove);
 		chosenMove = NULL;
 		Game();
 	}
@@ -551,54 +551,34 @@ void GameBoardSquare_ButtonClick(control* input)
 		}
 		else if (gameSelectedSquare_control == NULL)
 		{
-			position* chosenPos;
-			if (-1 == GetPosOfSquare(input, &chosenPos, &error_global))
-			{
-				guiQuit = -1;
-				return;
-			}
-			if (is_piece_of_color(board[chosenPos->col][chosenPos->row], curSettings->next_turn) == true){
+			position chosenPos = GetPosOfSquare(input);
+
+			if (is_piece_of_color(board[chosenPos.col][chosenPos.row], curSettings->next_turn) == true){
 				SwitchButtonHighlight(input);
 				gameSelectedSquare_control = input;
-				get_moves_from_pos(curMovesList, *chosenPos, &posMovesFromCurPos);
+				get_moves_from_pos(curMovesList, chosenPos, &posMovesFromCurPos);
 				HightlightPosMoves(posMovesFromCurPos);
 			}
-			free(chosenPos);
 		}
 		else if (gameSelectedSquare_control != NULL)
 		{
-			position* startPos;
-			if (-1 == GetPosOfSquare(gameSelectedSquare_control, &startPos, &error_global))
-			{
-				guiQuit = -1;
-				return;
-			}
+			position startPos = GetPosOfSquare(gameSelectedSquare_control);
 
-			position* endPos;
-			if (-1 == GetPosOfSquare(input, &endPos, &error_global))
-			{
-				free(startPos);
-				startPos = NULL;
-				guiQuit = -1;
-				return;
-			};
+			position endPos = GetPosOfSquare(input);
+
 			chosenMove = malloc(sizeof(move));
 			if (chosenMove == NULL)
 			{
-				free(startPos);
-				free(endPos);
 				guiQuit = -1;
 				return;
 			}
-			chosenMove->start_pos = *startPos;
-			chosenMove->end_pos = *endPos;
+			chosenMove->start_pos = startPos;
+			chosenMove->end_pos = endPos;
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
-				if (isPawnUpgradePossible(*chosenMove, board[startPos->col][startPos->row]) == true){
+				if (isPawnUpgradePossible(*chosenMove, board[startPos.col][startPos.row]) == true){
 					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
 					{
-						free(startPos);
-						free(endPos);
 						free(chosenMove);
 						guiQuit = -1;
 
@@ -617,20 +597,10 @@ void GameBoardSquare_ButtonClick(control* input)
 					posMovesFromCurPos = NULL;
 					free(chosenMove);
 					chosenMove = NULL;
-					free(startPos);
-					startPos = NULL;
-					free(endPos);
-					endPos = NULL;
 					Game();
 					return;
 				}
 			}
-			free(chosenMove);
-			chosenMove = NULL;
-			free(startPos);
-			startPos = NULL;
-			free(endPos);
-			endPos = NULL;
 		}
 
 		// DrawTree

@@ -146,19 +146,12 @@ char ResolveLetterFromButtonName(char* name)
 }
 
 
-int GetPosOfSquare(control* square, position** pos_ret, char** error)
+position GetPosOfSquare(control* square)
 {
-	position* pos = (position*)malloc(sizeof(position));
-	if (NULL == pos)
-	{
-		*pos_ret = NULL;
-		*error = "ERROR: Failed allocating memory for position";
-		return -1;
-	}
-	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
-	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
-	*pos_ret = pos;
-	return 0;
+	position pos_ret;
+	pos_ret.col = (square->location_rect->x - MARGIN) / SQUARE_W;
+	pos_ret.row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
+	return pos_ret;
 }
 
 int initializeButtonsBoard(char** error)
