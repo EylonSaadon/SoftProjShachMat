@@ -30,6 +30,14 @@ extern UINode* board_node;
 
 int PlacePiece(char** error);
 
+void SetPiecesBoardSquare_ButtonClick(control* input);
+
+void SetPiecesSidePanelPiece_ButtonClick(control* input);
+
+void SetPiecesCancel_ButtonClick(control* input);
+
+void SetPiecesStart_ButtonClick(control* input);
+
 void SetPiecesWindow();
 
 #endif

@@ -41,8 +41,8 @@ int HighlightBestMove(int blinknum, char** error)
 				if (-1 == Create_panel_from_bmp(
 					fileName,
 					name,
-					(Sint16)(BOARD_W + MARGIN),
-					(Sint16)(0.5*BOARD_W - SQUARE_H - 0.5),
+					(Sint16)(GAMEBOARDBACKGROUND_W - BUTTON_W - MARGIN),
+					(Sint16)(0.5*BOARD_H - SQUARE_H - 0.5),
 					(Uint16)SQUARE_W,
 					(Uint16)SQUARE_H,
 					&chessPiece_control, error))
