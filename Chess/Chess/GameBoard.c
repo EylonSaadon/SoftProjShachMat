@@ -31,7 +31,7 @@ int HighlightBestMove(int blinknum, char** error)
 		SwitchButtonHighlight(startSquare);
 		SwitchButtonHighlight(endSquare);
 
-		if (isPawnUpgradePossible(bestMove, get_piece(board, startPos)))
+		if (isPawnUpgradePossible(&bestMove, get_piece(board, startPos)))
 		{
 			char* fileName = ResolveFileNameFromLetter(bestMove.new_disc);
 			char* name = ResolveNameFromLetter(bestMove.new_disc);
@@ -92,16 +92,16 @@ void HightlightPosMoves(move_list* movesToHighlight)
 	}
 }
 
-bool isPawnUpgradePossible(move move, char piece)
+bool isPawnUpgradePossible(move* move, char piece)
 {
 	if (piece == WHITE_P || piece == BLACK_P){
 		if (curSettings->next_turn == WHITE)
 		{
-			return move.end_pos.row == BOARD_SIZE_FROM_ZERO;
+			return move->end_pos.row == BOARD_SIZE_FROM_ZERO;
 		}
 		else
 		{
-			return move.end_pos.row == 0;
+			return move->end_pos.row == 0;
 		}
 	}
 	return false;
@@ -577,7 +577,7 @@ void GameBoardSquare_ButtonClick(control* input)
 			chosenMove->new_disc = EMPTY;
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
-				if (isPawnUpgradePossible(*chosenMove, board[(int)startPos.col][(int)startPos.row]) == true){
+				if (isPawnUpgradePossible(chosenMove, board[(int)startPos.col][(int)startPos.row]) == true){
 					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
 					{
 						free(chosenMove);

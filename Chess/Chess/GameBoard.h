@@ -49,7 +49,7 @@ int HighlightBestMove(int blinknum, char** error);
 
 void HightlightPosMoves(move_list* move_list);
 
-bool isPawnUpgradePossible(move move, char piece);
+bool isPawnUpgradePossible(move* move, char piece);
 
 int buildBoardUITree(char** error);
 
