@@ -13,7 +13,7 @@
 
 // MainMenu Window Defs
 #define MAINMENUNAME "MainMenuBackGround"
-#define MAINMENUFILENAME "MainMenu2.bmp"
+#define MAINMENUFILENAME "MainMenu.bmp"
 
 #define MAINMENU_W 800
 #define MAINMENU_H 565
@@ -33,7 +33,7 @@
 // Global Variables//
 /////////////////////
 
-
+extern int guiQuit;
 
 
 /////////////

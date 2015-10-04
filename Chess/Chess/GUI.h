@@ -69,8 +69,8 @@
 // Global Variables//
 /////////////////////
 
-static int guiQuit = 0;
-char* error;
+int guiQuit;
+char* error_global;
 
 control* window;
 UINode* tree;

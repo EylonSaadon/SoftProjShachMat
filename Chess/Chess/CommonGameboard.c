@@ -1,19 +1,4 @@
 #include "CommonGameboard.h"
-
-int GetPosOfSquare(control* square, position** pos_ret, char** error_ret)
-{
-	position* pos = (position*)malloc(sizeof(position));
-	if (NULL == pos)
-	{
-		*pos_ret = NULL;
-		*error_ret = "ERROR: Failed allocating memory for position";
-		return -1;
-	}
-	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
-	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
-	*pos_ret = pos;
-	return 0;
-}
 char* ResolveFileNameFromLetter(char piece)
 {
 	char* fileName = NULL;
@@ -161,18 +146,47 @@ char ResolveLetterFromButtonName(char* name)
 }
 
 
-void initializeButtonsBoard()
+int GetPosOfSquare(control* square, position** pos_ret, char** error)
+{
+	position* pos = (position*)malloc(sizeof(position));
+	if (NULL == pos)
+	{
+		*pos_ret = NULL;
+		*error = "ERROR: Failed allocating memory for position";
+		return -1;
+	}
+	pos->col = (square->location_rect->x - MARGIN) / SQUARE_W;
+	pos->row = BOARD_SIZE - 1 - (square->location_rect->y - MARGIN) / SQUARE_H;
+	*pos_ret = pos;
+	return 0;
+}
+
+int initializeButtonsBoard(char** error)
 {
 	buttonsBoard = malloc(sizeof(control**)*(BOARD_SIZE));
+	if (buttonsBoard == NULL)
+	{
+		*error = "ERROR: Failed allocating memory for ButtonsBoard.";
+		return -1;
+	}
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
 		buttonsBoard[i] = malloc(sizeof(control*)*(BOARD_SIZE));
+		if (buttonsBoard[i] == NULL)
+		{
+			*error = "ERROR: Failed allocating memory for ButtonsBoard.";
+			return -1;
+		}
 	}
+	return 0;
 }
 
-void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
+int DrawSquareButtons(UINode* node, ButtonAction FuncPtr, char** error)
 {
-	initializeButtonsBoard();
+	if (-1 == initializeButtonsBoard(error))
+	{
+		return -1;
+	}
 
 	for (int i = 0; i < BOARD_SIZE; i++)
 	{
@@ -189,24 +203,31 @@ void DrawSquareButtons(UINode* node, ButtonAction FuncPtr)
 				(Uint16)SQUARE_H,
 				FuncPtr,
 				&square,
-				&error))
+				error))
 			{
-				guiQuit = -1;
+				FreeButtonsBoard();
+				return -1;
 			}
-			UINode* newGameButton_node;
-			if (-1 == CreateAndAddNodeToTree(square, node, &newGameButton_node, &error))
+			UINode* square_node;
+			if (-1 == CreateAndAddNodeToTree(square, node, &square_node, error))
 			{
-				guiQuit = -1;
+				FreeButtonsBoard();
+				FreeControl(square);
+				return -1;
 			}
-			if (-1 == AddToListeners(square, &error))
+			if (-1 == AddToListeners(square, error))
 			{
-				guiQuit = -1;
+				FreeTree(square_node);
+				FreeButtonsBoard();
+				return -1;
 			}
 			buttonsBoard[i][j] = square;
 		}
 	}
+	return 0;
 }
-void DrawBoardGui(UINode* node)
+
+int DrawBoardGui(UINode* node, char** error)
 {
 	int i, j;
 	for (j = (BOARD_SIZE - 1); j >= 0; j--)
@@ -225,22 +246,24 @@ void DrawBoardGui(UINode* node)
 					(Uint16)SQUARE_W,
 					(Uint16)SQUARE_H,
 					&chessPiece_control,
-					&error))
+					error))
 				{
-					guiQuit = -1;
+					return -1;
 				}
 
 				UINode* chessPiece_node;
-				if (-1 == CreateAndAddNodeToTree(chessPiece_control, node, &chessPiece_node, &error))
+				if (-1 == CreateAndAddNodeToTree(chessPiece_control, node, &chessPiece_node, error))
 				{
-					guiQuit = -1;
+					FreeControl(chessPiece_control);
+					return -1;
 				}
 			}
 		}
 	}
+	return 0;
 }
 
-void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
+int DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr, char** error)
 {
 	char* Pieces = "mMrRnNbBqQkK";
 	for (int i = 0; i < 13; i++)
@@ -257,7 +280,7 @@ void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 
 		if (fileName != NULL){
 			control* chessPiece_control;
-			if(-1 == Create_Button_from_bmp_transHighlight(
+			if (-1 == Create_Button_from_bmp_transHighlight(
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
@@ -267,25 +290,27 @@ void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr)
 				(Uint16)SQUARE_H,
 				FuncPtr,
 				&chessPiece_control,
-				&error))
+				error))
 			{
-				guiQuit = -1;
+				return -1;
 			}
 			UINode* chessPiece_node;
-			if(-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, &error))
+			if (-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, error))
 			{
-				guiQuit = -1;
+				FreeControl(chessPiece_control);
+				return-1;
 			}
-			if(-1 == AddToListeners(chessPiece_control, &error))
+			if (-1 == AddToListeners(chessPiece_control, error))
 			{
-				guiQuit = -1;
+				return-1;
 			}
 		}
 	}
+	return 0;
 
 }
 
-void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c)
+int  DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c, char** error)
 {
 	char* Pieces = "mrnbq";
 	if (c == BLACK)
@@ -307,7 +332,7 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 
 		if (fileName != NULL){
 			control* chessPiece_control;
-			if(-1 == Create_Button_from_bmp_transHighlight(
+			if (-1 == Create_Button_from_bmp_transHighlight(
 				fileName,
 				SQUAREBUTTONHIGHLIGHTEDFILENAME,
 				name,
@@ -315,23 +340,25 @@ void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, 
 				(Sint16)(0.5 * MARGIN + (i / 2) * SQUARE_H),
 				(Uint16)SQUARE_W,
 				(Uint16)SQUARE_H,
-				FuncPtr, 
+				FuncPtr,
 				&chessPiece_control,
-				&error))
+				error))
 			{
-				guiQuit = -1;
+				return -1;
 			}
 			UINode* chessPiece_node;
-			if (-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, &error))
+			if (-1 == CreateAndAddNodeToTree(chessPiece_control, panel_node, &chessPiece_node, error))
 			{
-				guiQuit = -1;
+				FreeControl(chessPiece_control);
+				return -1;
 			}
-			if (-1 == AddToListeners(chessPiece_control, &error))
+			if (-1 == AddToListeners(chessPiece_control, error))
 			{
-				guiQuit = -1;
+				return -1;
 			}
 		}
 	}
+	return 0;
 
 }
 

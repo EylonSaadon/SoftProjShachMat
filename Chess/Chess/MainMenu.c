@@ -6,7 +6,8 @@ void StartNewGame_ButtonClick(control* input)
 	if (NULL == curSettings)
 	{
 		guiQuit = -1;
-		error = "ERROR: Failed allocating memory for gameSettings";
+		error_global = "ERROR: Failed allocating memory for gameSettings";
+		return;
 	}
 
 	curSettings->game_mode = TWO_PLAYERS_GAME_MODE;
@@ -32,7 +33,8 @@ void LoadGame_ButtonClick(control* input)
 	if (NULL == curSettings)
 	{
 		guiQuit = -1;
-		error = "ERROR: Failed allocating memory for gameSettings";
+		error_global = "ERROR: Failed allocating memory for gameSettings";
+		return;
 	}
 	curSettings->minimax_depth = 1;
 
@@ -43,44 +45,52 @@ void MainMenu()
 {
 	releaseResouces();
 	InitGlobalVariable();
-	if (-1 == EventHandler_init(&Quit, &error))
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	control* window;
-	if (-1 == Create_window(MAINMENU_W, MAINMENU_H, &window, &error))
+	if (-1 == Create_window(MAINMENU_W, MAINMENU_H, &window, &error_global))
 	{
+		FreeEventHandler();
 		guiQuit = -1;
+		return;
 	}
 
 
-	if( -1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 
 	control* background_control;
-	if(-1 ==Create_panel_from_bmp(
+	if (-1 == Create_panel_from_bmp(
 		MAINMENUFILENAME,
 		MAINMENUNAME,
 		0,
 		0,
 		(Uint16)MAINMENU_W,
-		(Uint16)MAINMENU_H, &background_control, &error))
+		(Uint16)MAINMENU_H, &background_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* background_node;
-	if (-1 == CreateAndAddNodeToTree(background_control, tree, &background_node, &error))
+	if (-1 == CreateAndAddNodeToTree(background_control, tree, &background_node, &error_global))
 	{
+		FreeControl(background_control);
 		guiQuit = -1;
+		return;
 	}
 
 	int newGameButton_x_location = MAINMENULEFTMARGIN;
 	int newGameButton_y_location = MAINMENUTOPMARGIN;
 	control* newGameButton;
-	if(-1 == Create_Button_from_bmp(
+	if (-1 == Create_Button_from_bmp(
 		BUTTONNEWGAMEFILENAME,
 		BUTTONNEWGAMEFILENAME,
 		BUTTONNEWGAMENAME,
@@ -88,26 +98,32 @@ void MainMenu()
 		newGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&StartNewGame_ButtonClick, &newGameButton, &error))
+		&StartNewGame_ButtonClick, &newGameButton, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	UINode* newGameButton_node;
-	if (-1 == CreateAndAddNodeToTree(newGameButton, background_node, &newGameButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(newGameButton, background_node, &newGameButton_node, &error_global))
 	{
+		FreeControl(newGameButton);
 		guiQuit = -1;
+		return;
 	}
 
-	if (-1 == AddToListeners(newGameButton, &error))
+	if (-1 == AddToListeners(newGameButton, &error_global))
 	{
+		FreeControl(newGameButton);
+		FreeTree(newGameButton_node);
 		guiQuit = -1;
+		return;
 	}
 
 	int loadGameButton_x_location = newGameButton_x_location;
 	int loadGameButton_y_location = newGameButton_y_location + BUTTON_H + MAINMENUBUTTONMARGIN;
 	control* loadGameButton;
-	if( -1 == Create_Button_from_bmp(
+	if (-1 == Create_Button_from_bmp(
 		BUTTONLOADGAMEFILENAME,
 		BUTTONLOADGAMEFILENAME,
 		BUTTONLOADGAMENAME,
@@ -115,27 +131,34 @@ void MainMenu()
 		loadGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&LoadGame_ButtonClick, 
-		&loadGameButton, 
-		&error))
+		&LoadGame_ButtonClick,
+		&loadGameButton,
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
+
 	}
 
 	UINode* loadGameButton_node;
-	if (-1 == CreateAndAddNodeToTree(loadGameButton, background_node, &loadGameButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(loadGameButton, background_node, &loadGameButton_node, &error_global))
 	{
+		FreeControl(loadGameButton);
 		guiQuit = -1;
+		return;
 	}
-	if( -1 == AddToListeners(loadGameButton, &error))
+	if (-1 == AddToListeners(loadGameButton, &error_global))
 	{
+		FreeTree(loadGameButton_node);
+		FreeControl(loadGameButton);
 		guiQuit = -1;
+		return;
 	}
 
 	int quitGameButton_x_location = loadGameButton_x_location;
 	int quitGameButton_y_location = loadGameButton_y_location + BUTTON_H + MAINMENUBUTTONMARGIN;
-	control* quitButton; 
-	if( -1 == Create_Button_from_bmp(
+	control* quitButton;
+	if (-1 == Create_Button_from_bmp(
 		BUTTONQUITFILENAME,
 		BUTTONQUITFILENAME,
 		BUTTONQUITNAME,
@@ -143,23 +166,28 @@ void MainMenu()
 		quitGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&Quit_ButtonClick, &quitButton, &error))
+		&Quit_ButtonClick, &quitButton, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* quitButton_node;
-	if (-1 == CreateAndAddNodeToTree(quitButton, background_node, &quitButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(quitButton, background_node, &quitButton_node, &error_global))
 	{
+		FreeControl(quitButton);
 		guiQuit = -1;
+		return;
 	}
-	if(-1 == AddToListeners(quitButton, &error))
+	if (-1 == AddToListeners(quitButton, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }

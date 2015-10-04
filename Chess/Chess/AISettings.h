@@ -46,6 +46,7 @@
 // Global Variables//
 /////////////////////
 
+extern int guiQuit;
 
 extern UINode* tree;
 

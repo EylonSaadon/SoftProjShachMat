@@ -76,7 +76,7 @@ char get_piece_from_string(char* piece_string, COLOR color);
 bool is_valid_set(char board[BOARD_SIZE][BOARD_SIZE], char disc, struct position pos, COLOR color);
 
 // Load game from XML
-void load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
+int load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
 
 // Save game to XML
 int save_game_to_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);

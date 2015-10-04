@@ -48,10 +48,11 @@ bool is_move_in_move_list(struct move* mov, struct move_list* move_list);
 // Checks is 2 positions are equal
 bool is_equal_pos(struct position pos1, struct position pos2);
 
-// TODO: add documentaion
+// initial number of children for a node
 #define INITIALCHILDRENSIZE 100
 
-// TODO: add documentaion
+
+// All Panels, buttons, and windows will be controls with different types.
 struct control
 {
 	SDL_Surface* surface;
@@ -63,10 +64,10 @@ struct control
 	void (*Action)(struct control*);
 }; typedef struct control control;
 
-// TODO: add documentaion
+// A pointer for a function. each control of type button will hold one that points to the function that need to be called when it is pressed.
 typedef void(*ButtonAction)(struct control*);
 
-// TODO: add documentaion
+// a Node in the UI tree. holds the dontrol to draw
 struct UINode
 {
 	control* control;
@@ -77,16 +78,16 @@ struct UINode
 	struct UINode* root;
 };  typedef struct UINode UINode;
 
-// TODO: add documentaion
+// Creates a UINode that will be the rot of our new tree
 int CreateTree(control* window, UINode** node_ret, char** error);
 
-//TODO: add Documentation
+// adds a given node as the child of the given father.
 int addNodeAsChild(UINode* node, UINode* father, char** error);
 
-// TODO: add documentaion
+// takes a given control and creates a control out of it and adds it as a one of the children of the given father
 int CreateAndAddNodeToTree(control* control, UINode* father, UINode** node, char** error);
 
-// TODO: add documentaion
+// Given two strings the Function concats both of them, in failure returns NULL. if succesful the ret value should be freed.
 char* concat(char *s1, char *s2);
 #endif
 

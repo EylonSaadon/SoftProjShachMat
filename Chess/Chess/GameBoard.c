@@ -1,14 +1,6 @@
 #include "GameBoard.h"
 
-
-control* gameSelectedSquare_control;
-
-void GameBoardMainMenu_ButtonClick(control* input)
-{
-	MainMenu();
-}
-
-void HighlightBestMove(int blinknum)
+int HighlightBestMove(int blinknum, char** error)
 {
 	struct move_list* best_move_list = NULL;
 	int number_of_boards_evaluated = 0;
@@ -19,8 +11,7 @@ void HighlightBestMove(int blinknum)
 	// Check for errors
 	if (FAILED_ERROR == current_move_grade) {
 		free_move_list(best_move_list);
-		guiQuit = 1;
-		return;
+		return -1;
 	}
 
 	move bestMove = best_move_list->mov;
@@ -51,25 +42,26 @@ void HighlightBestMove(int blinknum)
 					fileName,
 					name,
 					(Sint16)(BOARD_W + MARGIN),
-					(Sint16)(BOARD_W - SQUARE_H - 0.5),
+					(Sint16)(0.5*BOARD_W - SQUARE_H - 0.5),
 					(Uint16)SQUARE_W,
 					(Uint16)SQUARE_H,
-					&chessPiece_control, &error))
+					&chessPiece_control, error))
 				{
-					guiQuit = -1;
+					return -1;
 				}
 				UINode* chessPiece_node;
-				if (-1 == CreateAndAddNodeToTree(chessPiece_control, tree->children[0], &chessPiece_node, &error))
+				if (-1 == CreateAndAddNodeToTree(chessPiece_control, tree->children[0], &chessPiece_node, error))
 				{
-					guiQuit = -1;
+					FreeControl(chessPiece_control);
+					return -1;
 				}
 			}
 		}
 
 		// DrawTree
-		if (-1 == FlipTree(&error))
+		if (-1 == FlipTree(error))
 		{
-			guiQuit = -1;
+			return -1;
 		}
 		SDL_Delay(500);
 	}
@@ -80,6 +72,150 @@ void HighlightBestMove(int blinknum)
 	endSquare->ishighlighted = endHiglighted;
 
 	free_move_list(best_move_list);
+	return 0;
+}
+
+void HightlightPosMoves(move_list* movesToHighlight)
+{
+	move_list * curMove = movesToHighlight;
+
+	if (curMove == NULL)
+	{
+		return;
+	}
+	else
+	{
+		move mov = curMove->mov;
+		buttonsBoard[mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
+		curMove = curMove->next;
+		HightlightPosMoves(curMove);
+	}
+}
+
+bool isPawnUpgradePossible(move move, char piece)
+{
+	if (piece == WHITE_P || piece == BLACK_P){
+		if (curSettings->next_turn == WHITE)
+		{
+			return move.end_pos.row == BOARD_SIZE_FROM_ZERO;
+		}
+		else
+		{
+			return move.end_pos.row == 0;
+		}
+	}
+	return false;
+}
+
+void switchOffAllButtons()
+{
+	for (int i = 0; i < BOARD_SIZE; i++){
+		for (int j = 0; j < BOARD_SIZE; j++){
+			buttonsBoard[i][j]->ishighlighted = 0;
+		}
+	}
+}
+
+int ComputerTurn(char** error)
+{
+	if (gameOver == false && tie == false){
+		struct move_list* best_move_list = NULL;
+		int number_of_boards_evaluated = 0;
+
+		int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+
+		// Check for errors
+		if (FAILED_ERROR == current_move_grade) {
+			free_move_list(curMovesList);
+			curMovesList = NULL;
+			free_move_list(best_move_list);
+			best_move_list = NULL;
+			*error = "ERROR: Failed getting best moves.";
+			return -1;
+		}
+
+		// Make the move
+		make_move(board, &best_move_list->mov);
+
+		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
+		free_move_list(curMovesList);
+		curMovesList = NULL;
+		free_move_list(posMovesFromCurPos);
+		posMovesFromCurPos = NULL;
+		free(chosenMove);
+		chosenMove = NULL;
+		free_move_list(best_move_list);
+		Game();
+	}
+	return 0;
+}
+
+int buildBoardUITree(char** error)
+{
+	control* board_control;
+	if (-1 == Create_panel_from_bmp(
+		CHESSBOARDFILENAME,
+		CHESSBOARDNAME,
+		0,
+		0,
+		(Uint16)BOARD_W,
+		(Uint16)BOARD_H,
+		&board_control,
+		error))
+	{
+		return -1;
+	}
+	if (-1 == CreateAndAddNodeToTree(board_control, tree, &board_node, error))
+	{
+		FreeControl(board_control);
+		return -1;
+	}
+
+	if (-1 == DrawSquareButtons(board_node, &GameBoardSquare_ButtonClick, error))
+	{
+		return -1;
+	}
+
+	if (-1 == DrawBoardGui(board_node, error))
+	{
+		return -1;
+	}
+	return 0;
+}
+
+void CheckGameOver()
+{
+	// Get the score of the board
+	int score = get_board_score_for_color(board, get_opposite_color(curSettings->next_turn));
+
+	// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
+	if (WIN_SCORE == score) {
+		print_win_message(get_opposite_color(get_opposite_color(curSettings->next_turn)));
+		gameOver = true;
+	}
+	else if (TIE_SCORE == score && NULL == curMovesList) {
+		tie = true;
+	}
+	else {
+		if (is_check_on_color(board, curSettings->next_turn)) {
+			check = true;
+		}
+	}
+}
+
+
+void GameBoardMainMenu_ButtonClick(control* input)
+{
+	//TODO: initialie anything else?
+	free_move_list(curMovesList);
+	curMovesList = NULL;
+	free_move_list(posMovesFromCurPos);
+	posMovesFromCurPos = NULL;
+	free(chosenMove);
+	chosenMove = NULL;
+	free(curSettings);
+
+	MainMenu();
 }
 
 void GameMinimaxDepth_ButtonClick(control* input)
@@ -135,12 +271,17 @@ void GameMinimaxDepth_ButtonClick(control* input)
 		}
 	}
 
-	HighlightBestMove(BLINKNUM);
-
-	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == HighlightBestMove(BLINKNUM, &error_global))
 	{
 		guiQuit = -1;
+		return;
+	}
+
+	// DrawTree
+	if (-1 == FlipTree(&error_global))
+	{
+		guiQuit = -1;
+		return;
 	}
 }
 
@@ -175,18 +316,22 @@ void GameBoardBest_ButtonClick(control * input)
 					(Uint16)NUMBUTTON_H,
 					&GameMinimaxDepth_ButtonClick,
 					&oneButton_control,
-					&error))
+					&error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 				UINode* oneButton_node;
-				if (-1 == CreateAndAddNodeToTree(oneButton_control, gameBoarBackground_node, &oneButton_node, &error))
+				if (-1 == CreateAndAddNodeToTree(oneButton_control, gameBoarBackground_node, &oneButton_node, &error_global))
 				{
+					FreeControl(oneButton_control);
 					guiQuit = -1;
+					return;
 				}
-				if (-1 == AddToListeners(oneButton_control, &error))
+				if (-1 == AddToListeners(oneButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 
 
@@ -204,18 +349,22 @@ void GameBoardBest_ButtonClick(control * input)
 					(Uint16)NUMBUTTON_H,
 					&GameMinimaxDepth_ButtonClick,
 					&twoButton_control,
-					&error))
+					&error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 				UINode* twoButton_node;
-				if (-1 == CreateAndAddNodeToTree(twoButton_control, gameBoarBackground_node, &twoButton_node, &error))
+				if (-1 == CreateAndAddNodeToTree(twoButton_control, gameBoarBackground_node, &twoButton_node, &error_global))
 				{
+					FreeControl(twoButton_control);
 					guiQuit = -1;
+					return;
 				}
-				if (-1 == AddToListeners(twoButton_control, &error))
+				if (-1 == AddToListeners(twoButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 
 
@@ -232,18 +381,22 @@ void GameBoardBest_ButtonClick(control * input)
 					(Uint16)NUMBUTTON_W,
 					(Uint16)NUMBUTTON_H,
 					&GameMinimaxDepth_ButtonClick,
-					&threeButton_control, &error))
+					&threeButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 				UINode* threeButton_node;
-				if (-1 == CreateAndAddNodeToTree(threeButton_control, gameBoarBackground_node, &threeButton_node, &error))
+				if (-1 == CreateAndAddNodeToTree(threeButton_control, gameBoarBackground_node, &threeButton_node, &error_global))
 				{
+					FreeControl(threeButton_control);
 					guiQuit = -1;
+					return;
 				}
-				if (-1 == AddToListeners(threeButton_control, &error))
+				if (-1 == AddToListeners(threeButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 
 				Sint16 fourButton_x_location = (Sint16)(threeButton_x_location + NUMBUTTON_W + 0.5 * MARGIN);
@@ -258,18 +411,22 @@ void GameBoardBest_ButtonClick(control * input)
 					(Uint16)NUMBUTTON_W,
 					(Uint16)NUMBUTTON_H,
 					&GameMinimaxDepth_ButtonClick,
-					&fourButton_control, &error))
+					&fourButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 				UINode* fourButton_node;
-				if (-1 == CreateAndAddNodeToTree(fourButton_control, gameBoarBackground_node, &fourButton_node, &error))
+				if (-1 == CreateAndAddNodeToTree(fourButton_control, gameBoarBackground_node, &fourButton_node, &error_global))
 				{
+					FreeControl(fourButton_control);
 					guiQuit = -1;
+					return;
 				}
-				if (-1 == AddToListeners(fourButton_control, &error))
+				if (-1 == AddToListeners(fourButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 
 				Sint16 bestButton_x_location = (Sint16)(fourButton_x_location + NUMBUTTON_W + 0.5 *MARGIN);
@@ -283,18 +440,22 @@ void GameBoardBest_ButtonClick(control * input)
 					bestButton_y_location,
 					(Uint16)NUMBUTTON_W,
 					(Uint16)NUMBUTTON_H,
-					&GameMinimaxDepth_ButtonClick, &bestButton_control, &error))
+					&GameMinimaxDepth_ButtonClick, &bestButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 				UINode* bestButton_node;
-				if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error))
+				if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error_global))
 				{
+					FreeControl(bestButton_control);
 					guiQuit = -1;
+					return;
 				}
-				if (-1 == AddToListeners(bestButton_control, &error))
+				if (-1 == AddToListeners(bestButton_control, &error_global))
 				{
 					guiQuit = -1;
+					return;
 				}
 
 				switch (curSettings->minimax_depth){
@@ -316,12 +477,17 @@ void GameBoardBest_ButtonClick(control * input)
 				}
 			}
 
-			HighlightBestMove(BLINKNUM);
-
-			// DrawTree
-			if (-1 == FlipTree(&error))
+			if (-1 == HighlightBestMove(BLINKNUM, &error_global))
 			{
 				guiQuit = -1;
+				return;
+			}
+
+			// DrawTree
+			if (-1 == FlipTree(&error_global))
+			{
+				guiQuit = -1;
+				return;
 			}
 		}
 		else
@@ -330,8 +496,6 @@ void GameBoardBest_ButtonClick(control * input)
 		}
 	}
 }
-
-
 
 void GameBoardSave_ButtonClick(control* input)
 {
@@ -347,53 +511,13 @@ void GameBoardSave_ButtonClick(control* input)
 	SaveLoadMenu();
 }
 
-void HightlightPosMoves(move_list* movesToHighlight)
-{
-	move_list * curMove = movesToHighlight;
-
-	if (curMove == NULL)
-	{
-		return;
-	}
-	else
-	{
-		move mov = curMove->mov;
-		buttonsBoard[mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
-		curMove = curMove->next;
-		HightlightPosMoves(curMove);
-	}
-}
-
-bool isPawnUpgradePossible(move move, char piece)
-{
-	if (piece == WHITE_P || piece == BLACK_P){
-		if (curSettings->next_turn == WHITE)
-		{
-			return move.end_pos.row == BOARD_SIZE_FROM_ZERO;
-		}
-		else
-		{
-			return move.end_pos.row == 0;
-		}
-	}
-	return false;
-}
-
-void switchOffAllButtons()
-{
-	for (int i = 0; i < BOARD_SIZE; i++){
-		for (int j = 0; j < BOARD_SIZE; j++){
-			buttonsBoard[i][j]->ishighlighted = 0;
-		}
-	}
-}
-
 void upgradePieces_ButtonClick(control* input)
 {
 	char piece = ResolveLetterFromButtonName(input->name);
 
 	chosenMove->new_disc = piece;
 	if (is_move_in_move_list(chosenMove, curMovesList) == true){
+
 		make_move(board, chosenMove);
 		SwitchButtonHighlight(gameSelectedSquare_control);
 		gameSelectedSquare_control = NULL;
@@ -408,9 +532,10 @@ void upgradePieces_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
 
@@ -427,9 +552,10 @@ void GameBoardSquare_ButtonClick(control* input)
 		else if (gameSelectedSquare_control == NULL)
 		{
 			position* chosenPos;
-			if(-1 == GetPosOfSquare(input, &chosenPos, &error))
+			if (-1 == GetPosOfSquare(input, &chosenPos, &error_global))
 			{
 				guiQuit = -1;
+				return;
 			}
 			if (is_piece_of_color(board[chosenPos->col][chosenPos->row], curSettings->next_turn) == true){
 				SwitchButtonHighlight(input);
@@ -442,19 +568,25 @@ void GameBoardSquare_ButtonClick(control* input)
 		else if (gameSelectedSquare_control != NULL)
 		{
 			position* startPos;
-			if (-1 == GetPosOfSquare(gameSelectedSquare_control, &startPos, &error))
+			if (-1 == GetPosOfSquare(gameSelectedSquare_control, &startPos, &error_global))
 			{
 				guiQuit = -1;
+				return;
 			}
-				
+
 			position* endPos;
-			if (-1 == GetPosOfSquare(input, &endPos, &error))
+			if (-1 == GetPosOfSquare(input, &endPos, &error_global))
 			{
+				free(startPos);
+				startPos = NULL;
 				guiQuit = -1;
+				return;
 			};
 			chosenMove = malloc(sizeof(move));
 			if (chosenMove == NULL)
 			{
+				free(startPos);
+				free(endPos);
 				guiQuit = -1;
 				return;
 			}
@@ -463,7 +595,14 @@ void GameBoardSquare_ButtonClick(control* input)
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
 				if (isPawnUpgradePossible(*chosenMove, board[startPos->col][startPos->row]) == true){
-					DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn);
+					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
+					{
+						free(startPos);
+						free(endPos);
+						free(chosenMove);
+						guiQuit = -1;
+
+					}
 					isUpgrade = true;
 				}
 				else
@@ -479,96 +618,26 @@ void GameBoardSquare_ButtonClick(control* input)
 					free(chosenMove);
 					chosenMove = NULL;
 					free(startPos);
+					startPos = NULL;
 					free(endPos);
+					endPos = NULL;
 					Game();
 					return;
 				}
 			}
+			free(chosenMove);
+			chosenMove = NULL;
 			free(startPos);
+			startPos = NULL;
 			free(endPos);
+			endPos = NULL;
 		}
 
 		// DrawTree
-		if (-1 == FlipTree(&error))
+		if (-1 == FlipTree(&error_global))
 		{
 			guiQuit = -1;
-		}
-	}
-}
-
-void ComputerTurn()
-{
-	if (gameOver == false && tie == false){
-		struct move_list* best_move_list = NULL;
-		int number_of_boards_evaluated = 0;
-
-		int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
-
-		// Check for errors
-		if (FAILED_ERROR == current_move_grade) {
-			free_move_list(curMovesList);
-			curMovesList = NULL;
-			free_move_list(best_move_list);
-			// TODO: check 
-			exit(EXIT_FAILURE);
-		}
-
-		// Make the move
-		make_move(board, &best_move_list->mov);
-
-		curSettings->next_turn = get_opposite_color(curSettings->next_turn);
-		free_move_list(curMovesList);
-		curMovesList = NULL;
-		free_move_list(posMovesFromCurPos);
-		posMovesFromCurPos = NULL;
-		free(chosenMove);
-		chosenMove = NULL;
-		free_move_list(best_move_list);
-		Game();
-	}
-}
-
-void buildBoardUITree()
-{
-	control* board_control;
-	if (-1 == Create_panel_from_bmp(
-		CHESSBOARDFILENAME,
-		CHESSBOARDNAME,
-		0,
-		0,
-		(Uint16)BOARD_W,
-		(Uint16)BOARD_H,
-		&board_control,
-		&error))
-	{
-		guiQuit = -1;
-	}
-	if (-1 == CreateAndAddNodeToTree(board_control, tree, &board_node, &error))
-	{
-		guiQuit = -1;
-	}
-
-	DrawSquareButtons(board_node, &GameBoardSquare_ButtonClick);
-
-	DrawBoardGui(board_node);
-}
-
-void CheckGameOver()
-{
-	// Get the score of the board
-	int score = get_board_score_for_color(board, get_opposite_color(curSettings->next_turn));
-
-	// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
-	if (WIN_SCORE == score) {
-		print_win_message(get_opposite_color(get_opposite_color(curSettings->next_turn)));
-		gameOver = true;
-	}
-	else if (TIE_SCORE == score && NULL == curMovesList) {
-		tie = true;
-	}
-	else {
-		if (is_check_on_color(board, curSettings->next_turn)) {
-			check = true;
+			return;
 		}
 	}
 }
@@ -581,9 +650,10 @@ void Game()
 	if (NULL != buttonsBoard){
 		FreeButtonsBoard();
 	}
-	if (-1 == EventHandler_init(&Quit, &error))
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -596,15 +666,18 @@ void Game()
 	CheckGameOver();
 
 	control* window;
-	if (-1 == Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H, &window, &error))
+	if (-1 == Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H, &window, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
-	if (-1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -617,17 +690,24 @@ void Game()
 		(Uint16)GAMEBOARDBACKGROUND_W,
 		(Uint16)GAMEBOARDBACKGROUND_H,
 		&gameBoarBackground_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* gameBoarBackground_node;
-	if (-1 == CreateAndAddNodeToTree(gameBoarBackground_control, tree, &gameBoarBackground_node, &error))
+	if (-1 == CreateAndAddNodeToTree(gameBoarBackground_control, tree, &gameBoarBackground_node, &error_global))
 	{
+		FreeControl(gameBoarBackground_control);
 		guiQuit = -1;
+		return;
 	}
 
-	buildBoardUITree();
+	if (-1 == buildBoardUITree(&error_global))
+	{
+		guiQuit = -1;
+		return;
+	}
 
 	Sint16 quitButton_x_location = (Sint16)(GAMEBOARDBACKGROUND_W - BUTTON_W - 0.5 * MARGIN);
 	Sint16 quitButton_y_location = (Sint16)(GAMEBOARDBACKGROUND_H - BUTTON_H - 1.5 * MARGIN);
@@ -642,18 +722,23 @@ void Game()
 		(Uint16)BUTTON_H,
 		&Quit_ButtonClick,
 		&quitButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* quitButton_node;
-	if (-1 == CreateAndAddNodeToTree(quitButton_control, gameBoarBackground_node, &quitButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(quitButton_control, gameBoarBackground_node, &quitButton_node, &error_global))
 	{
+		FreeControl(quitButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(quitButton_control, &error))
+	if (-1 == AddToListeners(quitButton_control, &error_global))
 	{
+		FreeControl(quitButton_control);
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -669,18 +754,22 @@ void Game()
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
 		&GameBoardBest_ButtonClick,
-		&bestButton_control, &error))
+		&bestButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* bestButton_node;
-	if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(bestButton_control, gameBoarBackground_node, &bestButton_node, &error_global))
 	{
+		FreeControl(bestButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(bestButton_control, &error))
+	if (-1 == AddToListeners(bestButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int saveButton_x_location = quitButton_x_location;
@@ -696,19 +785,23 @@ void Game()
 		(Uint16)BUTTON_H,
 		&GameBoardSave_ButtonClick,
 		&saveButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	UINode* saveButton_node;
-	if (-1 == CreateAndAddNodeToTree(saveButton_control, gameBoarBackground_node, &saveButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(saveButton_control, gameBoarBackground_node, &saveButton_node, &error_global))
 	{
+		FreeControl(saveButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(saveButton_control, &error))
+	if (-1 == AddToListeners(saveButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -725,18 +818,21 @@ void Game()
 		(Uint16)BUTTON_H,
 		&GameBoardMainMenu_ButtonClick,
 		&mainMenuButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* mainMenuButton_node;
-	if (-1 == CreateAndAddNodeToTree(mainMenuButton_control, gameBoarBackground_node, &mainMenuButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(mainMenuButton_control, gameBoarBackground_node, &mainMenuButton_node, &error_global))
 	{
+		FreeControl(mainMenuButton_control);
 		guiQuit;
 	}
-	if (-1 == AddToListeners(mainMenuButton_control, &error))
+	if (-1 == AddToListeners(mainMenuButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -767,14 +863,17 @@ void Game()
 			checkLabel_x_location,
 			checkabel_y_location,
 			GAMEBOARDBACKGROUND_W,
-			GAMEBOARDBACKGROUND_H, &checkLabel_control, &error))
+			GAMEBOARDBACKGROUND_H, &checkLabel_control, &error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 		UINode* checkLabel_node;
-		if (-1 == CreateAndAddNodeToTree(checkLabel_control, gameBoarBackground_node, &checkLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(checkLabel_control, gameBoarBackground_node, &checkLabel_node, &error_global))
 		{
+			FreeControl(checkLabel_control);
 			guiQuit = -1;
+			return;
 		}
 	}
 
@@ -791,15 +890,18 @@ void Game()
 			GAMEBOARDBACKGROUND_W,
 			GAMEBOARDBACKGROUND_H,
 			&checkMateLabel_control,
-			&error))
+			&error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 
 		UINode* checkMateLabel_node;
-		if (-1 == CreateAndAddNodeToTree(checkMateLabel_control, board_node, &checkMateLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(checkMateLabel_control, board_node, &checkMateLabel_node, &error_global))
 		{
+			FreeControl(checkMateLabel_control);
 			guiQuit = -1;
+			return;
 		}
 
 		char* filename = NULL;
@@ -827,14 +929,17 @@ void Game()
 			GAMEBOARDBACKGROUND_W,
 			GAMEBOARDBACKGROUND_H,
 			&winsLabel_control,
-			&error))
+			&error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 		UINode* winsLabel_node;
-		if (-1 == CreateAndAddNodeToTree(winsLabel_control, board_node, &winsLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(winsLabel_control, board_node, &winsLabel_node, &error_global))
 		{
+			FreeControl(winsLabel_control);
 			guiQuit = -1;
+			return;
 		}
 	}
 	else if (tie)
@@ -850,14 +955,17 @@ void Game()
 			GAMEBOARDBACKGROUND_W,
 			GAMEBOARDBACKGROUND_H,
 			&tieLabel_control,
-			&error))
+			&error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 		UINode* tieLabel_node;
-		if (-1 == CreateAndAddNodeToTree(tieLabel_control, board_node, &tieLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(tieLabel_control, board_node, &tieLabel_node, &error_global))
 		{
+			FreeControl(tieLabel_control);
 			guiQuit = -1;
+			return;
 		}
 
 		Sint16 gameOverLabel_x_location = 0;
@@ -869,31 +977,35 @@ void Game()
 			gameOverLabel_x_location,
 			gameOverLabel_y_location,
 			GAMEBOARDBACKGROUND_W,
-			GAMEBOARDBACKGROUND_H, 
+			GAMEBOARDBACKGROUND_H,
 			&gameOverLabel_control,
-			&error))
+			&error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 		UINode* gameOverLabel_node;
-		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, board_node, &gameOverLabel_node, &error))
+		if (-1 == CreateAndAddNodeToTree(gameOverLabel_control, board_node, &gameOverLabel_node, &error_global))
 		{
+			FreeControl(gameOverLabel_control);
 			guiQuit = -1;
+			return;
 		}
 	}
 
 
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
 
 	if (PLAYER_VS_AI_GAME_MODE == curSettings->game_mode && curSettings->next_turn != curSettings->user_color)
 	{
-		ComputerTurn();
+		ComputerTurn(&error_global);
 	}
 }

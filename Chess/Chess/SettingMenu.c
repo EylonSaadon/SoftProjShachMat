@@ -1,6 +1,5 @@
 #include "SettingMenu.h"
 
-
 void ChooseMode_ButtonClick(control* input)
 {
 	// PVP
@@ -31,9 +30,10 @@ void ChooseMode_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
 
@@ -50,13 +50,12 @@ void SetPiece_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
-
-
 
 void NextPlayer_ButtonClick(control* input)
 {
@@ -87,11 +86,13 @@ void NextPlayer_ButtonClick(control* input)
 		}
 	}
 
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
+
 void GameSettingsCancel_ButtonClick(control* input)
 {
 	releaseResouces();
@@ -104,7 +105,7 @@ void GameSettingsNext_ButtonClick(control* input)
 		AISetting();
 		return;
 	}
-	if(setPieces == 1){
+	if (setPieces == 1){
 		SetPiecesWindow();
 		return;
 	}
@@ -118,25 +119,29 @@ void GameSettingsNext_ButtonClick(control* input)
 void SettingMenu()
 {
 	FreeTree(tree);
-	if (-1 == EventHandler_init(&Quit, &error))
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	control* window;
-	if (-1 == Create_window(GAMESETTING_W, GAMESETTING_H, &window, &error))
+	if (-1 == Create_window(GAMESETTING_W, GAMESETTING_H, &window, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 
 	// Drawing all controls
-	#pragma region Drawing
+#pragma region Drawing
 	control* gameSettingBackground_control;
-	Create_panel_from_bmp(
+	if(-1 ==Create_panel_from_bmp(
 		GAMESETTINGFILENAME,
 		GAMESETTINGNAME,
 		0,
@@ -144,35 +149,18 @@ void SettingMenu()
 		(Uint16)GAMESETTING_W,
 		(Uint16)GAMESETTING_H,
 		&gameSettingBackground_control,
-		&error);
-	UINode* gameSettingBackground_node;
-	if (-1 == CreateAndAddNodeToTree(gameSettingBackground_control, tree, &gameSettingBackground_node, &error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-
-
-	//int chooseModeLabel_x_location = MARGIN;
-	//int chooseModeLabel_y_location = 0.25 * GAMESETTING_H - 20;
-
-	//control* chooseModeLabel_control;
-	//if (-1 == Create_panel_from_bmp(
-	//	LABELCHOOSEMODEFILENAME,
-	//	LABELCHOOSEMODENAME,
-	//	chooseModeLabel_x_location,
-	//	chooseModeLabel_y_location,
-	//	0,
-	//	0,
-	//	&chooseModeLabel_control,
-	//	&error))
-	//{
-	//	guiQuit = -1;
-	//}
-	//UINode* chooseModeLabel_node;
-	//if (-1 == CreateAndAddNodeToTree(chooseModeLabel_control, gameSettingBackground_node, &chooseModeLabel_node, &error))
-	//{
-	//	guiQuit = -1;
-	//}
+	UINode* gameSettingBackground_node;
+	if (-1 == CreateAndAddNodeToTree(gameSettingBackground_control, tree, &gameSettingBackground_node, &error_global))
+	{
+		FreeControl(gameSettingBackground_control);
+		guiQuit = -1;
+		return;
+	}
 
 	int pvpButtonn_x_location = 285;
 	int pvpButton_y_location = 45;
@@ -187,19 +175,23 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&ChooseMode_ButtonClick,
 		&pvpButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	UINode* pvpButton_node;
-	if (-1 == CreateAndAddNodeToTree(pvpButton_control, gameSettingBackground_node, &pvpButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(pvpButton_control, gameSettingBackground_node, &pvpButton_node, &error_global))
 	{
+		FreeControl(pvpButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(pvpButton_control, &error))
+	if (-1 == AddToListeners(pvpButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int pvcButtonn_x_location = pvpButtonn_x_location + BUTTON_W + MARGIN;//227
@@ -215,47 +207,30 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&ChooseMode_ButtonClick,
 		&pvcButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* pvcButton_node;
-	if (-1 == CreateAndAddNodeToTree(pvcButton_control, gameSettingBackground_node, &pvcButton_node, &error))
-	{		
+	if (-1 == CreateAndAddNodeToTree(pvcButton_control, gameSettingBackground_node, &pvcButton_node, &error_global))
+	{
+		FreeControl(pvcButton_control);
 		guiQuit = -1;
+		return;
 	}
 
-	if (-1 == AddToListeners(pvcButton_control, &error))
+	if (-1 == AddToListeners(pvcButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-
-	//int setPiecesLabel_x_location = MARGIN;
-	//int setPiecesLabel_y_location = 0.50 * GAMESETTING_H - 20;
-	//control* setPiecesLabel_control;
-	//if( -1 == Create_panel_from_bmp(
-	//	LABELSETPIECESFILENAME,
-	//	LABELSETPIECESNAME,
-	//	setPiecesLabel_x_location,
-	//	setPiecesLabel_y_location,
-	//	0,
-	//	0,
-	//	&setPiecesLabel_control, 
-	//	&error))
-	//{
-	//	guiQuit	= -1;
-	//}
-	//UINode* setPiecesLabel_node;
-	//if (-1 == CreateAndAddNodeToTree(setPiecesLabel_control, gameSettingBackground_node, &setPiecesLabel_node, &error))
-	//{
-	//	guiQuit = -1;
-	//}
 
 	int setPiecesButton_x_location = pvpButtonn_x_location;
 	int setPiecesButton_y_location = 133;
 
 	control* setPiecesButton_control;
-	if( -1 == Create_Button_from_bmp_transHighlight(
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONSETPIECESFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONSETPIECESNAME,
@@ -263,43 +238,26 @@ void SettingMenu()
 		setPiecesButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&SetPiece_ButtonClick, 
-		&setPiecesButton_control, 
-		&error))
+		&SetPiece_ButtonClick,
+		&setPiecesButton_control,
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* setPiecesButton_node;
-	if (-1 == CreateAndAddNodeToTree(setPiecesButton_control, gameSettingBackground_node, &setPiecesButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(setPiecesButton_control, gameSettingBackground_node, &setPiecesButton_node, &error_global))
 	{
+		FreeControl(setPiecesButton_control);
 		guiQuit = -1;
+		return;
 	}
 
-	if (-1 == AddToListeners(setPiecesButton_control, &error))
+	if (-1 == AddToListeners(setPiecesButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-
-	//int nextPlayerLabel_x_location = MARGIN;
-	//int nextPlayerLabel_y_location = 0.75 * GAMESETTING_H - 20;
-	//control* nextPlayerLabel_control;
-	//if(-1 == Create_panel_from_bmp(
-	//	LABELNEXTPLAYERFILENAME,
-	//	LABELNEXTPLAYERNAME,
-	//	nextPlayerLabel_x_location,
-	//	nextPlayerLabel_y_location,
-	//	0,
-	//	0, 
-	//	&nextPlayerLabel_control,
-	//	&error))
-	//{
-	//	guiQuit = -1;
-	//}
-	//UINode* nextPlayerLabel_node;
-	//if (-1 == CreateAndAddNodeToTree(nextPlayerLabel_control, gameSettingBackground_node, &nextPlayerLabel_node, &error))
-	//{
-	//	guiQuit = -1;
-	//}
 
 	int whiteButton_x_location = pvpButtonn_x_location;
 	int whiteButton_y_location = 222;
@@ -314,18 +272,22 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&NextPlayer_ButtonClick,
 		&whiteButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* whiteButton_node;
-	if (-1 == CreateAndAddNodeToTree(whiteButton_control, gameSettingBackground_node, &whiteButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(whiteButton_control, gameSettingBackground_node, &whiteButton_node, &error_global))
 	{
+		FreeControl(whiteButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(whiteButton_control, &error))
+	if (-1 == AddToListeners(whiteButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int blackButton_x_location = pvcButtonn_x_location;
@@ -341,18 +303,22 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&NextPlayer_ButtonClick,
 		&blackButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* blackButton_node;
-	if (-1 == CreateAndAddNodeToTree(blackButton_control, gameSettingBackground_node, &blackButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(blackButton_control, gameSettingBackground_node, &blackButton_node, &error_global))
 	{
+		FreeControl(blackButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(blackButton_control, &error))
+	if (-1 == AddToListeners(blackButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -369,24 +335,28 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&GameSettingsCancel_ButtonClick,
 		&cancelButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* cancelButton_node;
-	if (-1 == CreateAndAddNodeToTree(cancelButton_control, gameSettingBackground_node, &cancelButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, gameSettingBackground_node, &cancelButton_node, &error_global))
 	{
+		FreeControl(cancelButton_control); 
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(cancelButton_control, &error))
+	if (-1 == AddToListeners(cancelButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int nextButton_x_location = cancelButton_x_location;
 	int nextButton_y_location = 474;
 	control* nextButton_control;
-	if(-1 ==Create_Button_from_bmp_transHighlight(
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONNEXTFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONNEXTNAME,
@@ -396,20 +366,24 @@ void SettingMenu()
 		(Uint16)BUTTON_H,
 		&GameSettingsNext_ButtonClick,
 		&nextButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* nextButton_node;
-	if(-1 == CreateAndAddNodeToTree(nextButton_control, gameSettingBackground_node, &nextButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(nextButton_control, gameSettingBackground_node, &nextButton_node, &error_global))
 	{
+		FreeControl(nextButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(nextButton_control, &error))
+	if (-1 == AddToListeners(nextButton_control, &error_global))
 	{
-		guiQuit = -1;
+		guiQuit = -1;;
+		return;
 	}
-	#pragma endregion
+#pragma endregion
 
 	if (curSettings->game_mode == TWO_PLAYERS_GAME_MODE)
 	{
@@ -435,8 +409,9 @@ void SettingMenu()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }

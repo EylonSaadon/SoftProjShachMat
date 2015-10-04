@@ -6,56 +6,70 @@ void SaveLoadCancel_ButtonClick(control* input)
 	if (isSaveMode)
 	{
 		Game();
+		return;
 	}
 	else{
 		MainMenu();
+		return;
 	}
 }
 
 void SaveLoadSlot_ButtonClick(control* input)
 {
-	// TODO: take care of memory leak
-	// TODO: handle File not found
 	char* path = input->name;
 	if (isSaveMode)
 	{
 		FILE* file = fopen(path, "w");
 		if (NULL != file) {
 			fclose(file);
-			save_game_to_xml(path, curSettings, board);
+			if(-1 == save_game_to_xml(path, curSettings, board))
+			{
+				guiQuit = -1;
+				return;
+			}
+			Game();
+			return;
 		}
-		Game();
 	}
 	else{
 		FILE* file = fopen(path, "r");
 		if (NULL != file) {
 			fclose(file);
-			load_game_from_xml(path, curSettings, board);
+			if (-1 == load_game_from_xml(path, curSettings, board))
+			{
+				guiQuit = -1;
+				return;
+			}
+			SettingMenu();
+			return;
 		}
-		SettingMenu();
 	}
-		
+
 }
 
 
 void SaveLoadMenu()
 {
 	FreeTree(tree);
-	if (-1 == EventHandler_init(&Quit, &error))
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	control* window;
-	if (-1 == Create_window(SAVELOAD_W, SAVELOAD_H, &window, &error))
+	if (-1 == Create_window(SAVELOAD_W, SAVELOAD_H, &window, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
-	if (-1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -67,9 +81,7 @@ void SaveLoadMenu()
 		filename = SAVEMENUBACKGROUNDFILENAME;
 		name = SAVEMENUBACKGROUNDFILENAME;
 	}
-
-
-
+	
 	control* background_control;
 	Create_panel_from_bmp(
 		filename,
@@ -79,53 +91,27 @@ void SaveLoadMenu()
 		(Uint16)SAVELOAD_W,
 		(Uint16)SAVELOAD_H,
 		&background_control,
-		&error);
+		&error_global);
 	UINode* background_node;
-	if (-1 == CreateAndAddNodeToTree(background_control, tree, &background_node, &error))
+	if (-1 == CreateAndAddNodeToTree(background_control, tree, &background_node, &error_global))
 	{
+		FreeControl(background_control);
 		guiQuit = -1;
+		return;
 	}
-
-
-	/*int titleLabel_x_location = SAVELOAD_TITLE_LOCATION_X_CENTER-100;
-	int titleLabel_y_location = MARGIN;
-
-
-	
-
-	control* titleLabel_control;
-	if(-1 == Create_panel_from_bmp(
-		filename,
-		name,
-		titleLabel_x_location,
-		titleLabel_y_location,
-		0,
-		0,
-		&titleLabel_control,
-		&error))
-	{
-		guiQuit = -1;
-	}
-	UINode* titleLabel_node;
-	if (-1 == CreateAndAddNodeToTree(titleLabel_control, background_node, &titleLabel_node, &error))
-	{
-		guiQuit = -1;
-	}
-*/
-
 
 	for (int i = 0; i < NUMOFSLOTS; i++)
 	{
 		char numberstr[3];
-		_itoa_s(i+1,numberstr,3,10);
-		
+		_itoa_s(i + 1, numberstr, 3, 10);
+
 
 		char* saveFileName = concat(SAVEFILNAMEPREFIX, numberstr);
 
 		char* fileNameNoSuffix = concat(BUTTONIMGFILENAMEPREFIX, numberstr);
 		char* fileName = concat(fileNameNoSuffix, ".bmp");
 		control* slotButton_control;
-		if( -1 == Create_Button_from_bmp_transHighlight(
+		if (-1 == Create_Button_from_bmp_transHighlight(
 			fileName,
 			BUTTONSAVESLOTHIGHLIGHTFILENAME,
 			saveFileName,
@@ -135,18 +121,22 @@ void SaveLoadMenu()
 			(Uint16)BUTTON_W,
 			&SaveLoadSlot_ButtonClick,
 			&slotButton_control,
-			&error))
+			&error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 		UINode* slotButton_node;
-		if (-1 == CreateAndAddNodeToTree(slotButton_control, background_node, &slotButton_node, &error))
+		if (-1 == CreateAndAddNodeToTree(slotButton_control, background_node, &slotButton_node, &error_global))
 		{
+			FreeControl(slotButton_control);
 			guiQuit = -1;
+			return;
 		}
-		if (-1 == AddToListeners(slotButton_control, &error))
+		if (-1 == AddToListeners(slotButton_control, &error_global))
 		{
 			guiQuit = -1;
+			return;
 		}
 
 
@@ -159,7 +149,7 @@ void SaveLoadMenu()
 	Sint16 cancelButton_x_location = (Sint16)(SAVELOAD_W - BUTTON_W - 0.5 * MARGIN);
 	Sint16 cancelButton_y_location = (Sint16)(SAVELOAD_H - BUTTON_H - 1.5 * MARGIN);
 	control* cancelButton_control;
-	if(-1 ==Create_Button_from_bmp_transHighlight(
+	if (-1 == Create_Button_from_bmp_transHighlight(
 		BUTTONCANCELFILENAME,
 		BUTTONTRANSPARENTHIGHLIGHTEDFILENAME,
 		BUTTONCANCELNAME,
@@ -169,23 +159,28 @@ void SaveLoadMenu()
 		(Uint16)BUTTON_H,
 		&SaveLoadCancel_ButtonClick,
 		&cancelButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* cancelButton_node;
-	if (-1 == CreateAndAddNodeToTree(cancelButton_control, background_node, &cancelButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, background_node, &cancelButton_node, &error_global))
+	{
+		FreeControl(cancelButton_control);
+		guiQuit = -1;
+		return;
+	}
+	if (-1 == AddToListeners(cancelButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-	if(-1 ==AddToListeners(cancelButton_control, &error))
-		{
-			guiQuit = -1;
-		}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
