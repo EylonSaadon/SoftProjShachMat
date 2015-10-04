@@ -33,9 +33,6 @@
     <ClCompile Include="Chess.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UIFramework.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SettingMenu.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SaveLoadWindow.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIFrameWork.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

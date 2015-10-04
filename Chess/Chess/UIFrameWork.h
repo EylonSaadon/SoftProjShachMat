@@ -12,7 +12,6 @@
 
 
 //Functions
-#include "UIFrameWork.h"
 
 int LoadBMP(char* fileName, SDL_Surface** surface, char** error);
 

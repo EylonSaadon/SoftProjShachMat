@@ -131,8 +131,8 @@ void MainMenu()
 		loadGameButton_y_location,
 		(Uint16)BUTTON_W,
 		(Uint16)BUTTON_H,
-		&LoadGame_ButtonClick,
-		&loadGameButton,
+		&LoadGame_ButtonClick, 
+		&loadGameButton, 
 		&error_global))
 	{
 		guiQuit = -1;
@@ -157,7 +157,7 @@ void MainMenu()
 
 	int quitGameButton_x_location = loadGameButton_x_location;
 	int quitGameButton_y_location = loadGameButton_y_location + BUTTON_H + MAINMENUBUTTONMARGIN;
-	control* quitButton;
+	control* quitButton; 
 	if (-1 == Create_Button_from_bmp(
 		BUTTONQUITFILENAME,
 		BUTTONQUITFILENAME,

@@ -22,10 +22,6 @@
 #include "EventHandler.h"
 #endif
 
-#ifndef MAINMENU_
-#include "MainMenu.h"
-#endif
-
 #ifndef SETTINGMENU_
 #include "SettingMenu.h"
 #endif
