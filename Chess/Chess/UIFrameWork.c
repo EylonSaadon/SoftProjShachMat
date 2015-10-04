@@ -238,6 +238,8 @@ int Create_Button_from_bmp_transHighlight(char* background_filename, char* highl
 		Button_Rect = NULL;
 		return -1;
 	}
+	SDL_FreeSurface(TranparentHighlightedButton);
+	TranparentHighlightedButton = NULL;
 	return 0;
 }
 
