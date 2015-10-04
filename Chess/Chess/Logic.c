@@ -939,15 +939,15 @@ int get_moves_queen(char board[BOARD_SIZE][BOARD_SIZE], struct position pos, COL
 int get_moves_for_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color, struct move_list** move_list) {
 	for (int i = 0; i < BOARD_SIZE; i++) {
 		for (int j = 0; j < BOARD_SIZE; j++) {
-			if (!is_piece_of_color(board[i][j], color)) {
+			if (!is_piece_of_color(board[j][i], color)) {
 				continue;
 			}
 
 			struct position current_pos = { 0 };
-			current_pos.col = i;
-			current_pos.row = j;
+			current_pos.col = j;
+			current_pos.row = i;
 
-			switch (board[i][j]) {
+			switch (board[j][i]) {
 			case WHITE_P:
 			case BLACK_P:
 				if (-1 == get_moves_pawn(board, current_pos, color, move_list)) return -1;
