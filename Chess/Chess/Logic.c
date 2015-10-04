@@ -419,12 +419,12 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 		printf("testXmlwriterFilename: Error at xmlTextWriterEndDocument\n");
 		return -1;
 	}
+	
+	xmlFreeTextWriter(writer);
 
 	// Cleaning
 	xmlCleanupCharEncodingHandlers();
 	xmlCleanupParser();
-
-	xmlFreeTextWriter(writer);
 
 	return 0;
 }
