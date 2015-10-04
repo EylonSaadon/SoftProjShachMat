@@ -9,10 +9,6 @@
 #include "AISettings.h"
 #endif
 
-#ifndef SETPIECES_
-#include "SetPieces.h"
-#endif
-
 #ifndef GAMEBOARD_
 #include "GameBoard.h"
 #endif
