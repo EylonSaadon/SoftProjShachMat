@@ -1,11 +1,11 @@
 #include "SetPieces.h"
 
-void PlacePiece()
+int PlacePiece(char** error)
 {
 	position* pos;
-	if (-1 == GetPosOfSquare(selectedSquare_Control, &pos, &error))
+	if (-1 == GetPosOfSquare(selectedSquare_Control, &pos, error))
 	{
-		guiQuit = -1;
+		return -1;
 	}
 
 	char piece = ResolveLetterFromButtonName(selectedPiece_Control->name);
@@ -28,6 +28,7 @@ void PlacePiece()
 		board[pos->col][pos->row] = piece;
 	}
 	free(pos);
+	return 0;
 }
 
 
@@ -42,7 +43,11 @@ void SetPiecesBoardSquare_ButtonClick(control* input)
 		selectedSquare_Control = input;
 		if (selectedPiece_Control != NULL)
 		{
-			PlacePiece();
+			if (-1 == PlacePiece(&error_global))
+			{
+				guiQuit = -1;
+				return;
+			}
 			SetPiecesWindow();
 			return;
 		}
@@ -53,9 +58,10 @@ void SetPiecesBoardSquare_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
 
@@ -70,7 +76,11 @@ void SetPiecesSidePanelPiece_ButtonClick(control* input)
 		selectedPiece_Control = input;
 		if (selectedSquare_Control != NULL)
 		{
-			PlacePiece();
+			if (-1 == PlacePiece(&error_global))
+			{
+				guiQuit = -1;
+				return;
+			}
 			SetPiecesWindow();
 			return;
 		}
@@ -81,9 +91,10 @@ void SetPiecesSidePanelPiece_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
 
@@ -110,19 +121,23 @@ void SetPiecesStart_ButtonClick(control* input)
 void SetPiecesWindow()
 {
 	FreeTree(tree);
-	if (-1 == EventHandler_init(&Quit, &error))
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	control* window;
-	if (-1 == Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H, &window, &error))
+	if (-1 == Create_window(GAMEBOARDBACKGROUND_W, GAMEBOARDBACKGROUND_H, &window, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 	selectedSquare_Control = NULL;
 	selectedPiece_Control = NULL;
@@ -137,14 +152,17 @@ void SetPiecesWindow()
 		(Uint16)GAMEBOARDBACKGROUND_W,
 		(Uint16)GAMEBOARDBACKGROUND_H,
 		&gameBoarBackground_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* gameBoarBackground_node;
-	if (-1 == CreateAndAddNodeToTree(gameBoarBackground_control, tree, &gameBoarBackground_node, &error))
+	if (-1 == CreateAndAddNodeToTree(gameBoarBackground_control, tree, &gameBoarBackground_node, &error_global))
 	{
+		FreeControl(gameBoarBackground_control);
 		guiQuit = -1;
+		return;
 	}
 
 	control* board_control;
@@ -156,46 +174,65 @@ void SetPiecesWindow()
 		(Uint16)BOARD_W,
 		(Uint16)BOARD_H,
 		&board_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
-	if (-1 == CreateAndAddNodeToTree(board_control, tree, &board_node, &error))
+	if (-1 == CreateAndAddNodeToTree(board_control, tree, &board_node, &error_global))
+	{
+		FreeControl(board_control);
+		guiQuit = -1;
+		return;
+	}
+
+
+	if (-1 == DrawSquareButtons(board_node, &SetPiecesBoardSquare_ButtonClick, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
+	if (-1 == DrawBoardGui(board_node, &error_global))
+	{
+		guiQuit = -1;
+		return;
+	}
 
-	DrawSquareButtons(board_node, &SetPiecesBoardSquare_ButtonClick);
-
-	DrawBoardGui(board_node);
-
-	DrawPiecesOnSidePanel(gameBoarBackground_node, &SetPiecesSidePanelPiece_ButtonClick);
+	if (-1 == DrawPiecesOnSidePanel(gameBoarBackground_node, &SetPiecesSidePanelPiece_ButtonClick, &error_global))
+	{
+		guiQuit = -1;
+		return;
+	}
 
 	control* chessPiece_control;
 	if (-1 == Create_Button_from_bmp_transHighlight(
 		DELETE_FILENAME,
 		SQUAREBUTTONHIGHLIGHTEDFILENAME,
 		DELETE_NAME,
-		BOARD_W +MARGIN,
+		BOARD_W + MARGIN,
 		0,
 		(Uint16)SQUARE_W,
 		(Uint16)SQUARE_H,
 		&SetPiecesSidePanelPiece_ButtonClick,
 		&chessPiece_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* chessPiece_node;
-	if (-1 == CreateAndAddNodeToTree(chessPiece_control, gameBoarBackground_node, &chessPiece_node, &error))
+	if (-1 == CreateAndAddNodeToTree(chessPiece_control, gameBoarBackground_node, &chessPiece_node, &error_global))
 	{
+		FreeControl(chessPiece_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(chessPiece_control, &error))
+	if (-1 == AddToListeners(chessPiece_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -212,18 +249,22 @@ void SetPiecesWindow()
 		(Uint16)BUTTON_H,
 		&SetPiecesCancel_ButtonClick,
 		&cancelButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* cancelButton_node;
-	if (-1 == CreateAndAddNodeToTree(cancelButton_control, gameBoarBackground_node, &cancelButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, gameBoarBackground_node, &cancelButton_node, &error_global))
 	{
+		FreeControl(cancelButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(cancelButton_control, &error))
+	if (-1 == AddToListeners(cancelButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int startButton_x_location = cancelButton_x_location;
@@ -239,24 +280,29 @@ void SetPiecesWindow()
 		(Uint16)BUTTON_H,
 		&SetPiecesStart_ButtonClick,
 		&startButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* startButton_node;
-	if (-1 == CreateAndAddNodeToTree(startButton_control, gameBoarBackground_node, &startButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(startButton_control, gameBoarBackground_node, &startButton_node, &error_global))
 	{
+		FreeControl(startButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(startButton_control, &error))
+	if (-1 == AddToListeners(startButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
 

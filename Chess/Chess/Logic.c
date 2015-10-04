@@ -112,14 +112,14 @@ void load_game_from_xml_rec(xmlNode * a_node, struct game_settings* settings, ch
 	}
 }
 
-void load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]) {
+int load_game_from_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]) {
 	xmlDoc *doc = NULL;
 	xmlNode *root_element = NULL;
 
 	// Parse the file and get the DOM
 	if ((doc = xmlReadFile(file_path, NULL, 0)) == NULL) {
 		printf("ERROR: Failed to parse file %s\n", file_path);
-		exit(EXIT_FAILURE);
+		return -1;
 	}
 	else {
 		root_element = xmlDocGetRootElement(doc);
@@ -129,6 +129,7 @@ void load_game_from_xml(char* file_path, struct game_settings* settings, char bo
 		xmlFreeDoc(doc);       // free document
 		xmlCleanupParser();    // Free globals
 	}
+	return 0;
 }
 
 bool is_valid_set(char board[BOARD_SIZE][BOARD_SIZE], char disc, struct position pos, COLOR color) {

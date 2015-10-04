@@ -11,14 +11,6 @@ void FreeButtonsBoard()
 	buttonsBoard = NULL;
 }
 
-void SwitchOffHighlightAllMinimaxDepths()
-{
-	SwitchOffHighlightbyName(BUTTON1NAME);
-	SwitchOffHighlightbyName(BUTTON2NAME);
-	SwitchOffHighlightbyName(BUTTON3NAME);
-	SwitchOffHighlightbyName(BUTTON4NAME);
-	SwitchOffHighlightbyName(BUTTONBESTNAME);
-}
 
 int FlipTree(char** error)
 {
@@ -29,8 +21,6 @@ int FlipTree(char** error)
 
 	/* We finished drawing*/
 	if (SDL_Flip(tree->control->surface) != 0) {
-		// TODO: printf("ERROR: failed to flip buffer: %s\n", SDL_GetError());
-
 		*error = SDL_GetError();
 		return -1;
 	}
@@ -42,8 +32,6 @@ void releaseResouces()
 	FreeTree(tree);
 	tree = NULL;
 	FreeEventHandler();
-	free(curSettings);
-	curSettings = NULL;
 	if (buttonsBoard != NULL){
 		FreeButtonsBoard();
 	}
@@ -102,6 +90,15 @@ void InitGlobalVariable()
 	curSettings = NULL;
 }
 
+void SwitchOffHighlightAllMinimaxDepths()
+{
+	SwitchOffHighlightbyName(BUTTON1NAME);
+	SwitchOffHighlightbyName(BUTTON2NAME);
+	SwitchOffHighlightbyName(BUTTON3NAME);
+	SwitchOffHighlightbyName(BUTTON4NAME);
+	SwitchOffHighlightbyName(BUTTONBESTNAME);
+}
+
 void SwitchButtonHighlight(control* input)
 {
 	if (input->ishighlighted == 0){
@@ -141,17 +138,27 @@ void start_gui()
 	}
 	atexit(SDL_Quit);
 	
-	error = NULL;
+	guiQuit = 0;
+	error_global = NULL;
 
 	InitGlobalVariable();
 	guiQuit = 0;
 	SDL_WM_SetCaption("Chess", NULL);
-	//TODO: Handle Failure
+
 	MainMenu();
 
 	while (guiQuit == 0) {
 		HandleEvents();
 		SDL_Delay(125);
+	}
+
+	releaseResouces();
+	if (guiQuit == -1)
+	{
+		if (NULL != error_global){
+			printf(error_global);
+			getchar();
+		}
 	}
 }
 

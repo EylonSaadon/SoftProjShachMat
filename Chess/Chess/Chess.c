@@ -85,7 +85,10 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 
 			if (NULL != file) {
 				fclose(file);
-				load_game_from_xml(file_path, &settings, board);
+				if (-1 == load_game_from_xml(file_path, &settings, board))
+				{
+					exit(EXIT_FAILURE);
+				}
 			}
 			else {
 				print_message(WRONG_FILE_NAME);

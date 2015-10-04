@@ -30,12 +30,12 @@ void UserColor_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
-
 
 void AIMinimaxDepth_ButtonClick(control* input)
 {
@@ -91,12 +91,12 @@ void AIMinimaxDepth_ButtonClick(control* input)
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }
-
 
 void AICancel_ButtonClick(control* input)
 {
@@ -107,31 +107,37 @@ void AINext_ButtonClick(control* input)
 {
 	if (setPieces == 1){
 		SetPiecesWindow();
+		return;
 	}
 	else{
 		Game();
+		return;
 	}
 }
 
 void AISetting()
 {
 	FreeTree(tree);
-	
-	if (-1 == EventHandler_init(&Quit, &error))
+
+	if (-1 == EventHandler_init(&Quit, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	control* window;
-	if (-1 == Create_window(AISETTING_W, AISETTING_H, &window, &error))
+	if (-1 == Create_window(AISETTING_W, AISETTING_H, &window, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
-	if (-1 == CreateTree(window, &tree, &error))
+	if (-1 == CreateTree(window, &tree, &error_global))
 	{
+		FreeControl(window);
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -144,37 +150,18 @@ void AISetting()
 		(Uint16)AISETTING_W,
 		(Uint16)AISETTING_H,
 		&AISettingBackground_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* AISettingBackground_node;
-	if (-1 == CreateAndAddNodeToTree(AISettingBackground_control, tree, &AISettingBackground_node, &error))
+	if (-1 == CreateAndAddNodeToTree(AISettingBackground_control, tree, &AISettingBackground_node, &error_global))
 	{
+		FreeControl(AISettingBackground_control);
 		guiQuit = -1;
+		return;
 	}
-
-	/*int minimaxDepthLabel_x_location = MARGIN;
-	int minimaxDepthLabel_y_location = 0.30 * AISETTING_H - 20;
-
-	control* minimaxDepthLabel_control;
-	if (-1 == Create_panel_from_bmp(
-		LABELMINIMAXFILENAME,
-		LABELMINIMAXNAME,
-		minimaxDepthLabel_x_location,
-		minimaxDepthLabel_y_location,
-		0,
-		0,
-		&minimaxDepthLabel_control,
-		&error))
-	{
-		guiQuit = -1;
-	}
-	UINode* minimaxDepthLabel_node;
-	if (-1 == CreateAndAddNodeToTree(minimaxDepthLabel_control, AISettingBackground_node, &minimaxDepthLabel_node, &error))
-	{
-		guiQuit = -1;
-	}*/
 
 	int oneButton_x_location = 330;
 	int oneButton_y_location = 48;
@@ -189,18 +176,22 @@ void AISetting()
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
 		&AIMinimaxDepth_ButtonClick,
-		&oneButton_control, &error))
+		&oneButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* oneButton_node;
-	if (-1 == CreateAndAddNodeToTree(oneButton_control, AISettingBackground_node, &oneButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(oneButton_control, AISettingBackground_node, &oneButton_node, &error_global))
 	{
+		FreeControl(oneButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(oneButton_control, &error))
+	if (-1 == AddToListeners(oneButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int twoButton_x_location = oneButton_x_location + NUMBUTTON_W + 28;
@@ -216,18 +207,22 @@ void AISetting()
 		(Uint16)NUMBUTTON_H,
 		&AIMinimaxDepth_ButtonClick,
 		&twoButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* twoButton_node;
-	if (-1 == CreateAndAddNodeToTree(twoButton_control, AISettingBackground_node, &twoButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(twoButton_control, AISettingBackground_node, &twoButton_node, &error_global))
 	{
+		FreeControl(twoButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(twoButton_control, &error))
+	if (-1 == AddToListeners(twoButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int threeButton_x_location = twoButton_x_location + NUMBUTTON_W + 28;
@@ -242,18 +237,22 @@ void AISetting()
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
 		&AIMinimaxDepth_ButtonClick,
-		&threeButton_control, &error))
+		&threeButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* threeButton_node;
-	if (-1 == CreateAndAddNodeToTree(threeButton_control, AISettingBackground_node, &threeButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(threeButton_control, AISettingBackground_node, &threeButton_node, &error_global))
 	{
+		FreeControl(threeButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(threeButton_control, &error))
+	if (-1 == AddToListeners(threeButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int fourButton_x_location = threeButton_x_location + NUMBUTTON_W + 28;
@@ -268,18 +267,22 @@ void AISetting()
 		(Uint16)NUMBUTTON_W,
 		(Uint16)NUMBUTTON_H,
 		&AIMinimaxDepth_ButtonClick,
-		&fourButton_control, &error))
+		&fourButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* fourButton_node;
-	if (-1 == CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node, &fourButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(fourButton_control, AISettingBackground_node, &fourButton_node, &error_global))
 	{
+		FreeControl(fourButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(fourButton_control, &error))
+	if (-1 == AddToListeners(fourButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int bestButton_x_location = fourButton_x_location + NUMBUTTON_W + 45;
@@ -293,42 +296,23 @@ void AISetting()
 		bestButton_y_location,
 		(Uint16)BESTBUTTON_W,
 		(Uint16)BESTBUTTON_H,
-		&AIMinimaxDepth_ButtonClick, &bestButton_control, &error))
+		&AIMinimaxDepth_ButtonClick, &bestButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* bestButton_node;
-	if (-1 == CreateAndAddNodeToTree(bestButton_control, AISettingBackground_node, &bestButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(bestButton_control, AISettingBackground_node, &bestButton_node, &error_global))
 	{
+		FreeControl(bestButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(bestButton_control, &error))
+	if (-1 == AddToListeners(bestButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
-
-	/*int UserColorLabel_x_location = MARGIN;
-	int UserColorLabel_y_location = 0.75 * AISETTING_H - BUTTON_H;
-	control* UserColorLabel_control;
-	if (-1 == Create_panel_from_bmp(
-		LABELUSERCOLORFILENAME,
-		LABELUSERCOLORNAME,
-		UserColorLabel_x_location,
-		UserColorLabel_y_location,
-		0,
-		0,
-		&Create_panel_from_bmp, 
-		&UserColorLabel_control,
-		&error))
-	{
-		guiQuit = -1;
-	}
-
-	UINode* UserColorLabel_node = NULL;
-	if (-1 == CreateAndAddNodeToTree(UserColorLabel_control, AISettingBackground_node, &UserColorLabel_node, &error))
-	{
-		guiQuit = -1;
-	}*/
 
 	int whiteButton_x_location = oneButton_x_location;
 	int whiteButton_y_location = 156;
@@ -343,18 +327,22 @@ void AISetting()
 		(Uint16)BUTTON_H,
 		&UserColor_ButtonClick,
 		&whiteButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* whiteButton_node;
-	if (-1 == CreateAndAddNodeToTree(whiteButton_control, AISettingBackground_node, &whiteButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(whiteButton_control, AISettingBackground_node, &whiteButton_node, &error_global))
 	{
+		FreeControl(whiteButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(whiteButton_control, &error))
+	if (-1 == AddToListeners(whiteButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int blackButton_x_location = whiteButton_x_location + BUTTON_W + 28;
@@ -370,18 +358,22 @@ void AISetting()
 		(Uint16)BUTTON_H,
 		&UserColor_ButtonClick,
 		&blackButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* blackButton_node;
-	if (-1 == CreateAndAddNodeToTree(blackButton_control, AISettingBackground_node, &blackButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(blackButton_control, AISettingBackground_node, &blackButton_node, &error_global))
 	{
+		FreeControl(blackButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(blackButton_control, &error))
+	if (-1 == AddToListeners(blackButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 
@@ -398,18 +390,22 @@ void AISetting()
 		(Uint16)BUTTON_H,
 		&AICancel_ButtonClick,
 		&cancelButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* cancelButton_node;
-	if (-1 == CreateAndAddNodeToTree(cancelButton_control, AISettingBackground_node, &cancelButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(cancelButton_control, AISettingBackground_node, &cancelButton_node, &error_global))
 	{
+		FreeControl(cancelButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(cancelButton_control, &error))
+	if (-1 == AddToListeners(cancelButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	int nextButton_x_location = cancelButton_x_location;
@@ -425,18 +421,22 @@ void AISetting()
 		(Uint16)BUTTON_H,
 		&AINext_ButtonClick,
 		&nextButton_control,
-		&error))
+		&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 	UINode* nextButton_node;
-	if (-1 == CreateAndAddNodeToTree(nextButton_control, AISettingBackground_node, &nextButton_node, &error))
+	if (-1 == CreateAndAddNodeToTree(nextButton_control, AISettingBackground_node, &nextButton_node, &error_global))
 	{
+		FreeControl(nextButton_control);
 		guiQuit = -1;
+		return;
 	}
-	if (-1 == AddToListeners(nextButton_control, &error))
+	if (-1 == AddToListeners(nextButton_control, &error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 
 	if (curSettings->user_color == WHITE)
@@ -467,8 +467,9 @@ void AISetting()
 	}
 
 	// DrawTree
-	if (-1 == FlipTree(&error))
+	if (-1 == FlipTree(&error_global))
 	{
 		guiQuit = -1;
+		return;
 	}
 }

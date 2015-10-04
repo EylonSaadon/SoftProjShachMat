@@ -84,7 +84,7 @@
 // Global Variables//
 /////////////////////
 
-
+extern int guiQuit;
 
 
 
@@ -99,8 +99,11 @@ char* ResolveFileNameFromLetter(char piece);
 char* ResolveNameFromLetter(char piece);
 char ResolveLetterFromButtonName(char* name);
 
-void DrawSquareButtons(UINode* node, ButtonAction FuncPtr);
-void DrawBoardGui(UINode* node);
-void DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr);
-void DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c);
+
+int initializeButtonsBoard(char** error);
+
+int DrawSquareButtons(UINode* node, ButtonAction FuncPtr, char** error);
+int DrawBoardGui(UINode* node, char** error);
+int DrawPiecesOnSidePanel(UINode* panel_node, ButtonAction FuncPtr, char** error); 
+int DrawPiecesOnSidePanelFilterColor(UINode* panel_node, ButtonAction FuncPtr, COLOR c, char** error);
 #endif

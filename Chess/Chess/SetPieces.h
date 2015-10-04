@@ -14,6 +14,7 @@
 // Global Variables//
 /////////////////////
 
+extern int guiQuit;
 
 extern control* selectedSquare_Control;
 extern control* selectedPiece_Control;
@@ -27,7 +28,7 @@ extern UINode* board_node;
 /////////////
 
 
-void PlacePiece();
+int PlacePiece(char** error);
 
 void SetPiecesWindow();
 

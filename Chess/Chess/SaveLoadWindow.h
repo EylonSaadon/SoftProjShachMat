@@ -57,12 +57,14 @@
 // Global Variables//
 /////////////////////
 
-
+extern int guiQuit;
 
 /////////////
 //Functions//
 /////////////
+void SaveLoadCancel_ButtonClick(control* input);
 
+void SaveLoadSlot_ButtonClick(control* input);
 
 void SaveLoadMenu();
 

@@ -64,6 +64,7 @@ int Create_window(int window_w, int window_h, control** control_toRet, char** er
 	SDL_Surface* icon;
 	LoadBMP("icon.bmp", &icon, error);
 	if (!icon) {
+		*error = SDL_GetError();
 		return -1;
 	}
 
@@ -72,10 +73,6 @@ int Create_window(int window_w, int window_h, control** control_toRet, char** er
 	SDL_Surface *window = SDL_SetVideoMode(window_w, window_h, 0, SDL_HWSURFACE | SDL_DOUBLEBUF);
 	
 	if (window == NULL) {
-		// TODO: Consider ading prefix. but then the error should be freed.
-		//char* error_prefix = "ERROR: failed to set video mode: %s\n";
-		//*error = concat(error_prefix, SDL_GetError());
-
 		*error = SDL_GetError();
 		return -1;
 	}
@@ -293,7 +290,6 @@ int DrawTree(UINode* node, char** error)
 			DrawTree(node->children[i], error);
 		}
 	}
-	// TODO: can it reach this code?
 	return 0;
 }
 

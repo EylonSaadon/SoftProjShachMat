@@ -21,27 +21,47 @@
 
 extern UINode* tree;
 
+extern int guiQuit;
+
 extern int setPieces;
 
 extern game_settings* curSettings;
 
 extern char board[BOARD_SIZE][BOARD_SIZE];
 
+control* gameSelectedSquare_control;
+
+
 
 /////////////
 //Functions//
 /////////////
 
-
-void Square_ButtonClick(control input);
+int HighlightBestMove(int blinknum, char** error);
 
 void HightlightPosMoves(move_list* move_list);
 
 bool isPawnUpgradePossible(move move, char piece);
 
-void buildBoardUITree();
+int buildBoardUITree(char** error);
 
-void ComputerTurn();
+void CheckGameOver();
+
+void switchOffAllButtons();
+
+int ComputerTurn(char** error);
+
+void GameBoardMainMenu_ButtonClick(control* input);
+
+void GameBoardBest_ButtonClick(control * input);
+
+void GameBoardSave_ButtonClick(control* input);
+
+void upgradePieces_ButtonClick(control* input);
+
+void GameMinimaxDepth_ButtonClick(control* input);
+
+void GameBoardSquare_ButtonClick(control* input);
 
 void Game();
 
