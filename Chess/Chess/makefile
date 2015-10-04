@@ -1,7 +1,7 @@
 all: Chess
 
 clean:
-	-rm Data_Structures.o Chess.o Logic.o Minimax.o chessprog 
+	-rm SettingMenu.o SetPieces.o SaveLoadWindow.o MainMenu.o GUI.o GameBoard.o EventHandler.o CommonGameboard.o AISetting.o UIFrameWork.o Data_Structures.o Chess.o Logic.o Minimax.o chessprog 
 
 Chess: Data_Structures.o Logic.o Minimax.o UIFramework.o GUI.o Chess.o
 	gcc -o chessprog Data_Structures.o Logic.o Minimax.o UIFramework.o GUI.o Chess.o -lm -std=c99 -pedantic-errors -g -lxml2 `sdl-config --libs`

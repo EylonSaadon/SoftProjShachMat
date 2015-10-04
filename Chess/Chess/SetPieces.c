@@ -20,12 +20,12 @@ int PlacePiece(char** error)
 	}
 	if (piece != ' '){
 		if (is_valid_set(board, piece, *pos, c)){
-			board[pos->col][pos->row] = piece;
+			set_piece(board, *pos, piece);
 		}
 	}
 	else
 	{
-		board[pos->col][pos->row] = piece;
+		set_piece(board, *pos, piece);
 	}
 	free(pos);
 	return 0;
