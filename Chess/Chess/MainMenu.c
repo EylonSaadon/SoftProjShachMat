@@ -36,7 +36,10 @@ void LoadGame_ButtonClick(control* input)
 		error_global = "ERROR: Failed allocating memory for gameSettings";
 		return;
 	}
+	curSettings->game_mode = TWO_PLAYERS_GAME_MODE;
 	curSettings->minimax_depth = 1;
+	curSettings->next_turn = WHITE;
+	curSettings->user_color = WHITE;
 
 	SaveLoadMenu();
 }

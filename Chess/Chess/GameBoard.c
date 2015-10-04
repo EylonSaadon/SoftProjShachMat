@@ -63,7 +63,7 @@ int HighlightBestMove(int blinknum, char** error)
 		{
 			return -1;
 		}
-		SDL_Delay(500);
+		SDL_Delay(250);
 	}
 
 
@@ -206,7 +206,6 @@ void CheckGameOver()
 
 void GameBoardMainMenu_ButtonClick(control* input)
 {
-	//TODO: initialie anything else?
 	free_move_list(curMovesList);
 	curMovesList = NULL;
 	free_move_list(posMovesFromCurPos);
