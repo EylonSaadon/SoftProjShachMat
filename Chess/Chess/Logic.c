@@ -128,7 +128,6 @@ int load_game_from_xml(char* file_path, struct game_settings* settings, char boa
 
 		// Clean
 		xmlFreeDoc(doc);       // free document
-		xmlCleanupCharEncodingHandlers();
 		xmlCleanupParser();    // Free globals
 	}
 	return 0;
@@ -425,6 +424,7 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 
 	// Cleaning
 	xmlCleanupCharEncodingHandlers();
+	xmlCleanupEncodingAliases();
 	xmlCleanupParser();
 
 	return 0;
