@@ -526,6 +526,7 @@ void upgradePieces_ButtonClick(control* input)
 		curMovesList = NULL;
 		free_move_list(posMovesFromCurPos);
 		posMovesFromCurPos = NULL;
+		free(chosenMove);
 		chosenMove = NULL;
 		Game();
 	}
@@ -580,6 +581,7 @@ void GameBoardSquare_ButtonClick(control* input)
 					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
 					{
 						free(chosenMove);
+						chosenMove = NULL;
 						guiQuit = -1;
 
 					}
@@ -626,6 +628,7 @@ void Game()
 		return;
 	}
 
+	chosenMove = NULL;
 
 	gameSelectedSquare_control = NULL;
 
