@@ -139,7 +139,7 @@ void SettingMenu()
 	}
 
 	// Drawing all controls
-#pragma region Drawing
+
 	control* gameSettingBackground_control;
 	if(-1 ==Create_panel_from_bmp(
 		GAMESETTINGFILENAME,
@@ -383,7 +383,6 @@ void SettingMenu()
 		guiQuit = -1;;
 		return;
 	}
-#pragma endregion
 
 	if (curSettings->game_mode == TWO_PLAYERS_GAME_MODE)
 	{
