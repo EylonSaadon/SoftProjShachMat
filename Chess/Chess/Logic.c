@@ -423,9 +423,8 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 	xmlFreeTextWriter(writer);
 
 	// Cleaning
-	xmlCleanupCharEncodingHandlers();
-	xmlCleanupEncodingAliases();
-	xmlCleanupParser();
+	//xmlCleanupCharEncodingHandlers();
+	//xmlCleanupParser();
 
 	return 0;
 }
