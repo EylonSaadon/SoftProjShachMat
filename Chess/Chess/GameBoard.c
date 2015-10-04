@@ -553,7 +553,7 @@ void GameBoardSquare_ButtonClick(control* input)
 		{
 			position chosenPos = GetPosOfSquare(input);
 
-			if (is_piece_of_color(board[chosenPos.col][chosenPos.row], curSettings->next_turn) == true){
+			if (is_piece_of_color(get_piece(board, chosenPos), curSettings->next_turn) == true){
 				SwitchButtonHighlight(input);
 				gameSelectedSquare_control = input;
 				get_moves_from_pos(curMovesList, chosenPos, &posMovesFromCurPos);
@@ -576,7 +576,7 @@ void GameBoardSquare_ButtonClick(control* input)
 			chosenMove->end_pos = endPos;
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
-				if (isPawnUpgradePossible(*chosenMove, board[startPos.col][startPos.row]) == true){
+				if (isPawnUpgradePossible(*chosenMove, get_piece(board, startPos)) == true){
 					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
 					{
 						free(chosenMove);
@@ -797,7 +797,8 @@ void Game()
 	if (-1 == CreateAndAddNodeToTree(mainMenuButton_control, gameBoarBackground_node, &mainMenuButton_node, &error_global))
 	{
 		FreeControl(mainMenuButton_control);
-		guiQuit;
+		guiQuit = -1;
+		return;
 	}
 	if (-1 == AddToListeners(mainMenuButton_control, &error_global))
 	{
