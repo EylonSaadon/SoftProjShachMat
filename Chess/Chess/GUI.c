@@ -156,7 +156,7 @@ void start_gui()
 	if (guiQuit == -1)
 	{
 		if (NULL != error_global){
-			printf(error_global);
+			printf("%s\n", error_global);
 			getchar();
 		}
 	}

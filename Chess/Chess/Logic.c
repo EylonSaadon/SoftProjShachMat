@@ -126,6 +126,7 @@ int load_game_from_xml(char* file_path, struct game_settings* settings, char boa
 
 		load_game_from_xml_rec(root_element, settings, board);
 
+		// Clean
 		xmlFreeDoc(doc);       // free document
 		xmlCleanupParser();    // Free globals
 	}
@@ -419,11 +420,11 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 		return -1;
 	}
 
-	xmlFreeTextWriter(writer);
-
 	// Cleaning
 	xmlCleanupCharEncodingHandlers();
 	xmlCleanupParser();
+
+	xmlFreeTextWriter(writer);
 
 	return 0;
 }

@@ -1,25 +1,25 @@
 all: Chess
 
 clean:
-	-rm Data_Structures.o Chess.o Logic.o Minimax.o chessprog 
+	-rm SettingMenu.o SetPieces.o SaveLoadWindow.o MainMenu.o GUI.o GameBoard.o EventHandler.o CommonGameboard.o AISettings.o UIFrameWork.o Data_Structures.o Chess.o Logic.o Minimax.o chessprog 
 
-Chess: Data_Structures.o Logic.o Minimax.o UIFrameWork.o GUI.o Chess.o
-	gcc -o chessprog Data_Structures.o Logic.o Minimax.o UIFrameWork.o GUI.o Chess.o -lm -std=c99 -pedantic-errors -g -lxml2 `sdl-config --libs`
+Chess: Data_Structures.o Logic.o Minimax.o GameBoard.o CommonGameboard.o SetPieces.o AISettings.o SettingMenu.o SaveLoadWindow.o MainMenu.o EventHandler.o UIFrameWork.o GUI.o Chess.o
+	gcc -o chessprog Data_Structures.o Logic.o Minimax.o GameBoard.o CommonGameboard.o SetPieces.o AISettings.o SettingMenu.o SaveLoadWindow.o MainMenu.o EventHandler.o UIFrameWork.o GUI.o Chess.o -lm -std=c99 -pedantic-errors -g -lxml2 `sdl-config --libs`
 
 Data_Structures.o: Data_Structures.h Data_Structures.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm Data_Structures.c `sdl-config --cflags`
 
 Logic.o: Logic.h Logic.c
-	gcc -I/usr/include/libxml2 -std=c99 -pedantic-errors -c -Wall -g -lm Logic.c `sdl-config --cflags`
+	gcc -I/usr/include/libxml2 -std=c99 -pedantic-errors -c -Wall -g -lm Logic.c
 
 Minimax.o: Minimax.h Minimax.c
-	gcc -std=c99 -pedantic-errors -c -Wall -g -lm Minimax.c `sdl-config --cflags`
+	gcc -std=c99 -pedantic-errors -c -Wall -g -lm Minimax.c
 
-UIFrameWork.o: UIFrameWork.h UIFramework.c
-	gcc -std=c99 -pedantic-errors -c -Wall -g -lm UIFramework.c `sdl-config --cflags`
+UIFrameWork.o: UIFrameWork.h UIFrameWork.c
+	gcc -std=c99 -pedantic-errors -c -Wall -g -lm UIFrameWork.c `sdl-config --cflags`
 
-AISetting.o: AISetting.h AISetting.c
-	gcc -std=c99 -pedantic-errors -c -Wall -g -lm AISetting.c `sdl-config --cflags`
+AISettings.o: AISettings.h AISettings.c
+	gcc -std=c99 -pedantic-errors -c -Wall -g -lm AISettings.c `sdl-config --cflags`
 
 CommonGameboard.o: CommonGameboard.h CommonGameboard.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm CommonGameboard.c `sdl-config --cflags`
@@ -46,4 +46,4 @@ SettingMenu.o: SettingMenu.h SettingMenu.c
 	gcc -std=c99 -pedantic-errors -c -Wall -g -lm SettingMenu.c `sdl-config --cflags`
 
 Chess.o: Chess.h Chess.c
-	gcc  -std=c99 -pedantic-errors -c -Wall -g -lm Chess.c `sdl-config --cflags`
+	gcc  -std=c99 -pedantic-errors -c -Wall -g -lm Chess.c

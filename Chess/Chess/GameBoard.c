@@ -18,8 +18,8 @@ int HighlightBestMove(int blinknum, char** error)
 	position startPos = bestMove.start_pos;
 	position endPos = bestMove.end_pos;
 
-	control* startSquare = buttonsBoard[startPos.col][7 - (int)startPos.row];
-	control* endSquare = buttonsBoard[endPos.col][7 - (int)endPos.row];
+	control* startSquare = buttonsBoard[(int)startPos.col][7 - (int)startPos.row];
+	control* endSquare = buttonsBoard[(int)endPos.col][7 - (int)endPos.row];
 
 	bool startHiglighted = startSquare->ishighlighted;
 	bool endHiglighted = endSquare->ishighlighted;
@@ -31,7 +31,7 @@ int HighlightBestMove(int blinknum, char** error)
 		SwitchButtonHighlight(startSquare);
 		SwitchButtonHighlight(endSquare);
 
-		if (isPawnUpgradePossible(bestMove, board[startPos.col][startPos.row]))
+		if (isPawnUpgradePossible(bestMove, get_piece(board, startPos)))
 		{
 			char* fileName = ResolveFileNameFromLetter(bestMove.new_disc);
 			char* name = ResolveNameFromLetter(bestMove.new_disc);
@@ -86,7 +86,7 @@ void HightlightPosMoves(move_list* movesToHighlight)
 	else
 	{
 		move mov = curMove->mov;
-		buttonsBoard[mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
+		buttonsBoard[(int)mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
 		curMove = curMove->next;
 		HightlightPosMoves(curMove);
 	}
@@ -804,7 +804,6 @@ void Game()
 		guiQuit = -1;
 		return;
 	}
-
 
 	if (check)
 	{

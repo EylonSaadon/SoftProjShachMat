@@ -1,14 +1,6 @@
 #ifndef AISETTINGS_
 #define AISETTINGS_
 
-#ifndef SETTINGMENU_
-#include "SettingMenu.h"
-#endif
-
-#ifndef GAMEBOARD_
-#include "GameBoard.h"
-#endif
-
 #ifndef SETPIECES_
 #include "SetPieces.h"
 #endif
