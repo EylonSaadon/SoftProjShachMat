@@ -565,7 +565,7 @@ void GameBoardSquare_ButtonClick(control* input)
 
 			position endPos = GetPosOfSquare(input);
 
-			chosenMove = (struct move*)(calloc(1, sizeof(struct move)));
+			chosenMove = (move*)(calloc(1, sizeof(move)));
 			if (chosenMove == NULL)
 			{
 				guiQuit = -1;
@@ -576,7 +576,7 @@ void GameBoardSquare_ButtonClick(control* input)
 			chosenMove->new_disc = EMPTY;
 
 			if (is_move_in_move_list(chosenMove, curMovesList) == true){
-				if (isPawnUpgradePossible(*chosenMove, get_piece(board, startPos)) == true){
+				if (isPawnUpgradePossible(*chosenMove, board[(int)startPos.col][(int)startPos.row]) == true){
 					if (-1 == DrawPiecesOnSidePanelFilterColor(tree->children[0], &upgradePieces_ButtonClick, curSettings->next_turn, &error_global))
 					{
 						free(chosenMove);
