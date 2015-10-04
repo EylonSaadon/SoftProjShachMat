@@ -86,7 +86,7 @@ void HightlightPosMoves(move_list* movesToHighlight)
 	else
 	{
 		move mov = curMove->mov;
-		buttonsBoard[mov.end_pos.col][(char)(7 - (int)mov.end_pos.row)]->ishighlighted = 1;
+		buttonsBoard[(int)mov.end_pos.col][7 - (int)mov.end_pos.row]->ishighlighted = 1;
 		curMove = curMove->next;
 		HightlightPosMoves(curMove);
 	}
