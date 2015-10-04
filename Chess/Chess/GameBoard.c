@@ -565,7 +565,7 @@ void GameBoardSquare_ButtonClick(control* input)
 
 			position endPos = GetPosOfSquare(input);
 
-			chosenMove = (move*)(calloc(1, sizeof(move)));
+			chosenMove = (struct move*)(calloc(1, sizeof(struct move)));
 			if (chosenMove == NULL)
 			{
 				guiQuit = -1;
