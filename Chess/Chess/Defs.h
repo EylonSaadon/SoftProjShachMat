@@ -20,8 +20,7 @@
 #define BOARD_SIZE 8
 #define BOARD_SIZE_FROM_ZERO BOARD_SIZE - 1
 #define MAX_USER_COMMAND 51
-// TODO: decide what to do with this minimax best depth
-#define MAX_MINIMAX_DEPTH_POSSIBLE 10 //5949
+#define MAX_MINIMAX_DEPTH_POSSIBLE 5
 
 #define WIN_SCORE 1000
 #define LOSE_SCORE -WIN_SCORE
