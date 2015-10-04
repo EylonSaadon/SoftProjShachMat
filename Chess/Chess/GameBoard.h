@@ -29,7 +29,15 @@ extern game_settings* curSettings;
 
 extern char board[BOARD_SIZE][BOARD_SIZE];
 
+extern move* chosenMove;
+
+
+/////////////////////
+///////Local/////////
+/////////////////////
 control* gameSelectedSquare_control;
+
+
 
 
 
