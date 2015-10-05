@@ -252,7 +252,7 @@ void computer_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_li
 	int number_of_boards_evaluated = 0;
 
 	// Get the best next move
-	int current_move_grade = get_best_moves_using_minimax(settings->minimax_depth, board, get_opposite_color(settings->user_color), get_opposite_color(settings->user_color), 0, move_list, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+	int current_move_grade = get_best_moves(settings->minimax_depth, board, get_opposite_color(settings->user_color), move_list, &best_move_list, &number_of_boards_evaluated);
 
 	// Check for errors
 	if (FAILED_ERROR == current_move_grade) {
@@ -359,7 +359,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 			int number_of_boards_evaluated = 0;
 
 			// Get the best next move
-			int current_move_grade = get_best_moves_using_minimax(minimax_depth, board, color, color, 0, move_list, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+			int current_move_grade = get_best_moves(minimax_depth, board, color, move_list, &best_move_list, &number_of_boards_evaluated);
 
 			// Check for errors
 			if (FAILED_ERROR == current_move_grade) {
@@ -409,7 +409,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 			int number_of_boards_evaluated = 0;
 
 			// Get the best next move
-			int current_move_grade = get_best_moves_using_minimax(minimax_depth, board, color, color, 0, &one_move_list, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+			int current_move_grade = get_best_moves(minimax_depth, board, color, &one_move_list, &best_move_list, &number_of_boards_evaluated);
 
 			// Check for errors
 			if (FAILED_ERROR == current_move_grade) {

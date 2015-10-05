@@ -6,7 +6,7 @@ int HighlightBestMove(int blinknum, char** error)
 	int number_of_boards_evaluated = 0;
 
 	// Get the best next move
-	int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, curSettings->next_turn, curSettings->next_turn, 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+	int current_move_grade = get_best_moves(curSettings->minimax_depth, board, curSettings->next_turn, curMovesList, &best_move_list, &number_of_boards_evaluated);
 
 	// Check for errors
 	if (FAILED_ERROR == current_move_grade) {
@@ -122,7 +122,7 @@ int ComputerTurn(char** error)
 		struct move_list* best_move_list = NULL;
 		int number_of_boards_evaluated = 0;
 
-		int current_move_grade = get_best_moves_using_minimax(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), get_opposite_color(curSettings->user_color), 0, curMovesList, &best_move_list, ALPHA_INIT, BETA_INIT, &number_of_boards_evaluated);
+		int current_move_grade = get_best_moves(curSettings->minimax_depth, board, get_opposite_color(curSettings->user_color), curMovesList, &best_move_list, &number_of_boards_evaluated);
 
 		// Check for errors
 		if (FAILED_ERROR == current_move_grade) {
