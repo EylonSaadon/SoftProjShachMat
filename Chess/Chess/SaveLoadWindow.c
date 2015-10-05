@@ -104,7 +104,6 @@ void SaveLoadMenu()
 	for (int i = 0; i < NUMOFSLOTS; i++)
 	{
 		char numberstr[3];
-		// TODO: check if this good replacement for: 		_itoa_s(i + 1, numberstr, 3, 10);
 		sprintf(numberstr, "%d", i + 1);
 
 		char* saveFileName = concat(SAVEFILNAMEPREFIX, numberstr);
