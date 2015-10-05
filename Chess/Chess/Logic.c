@@ -1176,8 +1176,8 @@ int get_board_score_for_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 int count_discs(char board[BOARD_SIZE][BOARD_SIZE]) {
 	int counter = 0;
 
-	for (char i = 0; i < BOARD_SIZE; i++) {
-		for (char j = 0; j < BOARD_SIZE; j++) {
+	for (int i = 0; i < BOARD_SIZE; i++) {
+		for (int j = 0; j < BOARD_SIZE; j++) {
 			if ((board[j][i] != EMPTY)) {
 				counter++;
 			}
