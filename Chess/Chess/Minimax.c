@@ -58,16 +58,17 @@ int get_best_moves(	int max_depth,
 
 			// Checks if there is no moves for the next turn
 			if (NULL == minimax_move_list) {
-				return TIE_SCORE;
+				current_move_grade = score;
 			}
+			else {
+				// Run minimax again with the new board and position
+				current_move_grade = get_move_score_using_minimax(max_depth, minimax_board, next_color, run_for_color, current_depth + 1, minimax_move_list, ALPHA_INIT, BETA_INIT, number_of_boards_evaluated);
+				free_move_list(minimax_move_list);
 
-			// Run minimax again with the new board and position
-			current_move_grade = get_move_score_using_minimax(max_depth, minimax_board, next_color, run_for_color, current_depth + 1, minimax_move_list, ALPHA_INIT, BETA_INIT, number_of_boards_evaluated);
-			free_move_list(minimax_move_list);
-
-			// If return value is FAILED_ERROR there was an error with a standard function
-			if (FAILED_ERROR == current_move_grade) {
-				return FAILED_ERROR;
+				// If return value is FAILED_ERROR there was an error with a standard function
+				if (FAILED_ERROR == current_move_grade) {
+					return FAILED_ERROR;
+				}
 			}
 		}
 
@@ -147,16 +148,17 @@ int get_move_score_using_minimax(	int max_depth,
 
 			// Checks if there is no moves for the next turn
 			if (NULL == minimax_move_list) {
-				return TIE_SCORE;
+				current_move_grade = score;
 			}
+			else {
+				// Run minimax again with the new board and position
+				current_move_grade = get_move_score_using_minimax(max_depth, minimax_board, next_color, run_for_color, current_depth + 1, minimax_move_list, alpha, beta, number_of_boards_evaluated);
+				free_move_list(minimax_move_list);
 
-			// Run minimax again with the new board and position
-			current_move_grade = get_move_score_using_minimax(max_depth, minimax_board, next_color, run_for_color, current_depth + 1, minimax_move_list, alpha, beta, number_of_boards_evaluated);
-			free_move_list(minimax_move_list);
-
-			// If return value is FAILED_ERROR there was an error with a standard function
-			if (FAILED_ERROR == current_move_grade) {
-				return FAILED_ERROR;
+				// If return value is FAILED_ERROR there was an error with a standard function
+				if (FAILED_ERROR == current_move_grade) {
+					return FAILED_ERROR;
+				}
 			}
 		}
 
