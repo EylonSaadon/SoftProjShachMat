@@ -433,7 +433,7 @@ void GameBoardBest_ButtonClick(control * input)
 				control* bestButton_control;
 				if (-1 == Create_Button_from_bmp_transHighlight(
 					BUTTONBESTFILENAME,
-					NUMBUTTONHIGHLIGHTEDFILENAME,
+					BUTTONBESTHIGHLIGHTFILENAME,
 					BUTTONBESTNAME,
 					bestButton_x_location,
 					bestButton_y_location,

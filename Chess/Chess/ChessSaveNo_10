@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<game><next_turn>Black</next_turn><game_mode>1</game_mode><difficulty></difficulty><user_color></user_color><board><row_8>____K___</row_8><row_7>_______m</row_7><row_6>________</row_6><row_5>________</row_5><row_4>________</row_4><row_3>________</row_3><row_2>M_______</row_2><row_1>____k___</row_1></board></game>
+<game><next_turn>White</next_turn><game_mode>2</game_mode><difficulty>4</difficulty><user_color>White</user_color><board><row_8>__BKQBN_</row_8><row_7>________</row_7><row_6>_N______</row_6><row_5>________</row_5><row_4>_______R</row_4><row_3>________</row_3><row_2>___k____</row_2><row_1>________</row_1></board></game>
