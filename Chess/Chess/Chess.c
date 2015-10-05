@@ -56,7 +56,7 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 		// Set difficulty
 		else if (strstr(input, "difficulty ") == input && PLAYER_VS_AI_GAME_MODE == settings.game_mode) {
 			if (strstr(input, "best") == input) {
-				settings.minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
+				settings.minimax_depth = get_best_depth(board);
 			}
 			else {
 				input[12] = 0;
@@ -341,7 +341,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 			int minimax_depth = 0;
 
 			if (strstr(input, "get_best_moves best") == input) {
-				minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
+				minimax_depth = get_best_depth(board);
 			}
 			else {
 				minimax_depth = atoi(input + 15);
@@ -378,7 +378,7 @@ bool user_turn(char board[BOARD_SIZE][BOARD_SIZE], struct move_list* move_list, 
 			char* move_string;
 
 			if (strstr(input, "best ") == input) {
-				minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
+				minimax_depth = get_best_depth(board);
 				move_string = input + 15;
 			}
 			else {

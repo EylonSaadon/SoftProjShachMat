@@ -84,7 +84,7 @@ void AIMinimaxDepth_ButtonClick(control* input)
 	{
 		if (curSettings->minimax_depth != MAX_MINIMAX_DEPTH_POSSIBLE)
 		{
-			curSettings->minimax_depth = MAX_MINIMAX_DEPTH_POSSIBLE;
+			curSettings->minimax_depth = get_best_depth(board);
 			SwitchOffHighlightAllMinimaxDepths();
 			SwitchOnHighlightbyName(BUTTONBESTNAME);
 		}

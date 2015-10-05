@@ -1172,3 +1172,30 @@ int get_board_score_for_color(char board[BOARD_SIZE][BOARD_SIZE], COLOR color) {
 
 	return FAILED_ERROR;
 }
+
+int count_discs(char board[BOARD_SIZE][BOARD_SIZE]) {
+	int counter = 0;
+
+	for (char i = 0; i < BOARD_SIZE; i++) {
+		for (char j = 0; j < BOARD_SIZE; j++) {
+			if ((board[j][i] != EMPTY)) {
+				counter++;
+			}
+		}
+	}
+
+	return counter;
+}
+
+int get_best_depth(char board[BOARD_SIZE][BOARD_SIZE]) {
+	int discs_count = count_discs(board);
+
+	if (discs_count <= 5) {
+		return 6;
+	}
+	else if (discs_count <= 12) {
+		return 5;
+	}
+		
+	return 4;
+}

@@ -81,4 +81,10 @@ int load_game_from_xml(char* file_path, struct game_settings* settings, char boa
 // Save game to XML
 int save_game_to_xml(char* file_path, struct game_settings* settings, char board[BOARD_SIZE][BOARD_SIZE]);
 
+// Count discs on board
+int count_discs(char board[BOARD_SIZE][BOARD_SIZE]);
+
+// Get "best" depth
+int get_best_depth(char board[BOARD_SIZE][BOARD_SIZE]);
+
 #endif
