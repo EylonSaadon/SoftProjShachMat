@@ -348,7 +348,7 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 		return -1;
 	}
 
-	rc = xmlTextWriterWriteElement(writer, BAD_CAST "next_turn", settings->next_turn ? BAD_CAST "Black" : BAD_CAST "White");
+	rc = xmlTextWriterWriteElement(writer, BAD_CAST "next_turn", settings->next_turn == BLACK ? BAD_CAST "Black" : BAD_CAST "White");
 	if (rc < 0) {
 		printf("testXmlwriterFilename: Error at xmlTextWriterWriteElement\n");
 		return -1;
@@ -381,7 +381,7 @@ int save_game_to_xml(char* file_path, struct game_settings* settings, char board
 	}
 
 	if (settings->game_mode == 2) {
-		rc = xmlTextWriterWriteElement(writer, BAD_CAST "user_color", settings->user_color ? BAD_CAST "Black" : BAD_CAST "White");
+		rc = xmlTextWriterWriteElement(writer, BAD_CAST "user_color", settings->user_color == BLACK ? BAD_CAST "Black" : BAD_CAST "White");
 	}
 	else {
 		rc = xmlTextWriterWriteElement(writer, BAD_CAST "user_color", BAD_CAST "");

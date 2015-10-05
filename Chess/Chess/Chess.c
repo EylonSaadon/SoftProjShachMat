@@ -196,24 +196,22 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 
 void play(char board[BOARD_SIZE][BOARD_SIZE], struct game_settings* settings)
 {
-	COLOR current_color = settings->next_turn;
-
 	bool should_continue = true;
 
 	while (should_continue) {
 
 		// Get the possible moves of the current player
 		struct move_list* moves = NULL;
-		if (-1 == get_moves_for_color(board, current_color, &moves)) {
+		if (-1 == get_moves_for_color(board, settings->next_turn, &moves)) {
 			exit(0);
 		}
 
 		// Get the score of the board
-		int score = get_board_score_for_color(board, get_opposite_color(current_color));
+		int score = get_board_score_for_color(board, get_opposite_color(settings->next_turn));
 
 		// The game is over if the score is WIN_SCORE, LOSE_SCORE or TIE_SCORE
 		if (WIN_SCORE == score) {
-			print_win_message(get_opposite_color(current_color));
+			print_win_message(get_opposite_color(settings->next_turn));
 			break;
 		}
 		else if (TIE_SCORE == score && NULL == moves) {
@@ -221,20 +219,19 @@ void play(char board[BOARD_SIZE][BOARD_SIZE], struct game_settings* settings)
 			break;
 		}
 		else {
-			if (is_check_on_color(board, current_color)) {
+			if (is_check_on_color(board, settings->next_turn)) {
 				print_message(CHECK);
 			}
 		}
 
 		// Computer turn
-		if (PLAYER_VS_AI_GAME_MODE == settings->game_mode && current_color != settings->user_color) {
+		if (PLAYER_VS_AI_GAME_MODE == settings->game_mode && settings->next_turn != settings->user_color) {
 			computer_turn(board, moves, settings);
 		}
 		// User turn
 		else {
-			should_continue = user_turn(board, moves, settings, current_color);
+			should_continue = user_turn(board, moves, settings, settings->next_turn);
 		}
-
 
 		free_move_list(moves);
 
@@ -242,7 +239,7 @@ void play(char board[BOARD_SIZE][BOARD_SIZE], struct game_settings* settings)
 			print_board(board);
 		}
 
-		current_color = get_opposite_color(current_color);
+		settings->next_turn = get_opposite_color(settings->next_turn);
 	}
 }
 
