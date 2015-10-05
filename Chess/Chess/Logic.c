@@ -1068,7 +1068,18 @@ void make_move(char board[BOARD_SIZE][BOARD_SIZE], struct move* mov)
 
 	// Check if the disc is pawn and if it in the last row
 	if ((WHITE_P == disc && BOARD_SIZE_FROM_ZERO == mov->end_pos.row) || (BLACK_P == disc && 0 == mov->end_pos.row)) {
-		set_piece(board, mov->end_pos, mov->new_disc);
+		char new_disc = mov->new_disc;
+
+		if (EMPTY == mov->new_disc) {
+			if (is_piece_of_color(disc, WHITE)) {
+				new_disc = WHITE_Q;
+			}
+			else {
+				new_disc = BLACK_Q;
+			}
+		}
+
+		set_piece(board, mov->end_pos, new_disc);
 	}
 	else {
 		set_piece(board, mov->end_pos, disc);
