@@ -55,7 +55,7 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 		}
 		// Set difficulty
 		else if (strstr(input, "difficulty ") == input && PLAYER_VS_AI_GAME_MODE == settings.game_mode) {
-			if (strstr(input, "best") == input) {
+			if (strstr(input, "best") != NULL) {
 				settings.minimax_depth = get_best_depth(board);
 			}
 			else {
@@ -89,12 +89,12 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 				{
 					exit(EXIT_FAILURE);
 				}
+
+				print_board(board);
 			}
 			else {
 				print_message(WRONG_FILE_NAME);
 			}
-
-			print_board(board);
 		}
 		// Clear board
 		else if (strstr(input, "clear\n") == input) {
