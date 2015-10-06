@@ -60,7 +60,7 @@ game_settings set_settings(char board[BOARD_SIZE][BOARD_SIZE])
 			}
 			else {
 				input[12] = 0;
-				int minimax_depth = atoi(input + 11);
+				int minimax_depth = atoi(input + 17);
 
 				if (minimax_depth < 1 || minimax_depth > 4) {
 					print_message(WRONG_MINIMAX_DEPTH);
